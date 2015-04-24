@@ -13,4 +13,5 @@ return [
     |
     */
     'package_name'                          => 'Comunik',
+    'campaign'                              => 'Campaña|Campañas',
 ];
