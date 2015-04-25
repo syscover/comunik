@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class ComunikCreateTableGrupo extends Migration {
+class ComunikCreateTableGroup extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,11 +11,10 @@ class ComunikCreateTableGrupo extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('005_029_grupo', function($table){
+            Schema::create('005_029_group', function($table){
                 $table->engine = 'InnoDB';
                 $table->increments('id_029')->unsigned();
-                $table->string('nombre_029',50);
-                $table->timestamps();
+                $table->string('name_029',50);
             });
 	}
 
@@ -26,7 +25,7 @@ class ComunikCreateTableGrupo extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('005_029_grupo');
+            Schema::drop('005_029_group');
 	}
 
 }
