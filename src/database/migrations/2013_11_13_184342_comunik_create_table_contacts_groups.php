@@ -15,6 +15,7 @@ class ComunikCreateTableContactsGroups extends Migration {
                 $table->engine = 'InnoDB';
                 $table->integer('contact_044')->unsigned();
                 $table->integer('group_044')->unsigned();
+
                 $table->primary(['contact_044', 'group_044']);
                 $table->foreign('contact_044')->references('id_030')->on('005_030_contact')
                         ->onDelete('cascade')->onUpdate('cascade');

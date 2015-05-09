@@ -21,7 +21,6 @@ class Groups extends Controller {
     public function storeCustomRecord()
     {
         Group::create([
-            'id_029'    => Request::input('id'),
             'name_029'  => Request::input('name')
         ]);
     }
@@ -29,7 +28,6 @@ class Groups extends Controller {
     public function updateCustomRecord($parameters)
     {
         Group::where('id_029', $parameters['id'])->update([
-            'id_029'    => Request::input('id'),
             'name_029'  => Request::input('name')
         ]);
     }

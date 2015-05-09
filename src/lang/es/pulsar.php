@@ -14,4 +14,6 @@ return [
     */
     'package_name'                          => 'Comunik',
     'campaign'                              => 'Campaña|Campañas',
+    'international_prefix'                  => 'Prefijo internacional',
+    'sms'                                   => 'SMS',
 ];
