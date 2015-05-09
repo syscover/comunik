@@ -32,7 +32,7 @@ class Contacts extends Controller {
             'company_030'       => Request::input('company'),
             'name_030'          => Request::input('name'),
             'surname_030'       => Request::input('surname'),
-            'birthday_030'      => Request::has('birthdate')? \DateTime::createFromFormat('d-m-Y',Request::input('birthdate'))->getTimestamp() : null,
+            'birthdate_030'     => Request::has('birthdate')? \DateTime::createFromFormat('d-m-Y',Request::input('birthdate'))->getTimestamp() : null,
             'country_030'       => Request::input('country'),
             'prefix_030'        => Request::input('prefix'),
             'mobile_030'        => Request::has('mobile')? str_replace('-', '', Request::input('mobile')) : null,
@@ -41,6 +41,23 @@ class Contacts extends Controller {
 
         $contact->groups()->attach(Request::input('groups'));
     }
+
+    public function editCustomRecord($parameters)
+    {
+        $parameters['groups']       = Group::all();
+
+        return $parameters;
+    }
+
+    public function checkSpecialRulesToUpdate($parameters)
+    {
+        $contact = Contact::find($parameters['id']);
+
+        $parameters['specialRules']['emailRule'] = Request::input('email') == $contact->email_030? true : false;
+        $parameters['specialRules']['mobileRule'] = Request::input('mobile') == $contact->mobile_030? true : false;
+
+        return $parameters;
+    }
     
     public function updateCustomRecord($parameters)
     {
@@ -48,11 +65,11 @@ class Contacts extends Controller {
             'company_030'       => Request::input('company'),
             'name_030'          => Request::input('name'),
             'surname_030'       => Request::input('surname'),
-            'birthday_030'      => Request::input('birthday'),
+            'birthdate_030'     => Request::has('birthdate')? \DateTime::createFromFormat('d-m-Y',Request::input('birthdate'))->getTimestamp() : null,
             'country_030'       => Request::input('country'),
             'prefix_030'        => Request::input('prefix'),
-            'mobile_030'        => Request::input('mobile'),
-            'email_030'         => Request::input('email'),
+            'mobile_030'        => Request::has('mobile')? str_replace('-', '', Request::input('mobile')) : null,
+            'email_030'         => strtolower(Request::input('email')),
         ]);
     }
 }
