@@ -8,7 +8,7 @@
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/bootstrap-inputmask/jquery.inputmask.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/select2/select2_locale_' . config('app.locale') . '.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/getaddress/js/jquery.getaddress.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getaddress/js/jquery.getaddress.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -40,7 +40,7 @@
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.name'), 'name' => 'name', 'value' => $object->name_030, 'maxLength' => '50', 'rangeLength' => '2,50'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.surname'), 'name' => 'surname', 'value' => $object->surname_030, 'maxLength' => '50', 'rangeLength' => '2,50'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.birthdate'), 'name' => 'birthdate', 'value' => $object->birthdate_030? date('d-m-Y', $object->birthdate_030) : null, 'fieldSize' => 2, 'data' => ['mask' => '99-99-9999']])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.country', 1), 'name' => 'country', 'required' => false, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'class' => 'select2', 'fieldSize' => 4])
+    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.country', 1), 'name' => 'country', 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'class' => 'select2', 'fieldSize' => 4])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.email'), 'name' => 'email', 'value' => $object->email_030, 'maxLength' => '50', 'rangeLength' => '2,50', 'type' => 'email'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.mobile'), 'name' => 'prefix', 'value' => $object->prefix_030, 'maxLength' => '5', 'rangeLength' => '0,5', 'fieldSize' => 2, 'placeholder' => trans('comunik::pulsar.international_prefix'), 'inputs' => [['name' => 'mobile', 'value' => $object->mobile_030, 'maxLength' => '50', 'rangeLength' => '2,50', 'fieldSize' => 8]]])
     <!-- /comunik::contacts.create -->
