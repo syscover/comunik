@@ -13,7 +13,6 @@ class ResourceComunikTableSeeder extends Seeder {
             ['id_007' => 'comunik-group','name_007' => 'Groups','package_007' => '3'],
             ['id_007' => 'comunik-email-campaign','name_007' => 'Email services -- Campaigns','package_007' => '3'],
             ['id_007' => 'comunik-email-sending','name_007' => 'Email services -- Sendings','package_007' => '3'],
-            ['id_007' => 'comunik-email-account','name_007' => 'Email services -- Accounts','package_007' => '3'],
             ['id_007' => 'comunik-email-template','name_007' => 'Email services -- Templates','package_007' => '3'],
             ['id_007' => 'comunik-email-preference','name_007' => 'Email services -- Preferences','package_007' => '3'],
             ['id_007' => 'comunik-email-message','name_007' => 'Email services -- Messages','package_007' => '3'],
