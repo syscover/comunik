@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Request;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
-use Syscover\Pulsar\Traits\ControllerTrait;
+use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Contact;
 
 class Contacts extends Controller {
 
-    use ControllerTrait;
+    use TraitController;
 
     protected $routeSuffix  = 'ComunikContact';
     protected $folder       = 'contacts';
