@@ -2,12 +2,12 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
-use Syscover\Pulsar\Traits\ModelTrait;
+use Syscover\Pulsar\Traits\TraitModel;
 use Illuminate\Support\Facades\DB;
 
 class Contact extends Model {
 
-    use ModelTrait;
+    use TraitModel;
 
 	protected $table        = '005_030_contact';
     protected $primaryKey   = 'id_030';
