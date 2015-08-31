@@ -37,7 +37,7 @@
     <!-- comunik::contacts.create -->
     @include('pulsar::includes.html.form_text_group', ['label' => 'ID', 'value' => $object->id_030, 'name' => 'id', 'readOnly' => true, 'fieldSize' => 2])
     @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.group', 2), 'value' => $object->groups, 'name' => 'groups[]', 'objects' => $groups, 'idSelect' => 'id_029', 'nameSelect' => 'name_029', 'multiple' => true, 'class' => 'select2', 'fieldSize' => 10, 'data' => ['placeholder' => 'Seleccione las categorías correspondientes']])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.company'), 'name' => 'company', 'value' => $object->company_030, 'maxLength' => '100', 'rangeLength' => '2,100'])
+    @include('pulsar::includes.html.form_text_group', ['label' => trans_choice('pulsar::pulsar.company', 1), 'name' => 'company', 'value' => $object->company_030, 'maxLength' => '100', 'rangeLength' => '2,100'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.name'), 'name' => 'name', 'value' => $object->name_030, 'maxLength' => '50', 'rangeLength' => '2,50'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.surname'), 'name' => 'surname', 'value' => $object->surname_030, 'maxLength' => '50', 'rangeLength' => '2,50'])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.birthdate'), 'name' => 'birthdate', 'value' => $object->birthdate_030? date('d-m-Y', $object->birthdate_030) : null, 'fieldSize' => 2, 'data' => ['mask' => '99-99-9999']])
