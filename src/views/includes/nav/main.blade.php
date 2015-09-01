@@ -8,10 +8,10 @@
                     <li{!! Miscellaneous::setCurrentPage('comunik-group') !!}><a href="{{ route('ComunikGroup') }}"><i class="icomoon-icon-users-2"></i>{{ trans_choice('pulsar::pulsar.group', 2) }}</a></li>
                 @endif
                 <li{!! Miscellaneous::setCurrentOpenPage(['comunik-email-campaign']) !!}>
-                    <a href="javascript:void(0);"><i class="icon-envelope-alt"></i>Email Services</a>
+                    <a href="javascript:void(0);"><i class="fa fa-envelope-o"></i>Email Services</a>
                     <ul class="sub-menu" >
                         @if(session('userAcl')->isAllowed(Auth::user()->profile_010, 'comunik-email-campaign', 'access'))
-                            <li{!! Miscellaneous::setCurrentPage('comunik-email-campaign') !!}><a href="{{ route('ComunikGroup') }}"><i class="icon-bookmark"></i>{{ trans_choice('comunik::pulsar.campaign', 2) }}</a></li>
+                            <li{!! Miscellaneous::setCurrentPage('comunik-email-campaign') !!}><a href="{{ route('ComunikGroup') }}"><i class="fa fa-bookmark"></i>{{ trans_choice('comunik::pulsar.campaign', 2) }}</a></li>
                         @endif
                     </ul>
                 </li>
