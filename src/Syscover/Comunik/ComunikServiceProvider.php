@@ -27,7 +27,8 @@ class ComunikServiceProvider extends ServiceProvider
 
         // register migrations
         $this->publishes([
-            __DIR__.'/../../database/migrations/' => base_path('/database/migrations')
+            __DIR__.'/../../database/migrations/' => base_path('/database/migrations'),
+			__DIR__.'/../../database/migrations/updates/' => base_path('/database/migrations/updates'),
         ], 'migrations');
 
         // register migrations
