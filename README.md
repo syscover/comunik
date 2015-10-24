@@ -38,5 +38,5 @@ php artisan migrate
 **9 - Run seed database**
 
 ```
-php artisan db:seed
+php artisan db:seed --class="ComunikTableSeeder"
 ```
