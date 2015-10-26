@@ -9,10 +9,10 @@ class Contact extends Model {
 
     use TraitModel;
 
-	protected $table        = '005_030_contact';
-    protected $primaryKey   = 'id_030';
+	protected $table        = '005_041_contact';
+    protected $primaryKey   = 'id_041';
     public $timestamps      = false;
-    protected $fillable     = ['id_030','company_030','name_030','surname_030','birthdate_030','country_030','prefix_030','mobile_030','email_030'];
+    protected $fillable     = ['id_041','company_041','name_041','surname_041','birthdate_041','country_041','prefix_041','mobile_041','email_041'];
     private static $rules   = [
 
         'groups'        => 'required',
@@ -21,9 +21,9 @@ class Contact extends Model {
         'surname'       => 'between:0,50',
         'birthdate'     => 'date_format:d-m-Y',
         'country'       => 'not_in:null',
-        'email'         => 'between:2,50|email|unique:005_030_contact,email_030',
+        'email'         => 'between:2,50|email|unique:005_041_contact,email_041',
         'prefix'        => 'between:0,5',
-        'mobile'        => 'between:2,50|unique:005_030_contact,mobile_030'
+        'mobile'        => 'between:2,50|unique:005_041_contact,mobile_041'
     ];
 
     public static function validate($data, $specialRules = [])
@@ -36,15 +36,15 @@ class Contact extends Model {
 
     public function groups()
     {
-        return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_044_contacts_groups', 'contact_044', 'group_044');
+        return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
     }
 
     public static function getCustomRecordsLimit()
     {
-        $query =  Contact::join('001_002_country', '005_030_contact.country_030', '=', '001_002_country.id_002')
+        $query =  Contact::join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
             ->where('lang_002', config('app.locale'))
-            ->leftJoin('005_044_contacts_groups', '005_030_contact.id_030', '=', '005_044_contacts_groups.contact_044')
-            ->leftJoin('005_029_group', '005_044_contacts_groups.group_044', '=', '005_029_group.id_029')
+            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
             ->newQuery();
 
         return $query;
@@ -52,7 +52,7 @@ class Contact extends Model {
 
     public static function getCustomReturnRecordsLimit($query)
     {
-        return $query->groupBy('id_030')
-            ->get(array('*', DB::raw('GROUP_CONCAT(name_029 SEPARATOR \', \') AS name_029')));
+        return $query->groupBy('id_040')
+            ->get(array('*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')));
     }
 }

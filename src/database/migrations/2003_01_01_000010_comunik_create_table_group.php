@@ -11,10 +11,10 @@ class ComunikCreateTableGroup extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('005_029_group', function($table){
+            Schema::create('005_040_group', function($table){
                 $table->engine = 'InnoDB';
-                $table->increments('id_029')->unsigned();
-                $table->string('name_029',50);
+                $table->increments('id_040')->unsigned();
+                $table->string('name_040',50);
             });
 	}
 
@@ -25,7 +25,7 @@ class ComunikCreateTableGroup extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('005_029_group');
+            Schema::drop('005_040_group');
 	}
 
 }

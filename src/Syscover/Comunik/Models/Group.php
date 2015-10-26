@@ -8,10 +8,10 @@ class Group extends Model {
 
     use TraitModel;
 
-	protected $table        = '005_029_group';
-    protected $primaryKey   = 'id_029';
+	protected $table        = '005_040_group';
+    protected $primaryKey   = 'id_040';
     public $timestamps      = false;
-    protected $fillable     = ['id_029', 'name_029'];
+    protected $fillable     = ['id_040', 'name_040'];
     private static $rules   = [
         'name'  => 'required|between:2,50'
     ];

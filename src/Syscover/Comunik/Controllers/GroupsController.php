@@ -12,23 +12,23 @@ class GroupsController extends Controller {
     protected $routeSuffix  = 'ComunikGroup';
     protected $folder       = 'groups';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_029', 'name_029'];
-    protected $nameM        = 'name_029';
+    protected $aColumns     = ['id_040', 'name_040'];
+    protected $nameM        = 'name_040';
     protected $model        = '\Syscover\Comunik\Models\Group';
-    protected $icon         = 'icomoon-icon-users-2';
+    protected $icon         = 'fa fa-users';
     protected $objectTrans  = 'group';
 
     public function storeCustomRecord()
     {
         Group::create([
-            'name_029'  => Request::input('name')
+            'name_040'  => Request::input('name')
         ]);
     }
     
     public function updateCustomRecord($parameters)
     {
-        Group::where('id_029', $parameters['id'])->update([
-            'name_029'  => Request::input('name')
+        Group::where('id_040', $parameters['id'])->update([
+            'name_040'  => Request::input('name')
         ]);
     }
 }

@@ -11,16 +11,17 @@ class ComunikCreateTableContactsGroups extends Migration {
 	 */
 	public function up()
 	{
-            Schema::create('005_044_contacts_groups', function($table){
+            Schema::create('005_042_contacts_groups', function($table){
                 $table->engine = 'InnoDB';
-                $table->integer('contact_044')->unsigned();
-                $table->integer('group_044')->unsigned();
+                $table->integer('group_042')->unsigned();
+                $table->integer('contact_042')->unsigned();
 
-                $table->primary(['contact_044', 'group_044']);
-                $table->foreign('contact_044')->references('id_030')->on('005_030_contact')
+                $table->primary(['contact_042', 'group_042']);
+
+                $table->foreign('group_042')->references('id_040')->on('005_040_group')
                         ->onDelete('cascade')->onUpdate('cascade');
-                $table->foreign('group_044')->references('id_029')->on('005_029_group')
-                        ->onDelete('cascade')->onUpdate('cascade');
+                $table->foreign('contact_042')->references('id_041')->on('005_041_contact')
+                    ->onDelete('cascade')->onUpdate('cascade');
             });
 	}
 
@@ -31,7 +32,7 @@ class ComunikCreateTableContactsGroups extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('005_044_contacts_groups');
+            Schema::drop('005_042_contacts_groups');
 	}
 
 }
