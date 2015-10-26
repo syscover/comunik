@@ -6,7 +6,7 @@ use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Contact;
 
-class Contacts extends Controller {
+class ContactsController extends Controller {
 
     use TraitController;
 

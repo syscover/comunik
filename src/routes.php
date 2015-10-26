@@ -17,14 +17,14 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     | MOD. GROUPS
     |--------------------------------------------------------------------------
     */
-    Route::any(config('pulsar.appName') . '/comunik/groups/{offset?}',                                                                  ['as'=>'ComunikGroup',                  'uses'=>'Syscover\Comunik\Controllers\Groups@index',                'resource' => 'comunik-group',        'action' => 'access']);
-    Route::any(config('pulsar.appName') . '/comunik/groups/json/data',                                                                  ['as'=>'jsonDataComunikGroup',          'uses'=>'Syscover\Comunik\Controllers\Groups@jsonData',             'resource' => 'comunik-group',        'action' => 'access']);
-    Route::get(config('pulsar.appName') . '/comunik/groups/create/{offset}',                                                            ['as'=>'createComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\Groups@createRecord',         'resource' => 'comunik-group',        'action' => 'create']);
-    Route::post(config('pulsar.appName') . '/comunik/groups/store/{offset}',                                                            ['as'=>'storeComunikGroup',             'uses'=>'Syscover\Comunik\Controllers\Groups@storeRecord',          'resource' => 'comunik-group',        'action' => 'create']);
-    Route::get(config('pulsar.appName') . '/comunik/groups/{id}/edit/{offset}',                                                         ['as'=>'editComunikGroup',              'uses'=>'Syscover\Comunik\Controllers\Groups@editRecord',           'resource' => 'comunik-group',        'action' => 'access']);
-    Route::put(config('pulsar.appName') . '/comunik/groups/update/{id}/{offset}',                                                       ['as'=>'updateComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\Groups@updateRecord',         'resource' => 'comunik-group',        'action' => 'edit']);
-    Route::get(config('pulsar.appName') . '/comunik/groups/delete/{id}/{offset}',                                                       ['as'=>'deleteComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\Groups@deleteRecord',         'resource' => 'comunik-group',        'action' => 'delete']);
-    Route::delete(config('pulsar.appName') . '/comunik/groups/delete/select/records',                                                   ['as'=>'deleteSelectComunikGroup',      'uses'=>'Syscover\Comunik\Controllers\Groups@deleteRecordsSelect',  'resource' => 'comunik-group',        'action' => 'delete']);
+    Route::any(config('pulsar.appName') . '/comunik/groups/{offset?}',                                  ['as'=>'ComunikGroup',                  'uses'=>'Syscover\Comunik\Controllers\GroupsController@index',                'resource' => 'comunik-group',        'action' => 'access']);
+    Route::any(config('pulsar.appName') . '/comunik/groups/json/data',                                  ['as'=>'jsonDataComunikGroup',          'uses'=>'Syscover\Comunik\Controllers\GroupsController@jsonData',             'resource' => 'comunik-group',        'action' => 'access']);
+    Route::get(config('pulsar.appName') . '/comunik/groups/create/{offset}',                            ['as'=>'createComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\GroupsController@createRecord',         'resource' => 'comunik-group',        'action' => 'create']);
+    Route::post(config('pulsar.appName') . '/comunik/groups/store/{offset}',                            ['as'=>'storeComunikGroup',             'uses'=>'Syscover\Comunik\Controllers\GroupsController@storeRecord',          'resource' => 'comunik-group',        'action' => 'create']);
+    Route::get(config('pulsar.appName') . '/comunik/groups/{id}/edit/{offset}',                         ['as'=>'editComunikGroup',              'uses'=>'Syscover\Comunik\Controllers\GroupsController@editRecord',           'resource' => 'comunik-group',        'action' => 'access']);
+    Route::put(config('pulsar.appName') . '/comunik/groups/update/{id}/{offset}',                       ['as'=>'updateComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\GroupsController@updateRecord',         'resource' => 'comunik-group',        'action' => 'edit']);
+    Route::get(config('pulsar.appName') . '/comunik/groups/delete/{id}/{offset}',                       ['as'=>'deleteComunikGroup',            'uses'=>'Syscover\Comunik\Controllers\GroupsController@deleteRecord',         'resource' => 'comunik-group',        'action' => 'delete']);
+    Route::delete(config('pulsar.appName') . '/comunik/groups/delete/select/records',                   ['as'=>'deleteSelectComunikGroup',      'uses'=>'Syscover\Comunik\Controllers\GroupsController@deleteRecordsSelect',  'resource' => 'comunik-group',        'action' => 'delete']);
 
 
     /*
@@ -32,14 +32,23 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     | MOD. CONTACTS
     |--------------------------------------------------------------------------
     */
-    Route::any(config('pulsar.appName') . '/comunik/contacts/{offset?}',                                                                ['as'=>'ComunikContact',                  'uses'=>'Syscover\Comunik\Controllers\Contacts@index',                'resource' => 'comunik-contact',        'action' => 'access']);
-    Route::any(config('pulsar.appName') . '/comunik/contacts/json/data',                                                                ['as'=>'jsonDataComunikContact',          'uses'=>'Syscover\Comunik\Controllers\Contacts@jsonData',             'resource' => 'comunik-contact',        'action' => 'access']);
-    Route::get(config('pulsar.appName') . '/comunik/contacts/create/{offset}',                                                          ['as'=>'createComunikContact',            'uses'=>'Syscover\Comunik\Controllers\Contacts@createRecord',         'resource' => 'comunik-contact',        'action' => 'create']);
-    Route::post(config('pulsar.appName') . '/comunik/contacts/store/{offset}',                                                          ['as'=>'storeComunikContact',             'uses'=>'Syscover\Comunik\Controllers\Contacts@storeRecord',          'resource' => 'comunik-contact',        'action' => 'create']);
-    Route::get(config('pulsar.appName') . '/comunik/contacts/{id}/edit/{offset}',                                                       ['as'=>'editComunikContact',              'uses'=>'Syscover\Comunik\Controllers\Contacts@editRecord',           'resource' => 'comunik-contact',        'action' => 'access']);
-    Route::put(config('pulsar.appName') . '/comunik/contacts/update/{id}/{offset}',                                                     ['as'=>'updateComunikContact',            'uses'=>'Syscover\Comunik\Controllers\Contacts@updateRecord',         'resource' => 'comunik-contact',        'action' => 'edit']);
-    Route::get(config('pulsar.appName') . '/comunik/contacts/delete/{id}/{offset}',                                                     ['as'=>'deleteComunikContact',            'uses'=>'Syscover\Comunik\Controllers\Contacts@deleteRecord',         'resource' => 'comunik-contact',        'action' => 'delete']);
-    Route::delete(config('pulsar.appName') . '/comunik/contacts/delete/select/records',                                                 ['as'=>'deleteSelectComunikContact',      'uses'=>'Syscover\Comunik\Controllers\Contacts@deleteRecordsSelect',  'resource' => 'comunik-contact',        'action' => 'delete']);
+    Route::any(config('pulsar.appName') . '/comunik/contacts/{offset?}',                                ['as'=>'ComunikContact',                  'uses'=>'Syscover\Comunik\Controllers\ContactsController@index',                'resource' => 'comunik-contact',        'action' => 'access']);
+    Route::any(config('pulsar.appName') . '/comunik/contacts/json/data',                                ['as'=>'jsonDataComunikContact',          'uses'=>'Syscover\Comunik\Controllers\ContactsController@jsonData',             'resource' => 'comunik-contact',        'action' => 'access']);
+    Route::get(config('pulsar.appName') . '/comunik/contacts/create/{offset}',                          ['as'=>'createComunikContact',            'uses'=>'Syscover\Comunik\Controllers\ContactsController@createRecord',         'resource' => 'comunik-contact',        'action' => 'create']);
+    Route::post(config('pulsar.appName') . '/comunik/contacts/store/{offset}',                          ['as'=>'storeComunikContact',             'uses'=>'Syscover\Comunik\Controllers\ContactsController@storeRecord',          'resource' => 'comunik-contact',        'action' => 'create']);
+    Route::get(config('pulsar.appName') . '/comunik/contacts/{id}/edit/{offset}',                       ['as'=>'editComunikContact',              'uses'=>'Syscover\Comunik\Controllers\ContactsController@editRecord',           'resource' => 'comunik-contact',        'action' => 'access']);
+    Route::put(config('pulsar.appName') . '/comunik/contacts/update/{id}/{offset}',                     ['as'=>'updateComunikContact',            'uses'=>'Syscover\Comunik\Controllers\ContactsController@updateRecord',         'resource' => 'comunik-contact',        'action' => 'edit']);
+    Route::get(config('pulsar.appName') . '/comunik/contacts/delete/{id}/{offset}',                     ['as'=>'deleteComunikContact',            'uses'=>'Syscover\Comunik\Controllers\ContactsController@deleteRecord',         'resource' => 'comunik-contact',        'action' => 'delete']);
+    Route::delete(config('pulsar.appName') . '/comunik/contacts/delete/select/records',                 ['as'=>'deleteSelectComunikContact',      'uses'=>'Syscover\Comunik\Controllers\ContactsController@deleteRecordsSelect',  'resource' => 'comunik-contact',        'action' => 'delete']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MOD. EMAIL SERVICES PREFERENCES
+    |--------------------------------------------------------------------------
+    */
+    Route::any(config('pulsar.appName') . '/comunik/email/services/preferences',                        ['as'=>'EmailServicesPreference',          'uses'=>'Syscover\Comunik\Controllers\PreferenceController@index',               'resource' => 'comunik-email-preference',        'action' => 'access']);
+    Route::put(config('pulsar.appName') . '/comunik/email/services/preferences/update',                 ['as'=>'updateEmailServicesPreference',    'uses'=>'Syscover\Comunik\Controllers\PreferenceController@updateRecord',        'resource' => 'comunik-email-preference',        'action' => 'edit']);
 
 
 
@@ -47,6 +56,12 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
 
 
 
+
+
+
+
+
+    Route::any(config('pulsar.appName') . '/comunik/email/services/preferences/json/{json}',            ['as'=>'EmailServicesPreferenceJson',      'uses'=>'Syscover\Comunik\Controllers\PreferenceController@index',       'resource' => 'comunik-email-preference',        'action' => 'access']);
 
 
 
@@ -126,14 +141,6 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     Route::post(config('pulsar.appName').'/comunik/email/services/patterns/delete/select/elements',   array('as'=>'deleteEmailServicesPatterns', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesPatterns@deleteSelect'));
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | EMAIL SERVICES PREFERENCIAS
-    |--------------------------------------------------------------------------
-    */
-    Route::any(config('pulsar.appName').'/comunik/email/services/preferencias',                    array('as'=>'emailServicesPreferencias', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesPreferencias@index'));
-    Route::any(config('pulsar.appName').'/comunik/email/services/preferencias/json/{json}',        array('as'=>'emailServicesPreferenciasJson', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesPreferencias@index'));
-    Route::post(config('pulsar.appName').'/comunik/email/services/preferencias/update',            array('as'=>'updateEmailServicesPreferencias', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesPreferencias@update'));
 
     /*
     |--------------------------------------------------------------------------

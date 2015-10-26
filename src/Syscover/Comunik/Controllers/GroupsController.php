@@ -5,7 +5,7 @@ use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Group;
 
-class Groups extends Controller {
+class GroupsController extends Controller {
 
     use TraitController;
 

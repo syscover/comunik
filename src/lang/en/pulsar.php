@@ -15,5 +15,8 @@ return [
     'package_name'                          => 'Comunik',
     'campaign'                              => 'Campaign|Campaigns',
     'international_prefix'                  => 'International prefix',
+    'interval_shipping'                     => 'Shipping interval',
+    'test_group'                            => 'Test group',
+    'interval_process'                      => 'Interval process',
     'sms'                                   => 'SMS',
 ];

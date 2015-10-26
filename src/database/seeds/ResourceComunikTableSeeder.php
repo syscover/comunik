@@ -14,9 +14,9 @@ class ResourceComunikTableSeeder extends Seeder {
             ['id_007' => 'comunik-email-campaign','name_007' => 'Email services -- Campaigns','package_007' => '3'],
             ['id_007' => 'comunik-email-sending','name_007' => 'Email services -- Sendings','package_007' => '3'],
             ['id_007' => 'comunik-email-template','name_007' => 'Email services -- Templates','package_007' => '3'],
-            ['id_007' => 'comunik-email-preference','name_007' => 'Email services -- Preferences','package_007' => '3'],
             ['id_007' => 'comunik-email-message','name_007' => 'Email services -- Messages','package_007' => '3'],
             ['id_007' => 'comunik-email-pattern','name_007' => 'Email patterns -- Patterns','package_007' => '3'],
+            ['id_007' => 'comunik-email-preference','name_007' => 'Email services -- Preferences','package_007' => '3'],
         ]);
     }
 }
