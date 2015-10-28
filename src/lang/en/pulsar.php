@@ -20,7 +20,7 @@ return [
     'interval_process'                      => 'Interval process',
     'sms'                                   => 'SMS',
     'include_html_link'                     => 'Include HTML link',
-    'include_unsuscribe_link'               => 'Include unsuscribe link',
+    'include_unsubscribe_link'              => 'Include unsubscribe link',
     'include_track_pixel'                   => 'Include track pixel',
-    'unsuscribe_link'                       => 'Unsuscribe link',
+    'unsubscribe_link'                      => 'Unsubscribe link',
 ];

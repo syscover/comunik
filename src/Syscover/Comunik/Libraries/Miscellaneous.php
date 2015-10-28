@@ -103,13 +103,12 @@ class Miscellaneous
     {
         if($path === null)
         {
-            $path  = public_path().'/packages/pulsar/pulsar/plugins/contentbuilder/themes/';
+            $path  = public_path().'/packages/syscover/comunik/email/themes/';
         }
 
         if (is_dir($path))
         {
-            $themes = array();
-
+            $themes = [];
             if ($rsc = opendir($path))
             {
                 while (($file = readdir($rsc)) !== false)
@@ -117,7 +116,7 @@ class Miscellaneous
                     if (is_dir($path . $file) && $file != "." && $file != ".." && file_exists ($path . $file . '/settings.json'))
                     {
                         $settings = json_decode(file_get_contents($path . $file . '/settings.json'));
-                        array_push($themes, $settings);
+                        $themes[] = $settings;
                     }
                 }
                 closedir($rsc);
