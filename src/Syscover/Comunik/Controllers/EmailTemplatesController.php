@@ -1,6 +1,7 @@
 <?php namespace Syscover\Comunik\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
@@ -21,7 +22,8 @@ class EmailTemplatesController extends Controller {
 
     public function createCustomRecord($parameters)
     {
-        $parameters['groups'] = Group::all();
+        $parameters['emlHeaders']   = MiscellaneousComunik::getEmlHeaders();
+        $parameters['themes']       = MiscellaneousComunik::getThemes();
 
         return $parameters;
     }

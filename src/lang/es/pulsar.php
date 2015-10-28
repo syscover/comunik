@@ -19,4 +19,8 @@ return [
     'test_group'                            => 'Grupo de test',
     'interval_process'                      => 'Proceso de intervalo',
     'sms'                                   => 'SMS',
+    'include_html_link'                     => 'Incluir link HTML',
+    'include_unsuscribe_link'               => 'Incluir link unsuscribe',
+    'include_track_pixel'                   => 'Include pixel se seguimiento',
+    'unsuscribe_link'                       => 'Link unsuscribe',
 ];

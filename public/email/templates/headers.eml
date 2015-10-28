@@ -1,0 +1,18 @@
+Return-Path: #returpath#
+Date: #date#
+Subject: #subject#
+From: #from#
+To: #to#
+Envelope-To: #envelopeto#
+Message-ID: <0f7cbbe6a24ea19b2bc98c26e72ba064@swift.generated>
+MIME-Version: 1.0
+
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+#text#
+
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+#html#
