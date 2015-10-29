@@ -167,9 +167,10 @@
 
                     $.uniform.update();
                 }
-                else {
+                else
+                {
                     $('#btContent').fadeIn();
-                    var url = '{{ route('contentbuilder', ['theme' => 'theme', 'input' => 'body'])  }}';
+                    var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body'])  }}';
                     $('#btContent').attr('href', url.replace('theme', $('[name="theme"]').val()));
 
                     $.ajax({
@@ -190,6 +191,17 @@
                             //error
                         }
                     });
+                }
+            });
+
+            // set magnific popup
+            $('#btContent').magnificPopup({
+                type: 'iframe',
+                iframe: {
+                    markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
+                    '<div class="mfp-close"></div>'+
+                    '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                    '</div>'
                 }
             });
         });
@@ -321,17 +333,11 @@
             {{ $errors->first('body', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
         </div>
-        <div class="col-md-2">
-            <div class="marginB10"><a class="btn btn-inverse actionB" data-target="body" data-template="name" href="#">{{ trans('pulsar::pulsar.name') }}</a></div>
-            <div class="marginB10"><a class="btn btn-inverse actionB" data-target="body" data-template="surname" href="#">{{ trans('pulsar::pulsar.surname') }}</a></div>
-            <div class="marginB10"><a class="btn btn-inverse actionB" data-target="body" data-template="email" href="#">{{ trans('pulsar::pulsar.email') }}</a></div>
-            <div class="marginB10"><a class="btn btn-inverse actionB" data-target="body" data-template="unsubscribe" href="#">{{ trans('comunik::pulsar.unsubscribe_link') }}</a></div>
-        </div>
     </div>
     @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => Input::old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
-            <div><a id="btContent" class="btn btn-info mfp-iframe" href="#" data-options='{"width":"90p", "height":"90p", "iframe": true, "modal": true}'>Modificar theme</a></div>
+            <div><a id="btContent" class="btn btn-info mfp-iframe" href="#" data-options='{"width":"90p", "height":"90p", "iframe": true, "modal": true}'>Insertar theme</a></div>
         </div>
     </div>
     <!-- /comunik::email_templates.create -->

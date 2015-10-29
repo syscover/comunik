@@ -25,6 +25,11 @@ class ComunikServiceProvider extends ServiceProvider
 			realpath(__DIR__ . '/../../../public') => public_path('/packages/syscover/comunik')
 		]);
 
+		// register config files
+		$this->publishes([
+			realpath(__DIR__ . '/../../config/comunik.php') => config_path('comunik.php')
+		]);
+
         // register migrations
         $this->publishes([
             __DIR__.'/../../database/migrations/' => base_path('/database/migrations'),

@@ -77,7 +77,7 @@ class Miscellaneous
 
         if($path === null)
         {
-            $path  = public_path().'/packages/pulsar/comunik/email/templates/footer.html';
+            $path  = public_path() . '/packages/pulsar/comunik/email/templates/footer.html';
         }
 
         if (file_exists ($path))
@@ -103,7 +103,7 @@ class Miscellaneous
     {
         if($path === null)
         {
-            $path  = public_path().'/packages/syscover/comunik/email/themes/';
+            $path  = public_path() . config('comunik.themesFolder');
         }
 
         if (is_dir($path))
