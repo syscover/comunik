@@ -170,12 +170,12 @@
                 else
                 {
                     $('#btContent').fadeIn();
-                    var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body'])  }}';
+                    var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body']) }}';
                     $('#btContent').attr('href', url.replace('theme', $('[name="theme"]').val()));
 
                     $.ajax({
                         type:       "POST",
-                        url:        "{{ asset('packages/syscover/comunik/email/themes') }}/" + $('[name="theme"]').val() + '/settings.json',
+                        url:        "{{ asset(config('comunik.themesFolder')) }}/" + $('[name="theme"]').val() + '/settings.json',
                         dataType:   "json",
                         success:  function(data) {
                             $('#data').val(JSON.stringify(data));
