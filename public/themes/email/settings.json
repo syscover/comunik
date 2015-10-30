@@ -3,10 +3,12 @@
     "name": "Email",
     "version": "1.0",
     "description": "Plantilla desarrollada para diseños de email",
-    "setWidth": true,
-    "width": 600,
     "fullscreenButton": false,
     "saveButton":true,
+    "setWidth": true,
+    "width": 600,
+
+
     "setBackgroundColor": true,
     "backgroundColor": "#F4F4F4",
     "setCanvasColor": false,

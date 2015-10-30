@@ -206,17 +206,22 @@
             });
         });
 
-        var getValueContentBuilder = function(sHTML, dataRequest) {
+        //var getValueContentBuilder = function(html, dataRequest) {
+        var getValueContentBuilder = function(html) {
+
+
+            var url = '{{ route('contentbuilderBlocks', ['theme' => 'theme']) }}';
 
             $.ajax({
                 type:       "POST",
-                url:        "{{ URL::to(config('pulsar::pulsar.rootUri') . '/pulsar/contentbuilder/action/blocks') }}/" + $('[name="theme"]').val() ,
+                url:        url.replace('theme', $('[name="theme"]').val()),
                 dataType:   "json",
                 data:       dataRequest,
-                success:  function(data) {
-
+                success:  function(data)
+                {
                     $('#header').val(data.header);
-                    $('#body').val(sHTML);
+                    //$('#body').val(html);
+                    //$('.wysiwyg').froalaEditor('html.set', html);
                     $('#footer').val(data.footer);
 
                     $('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados
