@@ -14,7 +14,6 @@ class Contact extends Model {
     public $timestamps      = false;
     protected $fillable     = ['id_041','company_041','name_041','surname_041','birthdate_041','country_041','prefix_041','mobile_041','email_041'];
     private static $rules   = [
-
         'groups'        => 'required',
         'company'       => 'between:2,100',
         'name'          => 'required|between:2,50',
@@ -52,7 +51,7 @@ class Contact extends Model {
 
     public static function getCustomReturnRecordsLimit($query)
     {
-        return $query->groupBy('id_040')
+        return $query->groupBy('id_041')
             ->get(array('*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')));
     }
 }

@@ -1,6 +1,5 @@
 <?php namespace Syscover\Comunik\Controllers;
 
-use Illuminate\Support\Facades\Request;
 use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\EmailTemplate;
 use Syscover\Pulsar\Controllers\Controller;
@@ -28,72 +27,63 @@ class EmailTemplatesController extends Controller {
         return $parameters;
     }
 
-    public function storeCustomRecord($parameters, $request)
+    public function storeCustomRecord($request, $parameters)
     {
         // check if header is include inside body field
-        if(Input::has('header') == "" && strpos(Input::get('body'), "<!DOCTYPE html") === false)
+        if($request->has('theme') && $request->input('header') == "" && strpos($request->input('body'), "<!DOCTYPE html") === false)
         {
-            $header =   MiscellaneousComunik::getHeader();
+            $header =   MiscellaneousComunik::getHeader(public_path() . config('comunik.themesFolder') . $request->input('theme') . '/header.html');
         }
         else
         {
-            $header = Input::get('header');
+            $header = $request->input('header');
         }
 
-        if(Input::has('isHtmlLink'))
+        // check if include html link
+        if($request->has('isHtmlLink'))
         {
-            $body = MiscellaneousComunik::setHtmlLink(Input::get('body'));
+            $body = MiscellaneousComunik::setHtmlLink($parameters, $request->input('body'));
         }
         else
         {
-            $body = Input::get('body');
+            $body = $request->input('body');
         }
 
-        if(Input::has('isUnsubscribe'))
+        // check if include unsubscribe link
+        if($request->has('isUnsubscribe'))
         {
-            $body = MiscellaneousComunik::setUnsubscribe($body);
+            $body = MiscellaneousComunik::setUnsubscribe($parameters, $body);
         }
 
-        if(Input::has('isPixel'))
+        // check if include track pixel
+        if($request->has('isPixel'))
         {
-            $body = MiscellaneousComunik::setTracingPixel($body);
+            $body = MiscellaneousComunik::setTrackingPixel($request, $body);
         }
 
-        if(Input::has('footer') == "" && strpos(Input::get('body'), "</html>") === false)
+        // check if footer is include inside body field
+        if($request->has('theme') && $request->input('footer') == "" && strpos($request->input('body'), "</html>") === false)
         {
-            $footer =   MiscellaneousComunik::getFooter();
+            $footer = MiscellaneousComunik::getFooter(public_path() . config('comunik.themesFolder') . $request->input('theme') . '/footer.html');
         }
         else
         {
-            $footer = Input::get('footer');
+            $footer = $request->input('footer');
         }
 
+        // convert html to text, to send text version email
         $text = MiscellaneousComunik::htmlToText($header . $body . $footer);
 
         EmailTemplate::create([
-            'name_043'      => Input::get('name'),
-            'subject_043'   => Input::get('subject'),
-            'theme_043'     => Input::get('theme'),
+            'name_043'      => $request->input('name'),
+            'subject_043'   => $request->input('subject'),
+            'theme_043'     => $request->input('theme'),
             'header_043'    => $header,
             'body_043'      => $body,
             'footer_043'    => $footer,
             'text_043'      => $text,
-            'data_043'      => Input::get('data')
+            'data_043'      => $request->input('data')
         ]);
-
-
-        $contact = Contact::create([
-            'company_041'       => Request::input('company'),
-            'name_041'          => Request::input('name'),
-            'surname_041'       => Request::input('surname'),
-            'birthdate_041'     => Request::has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), Request::input('birthdate'))->getTimestamp() : null,
-            'country_041'       => Request::input('country'),
-            'prefix_041'        => Request::input('prefix'),
-            'mobile_041'        => Request::has('mobile')? str_replace('-', '', Request::input('mobile')) : null,
-            'email_041'         => strtolower(Request::input('email')),
-        ]);
-
-        $contact->groups()->attach(Request::input('groups'));
     }
 
     public function editCustomRecord($request, $parameters)
@@ -108,8 +98,8 @@ class EmailTemplatesController extends Controller {
     {
         $contact = Contact::find($parameters['id']);
 
-        $parameters['specialRules']['emailRule'] = Request::input('email') == $contact->email_041? true : false;
-        $parameters['specialRules']['mobileRule'] = Request::input('mobile') == $contact->mobile_041? true : false;
+        $parameters['specialRules']['emailRule'] = $request->input('email') == $contact->email_041? true : false;
+        $parameters['specialRules']['mobileRule'] = $request->input('mobile') == $contact->mobile_041? true : false;
 
         return $parameters;
     }
@@ -117,14 +107,14 @@ class EmailTemplatesController extends Controller {
     public function updateCustomRecord($request, $parameters)
     {
         Contact::where('id_041', $parameters['id'])->update([
-            'company_041'       => Request::input('company'),
-            'name_041'          => Request::input('name'),
-            'surname_041'       => Request::input('surname'),
-            'birthdate_041'     => Request::has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), Request::input('birthdate'))->getTimestamp() : null,
-            'country_041'       => Request::input('country'),
-            'prefix_041'        => Request::input('prefix'),
-            'mobile_041'        => Request::has('mobile')? str_replace('-', '', Request::input('mobile')) : null,
-            'email_041'         => strtolower(Request::input('email')),
+            'company_041'       => $request->input('company'),
+            'name_041'          => $request->input('name'),
+            'surname_041'       => $request->input('surname'),
+            'birthdate_041'     => $request->has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthdate'))->getTimestamp() : null,
+            'country_041'       => $request->input('country'),
+            'prefix_041'        => $request->input('prefix'),
+            'mobile_041'        => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
+            'email_041'         => strtolower($request->input('email')),
         ]);
     }
 }

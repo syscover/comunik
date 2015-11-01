@@ -1,8 +1,5 @@
 <?php namespace Syscover\Comunik\Libraries;
 
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
 use Syscover\Pulsar\Libraries\Miscellaneous as MiscellaneousPulsar;
 use Syscover\Comunik\Models\PatternEmail;
 use Syscover\Comunik\Models\Contacto;
@@ -17,7 +14,7 @@ class Miscellaneous
      * @return  string
      * @throws  \Exception
      */
-    public static function getEmlHeaders($path  = null)
+    public static function getEmlHeaders($path = null)
     {
         if($path === null)
         {
@@ -44,16 +41,10 @@ class Miscellaneous
      * @return  string
      * @throws  \Exception
      */
-    public static function getHeader($path  = null)
+    public static function getHeader($path)
     {
-        if($path === null)
-        {
-            $path  = public_path() . '/packages/syscover/comunik/email/templates/header.html';
-        }
-
         if (file_exists ($path))
         {
-
             $header = file_get_contents($path);
 
             return $header;
@@ -72,14 +63,8 @@ class Miscellaneous
      * @return  string
      * @throws  \Exception
      */
-    public static function getFooter($path  = null)
+    public static function getFooter($path)
     {
-
-        if($path === null)
-        {
-            $path  = public_path() . '/packages/pulsar/comunik/email/templates/footer.html';
-        }
-
         if (file_exists ($path))
         {
             $footer = file_get_contents($path);
@@ -99,7 +84,7 @@ class Miscellaneous
      * @return  string
      * @throws  \Exception
      */
-    public static function getThemes($path  = null)
+    public static function getThemes($path = null)
     {
         if($path === null)
         {
@@ -125,6 +110,114 @@ class Miscellaneous
         }
         return false;
     }
+
+    /**
+     * Function to insert link to show online
+     *
+     * @access  public
+     * @param   \Illuminate\Http\Request    $request
+     * @param   string                      $html
+     * @return  string
+     */
+    public static function setHtmlLink($request, $html)
+    {
+        // create link
+        $htmlLink = str_replace("#link#", route('showComunikEmailCampaign', ['campaign' => '#campaign#', 'contact' => '#contact#']), $request->input('htmlLink'));
+
+        $piece = '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
+            . $htmlLink .
+            '</td></tr></table>';
+
+        $indexBodyTag = strpos($html, "<body");
+
+        if($indexBodyTag === false)
+        {
+            $html = $piece . $html;
+        }
+        else
+        {
+            for ($i = $indexBodyTag; $i < strlen($html); $i++)
+            {
+                if ($html[$i] == ">")
+                {
+                    $indexEndBodyTag = $i;
+                    $i = strlen($html);
+                }
+            }
+            $html = substr_replace($html, $piece, $indexEndBodyTag + 1, 0);
+        }
+
+        return $html;
+    }
+
+    /**
+     * Function to insert link to unsubscribe
+     *
+     * @access  public
+     * @param   \Illuminate\Http\Request    $request
+     * @param   string                      $html
+     * @return  string
+     */
+    public static function setUnsubscribe($request, $html)
+    {
+        // create link
+        $unsubscribe = str_replace("#unsubscribe#", route('showUnsubscribeComunikContact', ['contact' => '#contact#']), $request->input('unsubscribe'));
+
+        $piece = '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
+            . $unsubscribe .
+            '</td></tr></table>';
+
+        $indexBodyTag = strpos($html, "</body>");
+
+        if($indexBodyTag === false)
+        {
+            $html = $html . $piece;
+        }
+        else
+        {
+            $html = substr_replace($html, $piece, $indexBodyTag, 0);
+        }
+
+        return $html;
+    }
+
+    /**
+     * Function to insert tracking pixel
+     *
+     * @access  public
+     * @param   \Illuminate\Http\Request    $request
+     * @param   string                      $html
+     * @return  string
+     */
+    public static function setTrackingPixel($request, $html)
+    {
+        $trackPixel = $request->input('trackPixel');
+
+        $indexBodyTag = strpos($html, "</body>");
+
+        if($indexBodyTag === false)
+        {
+            $html = $html . $trackPixel;
+        }
+        else
+        {
+            $html = substr_replace($html, $trackPixel, $indexBodyTag, 0);
+        }
+
+        return $html;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -194,104 +287,14 @@ class Miscellaneous
         return $response;
     }
 
-    /*
-     *  Función que inserta en un documento HTML 
-     *  un link para visualizar el mensaje online
-     *
-     * @access	public
-     * @return	string
-     */
-    public static function setHtmlLink($html)
-    {
-        //creamos el enlace según el formato dado
-        $htmlLink = str_replace("#link#", URL::to(Config::get('pulsar::pulsar.rootUri')).'/comunik/email/services/campanas/show/#message#/#contact#', Input::get('htmlLink'));
-
-        $piece =    '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
-                    .$htmlLink.
-                    '</td></tr></table>';
-
-        $idexBodyTag = strpos($html, "<body");
-
-        if($idexBodyTag === false)
-        {
-            $html = $piece . $html;
-        }
-        else
-        {
-            for ($i = $idexBodyTag; $i < strlen($html); $i++)
-            {
-                if ($html[$i] == ">")
-                {
-                    $idexEndBodyTag = $i;
-                    $i = strlen($html);
-                }
-            }
-            $html = substr_replace($html, $piece, $idexEndBodyTag+1, 0);
-        }
-
-        return $html;
-    }
-    
-    /*
-     *  Función que inserta en un documento HTML 
-     *  un link para realizar la operación de unsuscribe
-     *
-     * @access	public
-     * @return	string
-     */
-    public static function setUnsubscribe($html)
-    {
-        $unsubscribe = str_replace("#unsubscribe#", URL::to(Config::get('pulsar::pulsar.rootUri')).'/comunik/contactos/unsubscribe/email/#contact#', Input::get('unsubscribe'));
-
-        $piece =    '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
-            .$unsubscribe.
-            '</td></tr></table>';
-
-        $idexBodyTag = strpos($html, "</body>");
-
-        if($idexBodyTag === false)
-        {
-            $html = $html . $piece;
-        }
-        else
-        {
-            $html = substr_replace($html, $piece, $idexBodyTag, 0);
-        }
-        return $html;
-    }
-    
-    /*
-     *  Función que inserta en un documento HTML 
-     *  un pixel para realizar el seguimineto del envío
-     *
-     * @access	public
-     * @return	string
-     */
-    public static function setTracingPixel($html)
-    {
-        $seguimiento = Input::get('seguimiento');
-
-        $idexBodyTag = strpos($html, "</body>");
-
-        if($idexBodyTag === false)
-        {
-            $html = $html . $seguimiento;
-        }
-        else
-        {
-            $html = substr_replace($html, $seguimiento, $idexBodyTag, 0);
-        }
-
-        return $html;
-    }
-
-
 
     /**
-     *  Función para convertir el html al texto
+     * Function to convert html to text
      *
-     * @access	public
-     * @return	boolean
+     * @access  public
+     * @param   string $html
+     * @return  string
+     * @throws \Exception
      */
     public static function htmlToText($html)
     {
@@ -318,8 +321,8 @@ class Miscellaneous
      * then \r becomes \n. This means that all newlines (Unix, Windows, Mac)
      * all become \ns.
      *
-     * @param string text text with any number of \r, \r\n and \n combinations
-     * @return string the fixed text
+     * @param   string $text text with any number of \r, \r\n and \n combinations
+     * @return  string the fixed text
      */
     private static function fixNewlines($text)
     {

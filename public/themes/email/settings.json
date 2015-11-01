@@ -5,13 +5,12 @@
     "description": "Plantilla desarrollada para diseños de email",
     "fullscreenButton": false,
     "saveButton":true,
-    "setWidth": true,
+    "setWidth": false,
     "width": 600,
 
 
     "setBackgroundColor": true,
     "backgroundColor": "#F4F4F4",
-
     "setCanvasColor": false,
     "canvasColor": "#F8F8F8",
     "setHighlightColor": true,

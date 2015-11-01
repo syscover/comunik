@@ -63,6 +63,24 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
 
     /*
     |--------------------------------------------------------------------------
+    | MOD. EMAIL SERVICES CAMPAIGNS
+    |--------------------------------------------------------------------------
+    */
+    Route::any(config('pulsar.appName').'/comunik/email/services/campaigns/{offset?}',                          ['as'=>'ComunikEmailCampaign',                  'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@index']);
+    Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/send/test/{campana}/{offset?}',      ['as'=>'sendTestComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@sendTest']);
+    Route::any(config('pulsar.appName').'/comunik/email/services/campaigns/json/data',                          ['as'=>'jsonDataComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@jsonData']);
+    Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/create/{offset}/{id?}',              ['as'=>'createComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@create']);
+    Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/preview/{id}',                       ['as'=>'previewComunikEmailCampaign',           'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@preview']);
+    Route::post(config('pulsar.appName').'/comunik/email/services/campaigns/store/{offset}',                    ['as'=>'storeComunikEmailCampaign',             'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@store']);
+    Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/{id}/edit/{offset}',                 ['as'=>'editComunikEmailCampaign',              'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@edit']);
+    Route::put(config('pulsar.appName').'/comunik/email/services/campaigns/update/{offset}',                    ['as'=>'updateComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@update']);
+    Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/delete/{id}',                        ['as'=>'deleteComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@delete']);
+    Route::delete(config('pulsar.appName').'/comunik/email/services/campaigns/delete/select/elements',          ['as'=>'deleteSelectComunikEmailCampaign',      'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@deleteSelect']);
+
+
+
+    /*
+    |--------------------------------------------------------------------------
     | MOD. EMAIL SERVICES PREFERENCES
     |--------------------------------------------------------------------------
     */
@@ -99,22 +117,6 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     Route::any(config('pulsar.appName').'/comunik/email/services/envios/json/data/{campana}',      array('as'=>'jsonDataEmailServicesEnvios', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesEnvios@jsonData'));
     Route::get(config('pulsar.appName').'/comunik/email/services/envios/forward/{envio}/{offset?}',  array('as'=>'forwardEmailServicesEnvios', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesEnvios@forward'));
 
-    /*
-    |--------------------------------------------------------------------------
-    | EMAIL SERVICES CAMPAÑA
-    |--------------------------------------------------------------------------
-    */
-    Route::any(config('pulsar.appName').'/comunik/email/services/campanas/{offset?}',                        array('as'=>'emailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@index'));
-    Route::get(config('pulsar.appName').'/comunik/email/services/campanas/send/test/{campana}/{offset?}',    array('as'=>'sendTestEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@sendTest'));
-    Route::any(config('pulsar.appName').'/comunik/email/services/campanas/json/data',                      array('as'=>'jsonDataEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@jsonData'));
-    Route::get(config('pulsar.appName').'/comunik/email/services/campanas/create/{offset}/{id?}',            array('as'=>'createEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@create'));
-    Route::get(config('pulsar.appName').'/comunik/email/services/campanas/preview/{id}',                   array('as'=>'previewEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@preview'));
-    Route::post(config('pulsar.appName').'/comunik/email/services/campanas/store/{offset}',                  array('as'=>'storeEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@store'));
-    Route::get(config('pulsar.appName').'/comunik/email/services/campanas/{id}/edit/{offset}',               array('as'=>'editEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@edit'));
-    Route::post(config('pulsar.appName').'/comunik/email/services/campanas/update/{offset}',                 array('as'=>'updateEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@update'));
-    Route::get(config('pulsar.appName').'/comunik/email/services/campanas/delete/{id}',                   array('as'=>'deleteEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@delete'));
-    Route::post(config('pulsar.appName').'/comunik/email/services/campanas/delete/select/elements',       array('as'=>'deleteEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@deleteSelect'));
-    
 
     /*
     |--------------------------------------------------------------------------
@@ -201,6 +203,28 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
 
 /*
 |--------------------------------------------------------------------------
+| EMAIL SERVICES CAMPAIGNS
+|--------------------------------------------------------------------------
+*/
+Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{contact}',    ['as'=>'showComunikEmailCampaign', 'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@show']);
+
+/*
+|--------------------------------------------------------------------------
+| MOD. CONTACTS
+|--------------------------------------------------------------------------
+*/
+Route::post(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email', ['before' => 'csrf', 'as'=>'unsubscribeComunikContact', 'uses'=>'Syscover\Comunik\Controllers\Contacts@unsubscribeEmail']);
+Route::get(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email/{contact}', ['as' => 'showUnsubscribeComunikContact', function($id) {
+    return view('comunik::pulsar.comunik.contacts.email_unsubscribe', ['id' => $id]);
+}]);
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
 | SPAM MANAGER
 |--------------------------------------------------------------------------
 */
@@ -214,22 +238,8 @@ Route::post(config('pulsar.appName').'/comunik/email/services/spam/score', array
 Route::post(config('pulsar.appName').'/comunik/contacts/json/get_contacto_movil/{movil}', array('as'=>'jsonGetContactoMovil', 'uses'=>'Syscover\Comunik\Controllers\Contacts@jsonGetContactoMovil'));
 Route::post(config('pulsar.appName').'/comunik/contacts/json/get_contacto_email/{email}', array('as'=>'jsonGetContactoEmail', 'uses'=>'Syscover\Comunik\Controllers\Contacts@jsonGetContactoEmail'));
 
-/*
-|--------------------------------------------------------------------------
-| EMAIL SERVICES CAMPANAS
-|--------------------------------------------------------------------------
-*/
-Route::get(config('pulsar.appName').'/comunik/email/services/campanas/show/{campana}/{contact}', array('as'=>'showEmailServicesCampanas', 'uses'=>'Syscover\Comunik\Controllers\EmailServicesCampanas@show'));
 
-/*
-|--------------------------------------------------------------------------
-| MOD. CONTACTOS
-|--------------------------------------------------------------------------
-*/
-Route::post(config('pulsar.appName').'/comunik/contacts/unsubscribe/email', array('before' => 'csrf', 'as'=>'unsubscribeComunikContact', 'uses'=>'Syscover\Comunik\Controllers\Contacts@unsubscribeEmail'));
-Route::get(config('pulsar.appName').'/comunik/contacts/unsubscribe/email/{contact}', function($id){
-    return View::make('comunik::pulsar.comunik.contacts.email_unsubscribe',array('id' => $id));
-});
+
 
 /*
 |--------------------------------------------------------------------------

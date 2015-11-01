@@ -5,12 +5,12 @@ use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Contact;
 
-class ContactsController extends Controller {
+class EmailCampaignsController extends Controller {
 
     use TraitController;
 
-    protected $routeSuffix  = 'ComunikContact';
-    protected $folder       = 'contacts';
+    protected $routeSuffix  = 'ComunikEmailCampaign';
+    protected $folder       = 'campaigns';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_mobile_041', 'type' => 'invertActive'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
     protected $nameM        = 'name_041';

@@ -222,8 +222,8 @@
                 success:  function(data)
                 {
                     $('#header').val(data.header);
-                    $('.wysiwyg').val(data.header + html + data.footer);
-                    //$('.wysiwyg').froalaEditor('html.set', data.header + html + data.footer);
+                    $('.wysiwyg').val(html);
+                    //$('.wysiwyg').froalaEditor('html.set', html);
                     $('#footer').val(data.footer);
 
                     //$('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados

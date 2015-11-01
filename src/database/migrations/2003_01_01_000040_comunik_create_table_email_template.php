@@ -21,7 +21,7 @@ class ComunikCreateTableEmailTemplate extends Migration {
                 $table->text('body_043');
                 $table->text('footer_043');
                 $table->text('text_043');
-                $table->text('data_043');
+                $table->text('data_043')->nullable();
             });
 	}
 
