@@ -23,4 +23,7 @@ return [
     'include_unsubscribe_link'              => 'Incluir link unsubscribe',
     'include_track_pixel'                   => 'Include pixel se seguimiento',
     'unsubscribe_link'                      => 'Link unsubscribe',
+    'shipping_date'                         => 'Fecha de envío',
+    'persistence_date'                      => 'Fecha de persistencia',
+    'sent_queue'                            => 'Enviada a cola',
 ];

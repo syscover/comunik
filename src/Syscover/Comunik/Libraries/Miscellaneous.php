@@ -43,7 +43,7 @@ class Miscellaneous
      */
     public static function getHeader($path)
     {
-        if (file_exists ($path))
+        if(file_exists($path))
         {
             $header = file_get_contents($path);
 
@@ -65,7 +65,7 @@ class Miscellaneous
      */
     public static function getFooter($path)
     {
-        if (file_exists ($path))
+        if(file_exists($path))
         {
             $footer = file_get_contents($path);
             return $footer;

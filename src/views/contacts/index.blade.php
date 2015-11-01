@@ -32,11 +32,11 @@
     <!-- comunik::contacts.index -->
     <tr>
         <th data-hide="phone,tablet">ID.</th>
-        <th>{{ trans('pulsar::pulsar.name') }}</th>
+        <th data-class="expand">{{ trans('pulsar::pulsar.name') }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.surname') }}</th>
         <th data-hide="phone,tablet">{{ trans_choice('pulsar::pulsar.country', 1) }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.mobile') }}</th>
-        <th data-hide="expand">{{ trans('pulsar::pulsar.email') }}</th>
+        <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.email') }}</th>
         <th data-hide="phone,tablet">{{ trans('comunik::pulsar.sms') }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.email') }}</th>
         <th data-hide="phone,tablet">{{ trans_choice('pulsar::pulsar.group', 2) }}</th>

@@ -29,7 +29,7 @@ class ComunikCreateTableEmailCampaign extends Migration {
             $table->smallInteger('sorting_044')->nullable()->unsigned()->default(0);
             $table->boolean('created_044')->default(false);
             $table->boolean('sent_044')->default(false);
-            $table->integer('viewed_048')->unsigned()->default(0);
+            $table->integer('viewed_044')->unsigned()->default(0);
 
             $table->foreign('email_account_044')->references('id_013')->on('001_013_email_account')
                     ->onDelete('restrict')->onUpdate('cascade');

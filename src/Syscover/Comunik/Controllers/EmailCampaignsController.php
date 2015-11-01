@@ -3,7 +3,10 @@
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
+use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\Contact;
+use Syscover\Pulsar\Models\EmailAccount;
+use Syscover\Comunik\Models\EmailTemplate;
 
 class EmailCampaignsController extends Controller {
 
@@ -12,15 +15,17 @@ class EmailCampaignsController extends Controller {
     protected $routeSuffix  = 'ComunikEmailCampaign';
     protected $folder       = 'campaigns';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_mobile_041', 'type' => 'invertActive'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
-    protected $nameM        = 'name_041';
-    protected $model        = '\Syscover\Comunik\Models\Contact';
+    protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', 'sent_044'];
+    protected $nameM        = 'name_044';
+    protected $model        = '\Syscover\Comunik\Models\EmailCampaign';
     protected $icon         = 'fa fa-user';
-    protected $objectTrans  = 'contact';
+    protected $objectTrans  = 'campaign';
 
     public function createCustomRecord($request, $parameters)
     {
-        $parameters['groups'] = Group::all();
+        $parameters['emailAccounts']    = EmailAccount::all();
+        $parameters['templates']        = EmailTemplate::all();
+        $parameters['themes']           = MiscellaneousComunik::getThemes();
 
         return $parameters;
     }
