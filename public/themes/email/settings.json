@@ -11,6 +11,7 @@
 
     "setBackgroundColor": true,
     "backgroundColor": "#F4F4F4",
+
     "setCanvasColor": false,
     "canvasColor": "#F8F8F8",
     "setHighlightColor": true,

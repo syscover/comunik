@@ -138,7 +138,7 @@
                     this.html.insert('#unsubscribe#');
                 }
             });
-
+/*
             $('.wysiwyg').froalaEditor({
                 language: '{{ config('app.locale') }}',
                 placeholderText: '{{ trans('cms::pulsar.type_something') }}',
@@ -150,7 +150,7 @@
                 heightMin: 250,
                 enter: $.FroalaEditor.ENTER_BR,
                 key: '{{ config('pulsar.froalaEditorKey') }}'
-            });
+            });*/
 
             /*
              *   Cargamos los settings de un theme en el campo data, cuando cambiamos el selector de themes,
@@ -209,22 +209,24 @@
         //var getValueContentBuilder = function(html, dataRequest) {
         var getValueContentBuilder = function(html) {
 
-
             var url = '{{ route('contentbuilderBlocks', ['theme' => 'theme']) }}';
 
             $.ajax({
                 type:       "POST",
                 url:        url.replace('theme', $('[name="theme"]').val()),
                 dataType:   "json",
-                data:       dataRequest,
+                headers:    { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                data:       {
+                    themeFolder: '{{ config('comunik.themesFolder') }}/'
+                },
                 success:  function(data)
                 {
                     $('#header').val(data.header);
-                    //$('#body').val(html);
-                    //$('.wysiwyg').froalaEditor('html.set', html);
+                    $('.wysiwyg').val(data.header + html + data.footer);
+                    //$('.wysiwyg').froalaEditor('html.set', data.header + html + data.footer);
                     $('#footer').val(data.footer);
 
-                    $('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados
+                    //$('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados
                 },
                 error:function(objXMLHttpRequest){
                     //error
@@ -342,7 +344,7 @@
     @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => Input::old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
-            <div><a id="btContent" class="btn btn-info mfp-iframe" href="#" data-options='{"width":"90p", "height":"90p", "iframe": true, "modal": true}'>Insertar theme</a></div>
+            <div><a id="btContent" class="btn btn-info mfp-iframe">Insertar theme</a></div>
         </div>
     </div>
     <!-- /comunik::email_templates.create -->
