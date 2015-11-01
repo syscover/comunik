@@ -18,14 +18,14 @@ class GroupsController extends Controller {
     protected $icon         = 'fa fa-users';
     protected $objectTrans  = 'group';
 
-    public function storeCustomRecord()
+    public function storeCustomRecord($request, $parameters)
     {
         Group::create([
             'name_040'  => Request::input('name')
         ]);
     }
     
-    public function updateCustomRecord($parameters)
+    public function updateCustomRecord($request, $parameters)
     {
         Group::where('id_040', $parameters['id'])->update([
             'name_040'  => Request::input('name')

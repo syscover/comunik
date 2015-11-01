@@ -20,7 +20,7 @@ class EmailTemplatesController extends Controller {
     protected $icon         = 'fa fa-pencil-square-o';
     protected $objectTrans  = 'template';
 
-    public function createCustomRecord($parameters)
+    public function createCustomRecord($request, $parameters)
     {
         $parameters['emlHeaders']   = MiscellaneousComunik::getEmlHeaders();
         $parameters['themes']       = MiscellaneousComunik::getThemes();
@@ -96,7 +96,7 @@ class EmailTemplatesController extends Controller {
         $contact->groups()->attach(Request::input('groups'));
     }
 
-    public function editCustomRecord($parameters)
+    public function editCustomRecord($request, $parameters)
     {
         $parameters['emlHeaders']   = MiscellaneousComunik::getEmlHeaders();
         $parameters['themes']       = MiscellaneousComunik::getThemes();
@@ -104,7 +104,7 @@ class EmailTemplatesController extends Controller {
         return $parameters;
     }
 
-    public function checkSpecialRulesToUpdate($parameters)
+    public function checkSpecialRulesToUpdate($request, $parameters)
     {
         $contact = Contact::find($parameters['id']);
 
@@ -114,7 +114,7 @@ class EmailTemplatesController extends Controller {
         return $parameters;
     }
     
-    public function updateCustomRecord($parameters)
+    public function updateCustomRecord($request, $parameters)
     {
         Contact::where('id_041', $parameters['id'])->update([
             'company_041'       => Request::input('company'),
