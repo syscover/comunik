@@ -26,6 +26,7 @@ class EmailCampaignsController extends Controller {
         $parameters['emailAccounts']    = EmailAccount::all();
         $parameters['templates']        = EmailTemplate::all();
         $parameters['themes']           = MiscellaneousComunik::getThemes();
+        $parameters['emlHeaders']       = MiscellaneousComunik::getEmlHeaders();
         $parameters['groups']           = Group::all();
         $parameters['countries']        = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
 
