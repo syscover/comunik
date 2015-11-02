@@ -26,4 +26,6 @@ return [
     'shipping_date'                         => 'Fecha de envío',
     'persistence_date'                      => 'Fecha de persistencia',
     'sent_queue'                            => 'Enviada a cola',
+    'shipping_groups'                       => 'Grupos de envíos',
+    'shipping_countries'                    => 'Países de envíos',
 ];

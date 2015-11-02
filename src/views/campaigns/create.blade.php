@@ -50,9 +50,34 @@
     @endif
     <!-- /Froala -->
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/duallistbox/jquery.duallistbox.1.3.1.min.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+            //--------------- Customm Dual multi select ------------------//
+            $.configureBoxes({
+                textShowing: 'Mostrando',
+                textOf: 'de',
+                box1View: 'box3View',
+                box1Storage: 'box3Storage',
+                box1Filter: 'box3Filter',
+                box1Clear: 'box3Clear',
+                box1Counter: 'box3Counter',
+                box2View: 'box4View',
+                box2Storage: 'box4Storage',
+                box2Filter: 'box4Filter',
+                box2Clear: 'box4Clear',
+                box2Counter: 'box4Counter',
+                to1: 'to3',
+                to2: 'to4',
+                allTo1: 'allTo3',
+                allTo2: 'allTo4'
+            });
+
+
+
+
 
             //$('#report').hide();
 
@@ -339,7 +364,9 @@
         </div>
     </div>
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.preference', 2), 'icon' => 'fa fa-cog'])
-    @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.preference', 2), 'icon' => 'fa fa-globe'])
-    @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.preference', 2), 'icon' => 'fa fa-cog'])
+    @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
+    @include('pulsar::includes.html.form_lists_group', ['name' => 'groups', 'value' => Input::old('groups'), 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2])
+    @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
+    @include('pulsar::includes.html.form_lists_group', ['name' => 'countries', 'value' => Input::old('countries'), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4])
     <!-- /comunik::email_templates.create -->
 @stop

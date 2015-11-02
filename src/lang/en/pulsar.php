@@ -26,4 +26,6 @@ return [
     'shipping_date'                         => 'Shipping date',
     'persistence_date'                      => 'Persistence date',
     'sent_queue'                            => 'Sent to queue',
+    'shipping_groups'                       => 'Shipping groups',
+    'shipping_countries'                    => 'Shipping countries',
 ];

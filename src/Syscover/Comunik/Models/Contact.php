@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
+use Syscover\Pulsar\Models\Country;
 use Syscover\Pulsar\Traits\TraitModel;
 use Illuminate\Support\Facades\DB;
 
@@ -53,5 +54,18 @@ class Contact extends Model {
     {
         return $query->groupBy('id_041')
             ->get(array('*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')));
+    }
+
+    public static function getCountriesContacts($args)
+    {
+        return Country::join('001_001_lang', '001_002_country.lang_002', '=', '001_001_lang.id_001')
+            ->where('lang_002', $args['lang'])
+            ->whereIn('id_002', function($query) {
+                $query->select('country_041')
+                    ->from('005_041_contact')
+                    ->groupBy('country_041')
+                    ->get();
+            })
+            ->orderBy('name_002')->get();
     }
 }
