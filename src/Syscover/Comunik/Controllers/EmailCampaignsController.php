@@ -1,5 +1,6 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Syscover\Comunik\Models\EmailCampaign;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
@@ -35,18 +36,25 @@ class EmailCampaignsController extends Controller {
 
     public function storeCustomRecord($request)
     {
-        $contact = Contact::create([
-            'company_041'       => $request->input('company'),
-            'name_041'          => $request->input('name'),
-            'surname_041'       => $request->input('surname'),
-            'birthdate_041'     => $request->has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthdate'))->getTimestamp() : null,
-            'country_041'       => $request->input('country'),
-            'prefix_041'        => $request->input('prefix'),
-            'mobile_041'        => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
-            'email_041'         => strtolower($request->input('email')),
+        EmailCampaign::create([
+            'name_044'              => $request->input('name'),
+            'email_account_044'     => $request->input('account'),
+            'template_044'          => $request->input('template'),
+            'subject_044'           => $request->input('subject'),
+            'theme_044'             => $request->input('theme'),
+            'header_044'            => $request->input('header'),
+            'body_044'              => $request->input('body'),
+            'footer_044'            => $request->input('footer'),
+            'text_044'              => $request->input('text'),
+            'data_044'              => $request->input('data'),
+            'shipping_date_044'     => $request->input('shippingDate'),
+            'shipping_date_044'     => $request->input('shippingDate'),
+            'persistence_date_044'  => $request->input('persistenceDate'),
+            'sorting_044'           => $request->input('sorting'),
+            'created_044'           => $request->input('created'),
+            'sent_044'              => $request->input('sent'),
+            'viewed_044'            => $request->input('viewed'),
         ]);
-
-        $contact->groups()->attach($request->input('groups'));
     }
 
     public function editCustomRecord($request, $parameters)
