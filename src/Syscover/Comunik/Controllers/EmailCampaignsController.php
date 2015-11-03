@@ -94,8 +94,11 @@ class EmailCampaignsController extends Controller {
             'data_044'              => $request->input('data', 'NULL'),
             'shipping_date_044'     => $request->input('shippingDate'),
             'shipping_date_044'     => $request->input('shippingDate'),
-            'sorting_044'           => $request->input('sorting'),
+            'sorting_044'           => $request->input('sorting')
         ]);
+
+        $emailCampaign->countries()->attach($request->input('countries'));
+        $emailCampaign->groups()->attach($request->input('groups'));
     }
 
     public function editCustomRecord($request, $parameters)

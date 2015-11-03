@@ -30,4 +30,14 @@ class EmailCampaign extends Model {
 
         return $query;
     }
+
+    public function countries()
+    {
+        return EmailCampaign::belongsToMany('Syscover\Pulsar\Models\Country', '005_045_email_campaigns_countries', 'campaign_045', 'country_045');
+    }
+
+    public function groups()
+    {
+        return EmailCampaign::belongsToMany('Syscover\Comunik\Models\Group', '005_046_email_campaigns_groups', 'campaign_046','group_046');
+    }
 }
