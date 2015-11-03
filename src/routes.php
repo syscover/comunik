@@ -69,13 +69,13 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     Route::any(config('pulsar.appName').'/comunik/email/services/campaigns/{offset?}',                          ['as'=>'ComunikEmailCampaign',                  'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@index',          'resource' => 'comunik-email-campaign',     'action' => 'access']);
     Route::any(config('pulsar.appName').'/comunik/email/services/campaigns/json/data',                          ['as'=>'jsonDataComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@jsonData',       'resource' => 'comunik-email-campaign',     'action' => 'access']);
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/create/{offset}/{id?}',              ['as'=>'createComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@createRecord',   'resource' => 'comunik-email-campaign',     'action' => 'create']);
-
+    Route::post(config('pulsar.appName').'/comunik/email/services/campaigns/store/{offset}',                    ['as'=>'storeComunikEmailCampaign',             'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@storeRecord',    'resource' => 'comunik-email-campaign',     'action' => 'create']);
 
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/send/test/{campana}/{offset?}',      ['as'=>'sendTestComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@sendTest']);
 
 
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/preview/{id}',                       ['as'=>'previewComunikEmailCampaign',           'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@preview']);
-    Route::post(config('pulsar.appName').'/comunik/email/services/campaigns/store/{offset}',                    ['as'=>'storeComunikEmailCampaign',             'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@store']);
+
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/{id}/edit/{offset}',                 ['as'=>'editComunikEmailCampaign',              'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@edit']);
     Route::put(config('pulsar.appName').'/comunik/email/services/campaigns/update/{offset}',                    ['as'=>'updateComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@update']);
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/delete/{id}',                        ['as'=>'deleteComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@delete']);

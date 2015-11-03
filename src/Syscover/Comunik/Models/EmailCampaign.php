@@ -22,4 +22,12 @@ class EmailCampaign extends Model {
     {
         return Validator::make($data, static::$rules);
 	}
+
+    public static function getCustomRecordsLimit()
+    {
+        $query =  EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
+            ->newQuery();
+
+        return $query;
+    }
 }
