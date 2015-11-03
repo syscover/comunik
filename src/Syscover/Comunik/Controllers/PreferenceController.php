@@ -57,8 +57,8 @@ class PreferenceController extends Controller {
     
     public function updateCustomRecord()
     {
-        Preference::setValue('emailServiceIntervalShipping', Request::input('intervalShipping'), 3);
-        Preference::setValue('emailServiceTestGroup', Request::input('testGroup'), 3);
-        Preference::setValue('emailServiceIntervalProcess', Request::input('intervalProcess'), 3);
+        Preference::setValue('emailServiceIntervalShipping', 3, Request::input('intervalShipping'));
+        Preference::setValue('emailServiceTestGroup', 3, Request::input('testGroup'));
+        Preference::setValue('emailServiceIntervalProcess', 3, Request::input('intervalProcess'));
     }
 }
