@@ -27,8 +27,12 @@ class ComunikCreateTableEmailCampaign extends Migration {
             $table->integer('shipping_date_044')->nullable()->unsigned()->default(0);
             $table->integer('persistence_date_044')->nullable()->unsigned()->default(0);
             $table->smallInteger('sorting_044')->nullable()->unsigned()->default(0);
+
+            // estado en true, cuando estamos enviando los emails correspondientes a la campaña a cola de envíos
+            $table->boolean('processing_044')->default(false);
+            // estado en true, cuando todos los correos que tienen que ser enviados a cola de envíos se han enviado
             $table->boolean('created_044')->default(false);
-            $table->boolean('sent_044')->default(false);
+
             $table->integer('viewed_044')->unsigned()->default(0);
 
             $table->foreign('email_account_044')->references('id_013')->on('001_013_email_account')

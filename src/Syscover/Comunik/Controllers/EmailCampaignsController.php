@@ -16,7 +16,7 @@ class EmailCampaignsController extends Controller {
     protected $routeSuffix  = 'ComunikEmailCampaign';
     protected $folder       = 'campaigns';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', 'sent_044'];
+    protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';
     protected $model        = '\Syscover\Comunik\Models\EmailCampaign';
     protected $icon         = 'fa fa-user';
@@ -34,7 +34,7 @@ class EmailCampaignsController extends Controller {
         return $parameters;
     }
 
-    public function storeCustomRecord($request)
+    public function storeCustomRecord($request, $parameters)
     {
         // check if header is include inside body field
         if($request->has('theme') && $request->input('header') == "" && strpos($request->input('body'), "<!DOCTYPE html") === false)
@@ -103,7 +103,12 @@ class EmailCampaignsController extends Controller {
 
     public function editCustomRecord($request, $parameters)
     {
-        $parameters['groups'] = Group::all();
+        $parameters['emailAccounts']    = EmailAccount::all();
+        $parameters['templates']        = EmailTemplate::all();
+        $parameters['themes']           = MiscellaneousComunik::getThemes();
+        $parameters['emlHeaders']       = MiscellaneousComunik::getEmlHeaders();
+        $parameters['groups']           = Group::all();
+        $parameters['countries']        = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
 
         return $parameters;
     }

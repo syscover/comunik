@@ -36,7 +36,7 @@ class PreferenceController extends Controller {
             $parameters['intervalsShipping'][] = (object)['id' => $i, 'name' => str_pad($i, 2, '0', STR_PAD_LEFT)];
         $parameters['intervalShipping']     = Preference::getValue('emailServiceIntervalShipping', 3);
 
-        $parameters['groups'] = Group::all();
+        $parameters['groups']               = Group::all();
         $parameters['testGroup']            = Preference::getValue('emailServiceTestGroup', 3);
 
         $parameters['intervalsProcess']     = [

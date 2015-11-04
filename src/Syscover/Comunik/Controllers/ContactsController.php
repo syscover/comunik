@@ -12,7 +12,7 @@ class ContactsController extends Controller {
     protected $routeSuffix  = 'ComunikContact';
     protected $folder       = 'contacts';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_mobile_041', 'type' => 'invertActive'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
+    protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
     protected $nameM        = 'name_041';
     protected $model        = '\Syscover\Comunik\Models\Contact';
     protected $icon         = 'fa fa-user';
@@ -31,7 +31,7 @@ class ContactsController extends Controller {
             'company_041'       => $request->input('company'),
             'name_041'          => $request->input('name'),
             'surname_041'       => $request->input('surname'),
-            'birthdate_041'     => $request->has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthdate'))->getTimestamp() : null,
+            'birth_date_041'    => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
             'country_041'       => $request->input('country'),
             'prefix_041'        => $request->input('prefix'),
             'mobile_041'        => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
@@ -64,7 +64,7 @@ class ContactsController extends Controller {
             'company_041'       => $request->input('company'),
             'name_041'          => $request->input('name'),
             'surname_041'       => $request->input('surname'),
-            'birthdate_041'     => $request->has('birthdate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthdate'))->getTimestamp() : null,
+            'birth_date_041'    => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
             'country_041'       => $request->input('country'),
             'prefix_041'        => $request->input('prefix'),
             'mobile_041'        => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,

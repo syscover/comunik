@@ -19,102 +19,266 @@
  */
 // ------------------------------------------------------------------------
 
+use Syscover\Comunik\Models\EmailSendHistorical;
+use Syscover\Comunik\Models\EmailSendQueue;
+use Syscover\Pulsar\Libraries\EmailServices;
 use Syscover\Pulsar\Models\Preference;
 use Syscover\Comunik\Models\EmailCampaign;
+use Syscover\Comunik\Models\Contact;
 
 class Cron
 {
     /**
-     * Function to get contacts from campaign to record in send queue table
+     *  Función que recupera las llamadas a realizar que serán enviadas a nuestra cola de procesos, tanto de emails de campañas persistentes que no se hayan enviado,
+     *  como correos de campañas con fecha de envio anterior a la actual y que no se haya enviado.
+     *  Tanto de emails como de SMS
      *
      * @access	public
+     * @return	void
+     */
+    public static function checkCampaignsToCreate()
+    {
+        // listamos todas las campañas persistentes activas,
+        // que su fecha de envío sea anterior a la actual y ya hayan sido enviadas
+        $campaigns = EmailCampaign::getCampaignsWithPersistence();
+
+        // enviamos a cola de proceso la comprobación que no hay correos nuevos a los que hacer envío
+        foreach ($campaigns as $campaign)
+        {
+            Cron::checkEmailsToQueue(['id' => $campaign->id_044]);
+        }
+
+
+        // listamos todas las campañas sin crear, que su fecha de envío sea anterior a la actual,
+        // enviará las campañas hasta que se envíen todos sus emails a cola de proceso y quede marcada como creada
+        $campaigns = EmailCampaign::getCampaignsNotCreated();
+
+        // enviamos a cola de proceso la comprobacion que no hay correos nuevos de los que hacer envío
+        foreach ($campaigns as $campaign)
+        {
+            Cron::checkEmailsToQueue(['id' => $campaign->id_044]);
+
+            if($campaign->enviada_048 != true)
+            {
+                EmailCampaign::where('id_044', $campaign->id_044)->update([
+                    'processing_044' => true
+                ]);
+            }
+        }
+    }
+
+
+    /**
+     * Function to get contacts from campaign to record in send queue table
+     *
+     * @access	private
      * @param   arrray $data
      * @return	void
      */
-    public static function checkEmailsToQueue($data)
+    private static function checkEmailsToQueue($data)
     {
-        $sendingEmailsToQueue = Preference::getValue('sendingEmailsToQueue', 3, 0);
+        $emailServiceSendingEmailsToQueue = Preference::getValue('emailServiceSendingEmailsToQueue', 3, '0');
 
         // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo el envío de emails a la cola de proceso
         // si en 5 minutos no se ha liberado la variable, damos por hecho que se ha bloqueado y la liberamos
-        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $sendingEmailsToQueue->updated_at);
-        if($sendingEmailsToQueue->value_018 == 1 && date('U') - $update->getTimestamp() > 300)
-        {
-            Preference::setValue('sendingEmailsToQueue', 3, 0);
-        }
+        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailServiceSendingEmailsToQueue->updated_at);
+        if($emailServiceSendingEmailsToQueue->value_018 == '1' && date('U') - $update->getTimestamp() > 300)
+            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
+
 
         // en el caso que el estado de envio esté activo, eso siginifica que hay una petición trabajando y enviando
         // a la tabla de cola de envíos los contactos, cuando termine de hacerlo cambiaremos el estado de envío de emails
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes insertando mails.
-        if($sendingEmailsToQueue->value_018)
+        if($emailServiceSendingEmailsToQueue->value_018 == '1')
         {
             exit;
         }
         else
         {
-            ConfigPulsar::setValue('sendingEmailsToQueue', 1);
+            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '1');
         }
 
         // START INCLUDES EMAILS IN SEND QUEUE TABLE
-
-        $campaign = EmailCampaign::find($data['id'])
+        $campaign = EmailCampaign::find($data['id']);
 
         // antes de realizar la ejecución comprobamos que la capaña aún existe, no vaya a ser que la hayan borrado en el intervalo de tiempo,
         // entre que se mando la petición a cola y se ejecute la petición
-        if($campana == null)
+        if($campaign == null)   exit;
+
+        $groups     = $campaign->groups;
+        $countries  = $campaign->countries;
+        $groupIds   = $groups->pluck('id_040')->toArray();
+        $countryIds = $countries->pluck('id_002')->toArray();
+
+        // obtenemos los contactos a insertar
+        $contacts = Contact::getContactsEmailToInsert($campaign->id_044, $groupIds, $countryIds, (int)Preference::find('emailServiceIntervalProcess')->value_018, 0);
+
+        // insert emailing into email queue
+        if(count($contacts) > 0)
         {
-            $job->delete();
-            exit(0);
-        }
-
-        $grupos     = $campana->grupos;
-        $paises     = $campana->paises;
-        $idGrupos   = array();
-        $idPaises   = array();
-
-        foreach ($grupos as $grupo)
-        {
-            array_push($idGrupos, $grupo->id_029);
-        }
-
-        foreach ($paises as $pais)
-        {
-            array_push($idPaises, $pais->id_002);
-        }
-
-        $contactos = Contacto::getContactosEmailToInsert($campana->id_048, $idGrupos, $idPaises, (int)ConfigPulsar::find('emailIntervaloProceso')->value_018, 0);
-
-        if(count($contactos) > 0)
-        {
-            $enviosEmails = array();
-            foreach ($contactos as $contacto)
+            $emailSendQueue = [];
+            foreach ($contacts as $contact)
             {
-                $envioEmail = array(
-                    'campana_056'   => $campana->id_048,
-                    'contacto_056'  => $contacto->id_030,
-                    'creado_056'    => date('U'),
-                    'orden_056'     => $campana->orden_048
-                );
-                array_push($enviosEmails, $envioEmail);
+                $emailing = [
+                    'campaign_047'  => $campaign->id_044,
+                    'contact_047'   => $contact->id_041,
+                    'create_047'    => date('U'),
+                    'sorting_047'   => $campaign->sorting_044
+                ];
+                array_push($emailSendQueue, $emailing);
             }
-            ColaEnviosEmails::insert($enviosEmails);
 
-            ConfigPulsar::setValue('sendingEmailsToQueue', 0);
+            EmailSendQueue::insert($emailSendQueue);
 
-            $job->release();
+            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
         }
         else
         {
-            //marcamos la campaña como creada, ya que puede que esté creada de antemano o si no lo estuviera por ser un envío con fecha posterior
-            //a la de su creación
-            CampanaEmail::where('id_048','=',$campana->id_048)->update(array(
-                'creada_048'        => true
-            ));
+            // marcamos la campaña como creada, ya que puede que esté creada de antemano
+            // o si no lo estuviera por ser un envío con fecha posterior a la de su creación
+            EmailCampaign::where('id_044', $campaign->id_044)->update([
+                'created_044' => true
+            ]);
 
-            Preference::setValue('sendingEmailsToQueue', 3, 0);
+            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
         }
     }
+
+
+    /**
+     *  Function to check if there is to send any email
+     *
+     *  @access	public
+     *  @return	void
+     */
+    public static function checkSendEmails()
+    {
+
+        $nMailings = EmailSendQueue::getNMailings();
+
+        if($nMailings > 0)
+        {
+            Cron::sendEmails();
+        }
+    }
+
+
+    /**
+     *  Function that sends emails
+     *
+     * @access	private
+     * @return	array
+     */
+    private static function sendEmails()
+    {
+        $emailServiceSendingEmails = Preference::getValue('emailServiceSendingEmails', 3, '0');
+
+        // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo el envío de emails
+        // si en 5 minutos no se ha liberado la variable, damos por hecho que se ha bloqueado y la liberamos
+        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailServiceSendingEmails->updated_at);
+        if($emailServiceSendingEmails->value_018 == '1' && date('U') - $update->getTimestamp() > 300)
+            Preference::setValue('emailServiceSendingEmails', 3, '0');
+
+
+        //en el caso que el estado de envio esté activo, eso siginifica que hay una petición en curso y está haciendo la petición
+        //a la base de datos y esta sustrayendo los ids, para posteriormente cambiar el estado de envíos, solo en ese momento
+        //cambiaremos el estado de envío de emails para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
+        //varias peticiones concurrentes del gestor de colas.
+        if($emailServiceSendingEmails->value_018 == '1')
+        {
+            exit;
+        }
+        else
+        {
+            Preference::setValue('emailServiceSendingEmails', 3, '1');
+        }
+
+        // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
+        // solo de aquellos envíos que estén en estado: 0 = waiting to be sent
+        $mailings   = EmailSendQueue::getMailings((int)Preference::find('emailServiceIntervalProcess')->value_018, 0);
+        $mailingIds = $mailings->pluck('id_047')->toArray();
+
+        if(count($mailings) > 0)
+        {
+            // cambiamos el estado de EmailSendQueue para que se puedan hacer peticiones
+            EmailSendQueue::whereIn('id_047', $mailingIds)->update([
+                // status_047 = 1 in process
+                'status_047' => 1
+            ]);
+
+            // desbloqueo de proceso de obtención de emails para ser enviados y se puedan hacer peticiones
+            Preference::setValue('emailServiceSendingEmails', 3, '0');
+
+            $successfulIds =[];
+
+            foreach ($mailings as $mailing)
+            {
+                // Creamos el historico de envío con antelación para obtener el ID del histórico de envío y contabilizarlo
+                $emailSendHistorical = EmailSendHistorical::create([
+                    'send_queue_048'    => $mailing->id_047,
+                    'campaign_048'      => $mailing->campaign_047,
+                    'contact_048'       => $mailing->contact_047,
+                    'sent_048'          => date('U'),
+                    'viewed_048'        => 0
+                ]);
+
+                $dataEmail = [
+                    'replyTo'   => empty($mailing->reply_to_013)? null : $mailing->reply_to_013,
+                    'email'     => $mailing->email_041,
+                    'html'      => $mailing->header_044 . $mailing->body_044 . $mailing->footer_044,
+                    'text'      => $mailing->text_044,
+                    'asunto'    => $mailing->subject_044,
+                    'message'   => Crypt::encrypt($mailing->id_044),
+                    'contact'   => Crypt::encrypt($mailing->id_041),
+                    'company'   => isset($mailing->company_041)? $mailing->company_041 : '',
+                    'name'      => isset($mailing->name_041)? $mailing->name_041 : '',
+                    'surname'   => isset($mailing->surname_041)? $mailing->surname_041 : '',
+                    'birthday'  => isset($mailing->birth_date_041)?  date('d-m-Y', $mailing->birth_date_041) : '',
+                    'campana'   => Crypt::encrypt($mailing->id_044),
+                    'envio'     => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
+                ];
+
+                // config SMTP account
+                config(['mail.host'         => $mailing->outgoing_server_013]);
+                config(['mail.port'         => $mailing->outgoing_port_013]);
+                config(['mail.from'         => ['address' => $mailing->email_013, 'name' => $mailing->name_013]]);
+                config(['mail.encryption'   => $mailing->outgoing_secure_013 == 'null'? null : $mailing->outgoing_secure_013]);
+                config(['mail.username'     => $mailing->outgoing_user_013]);
+                config(['mail.password'     => Crypt::decrypt($mailing->outgoing_pass_013)]);
+
+                // exec mailing
+                $response = EmailServices::SendEmail($dataEmail);
+
+                if($response)
+                {
+                    // agregamos el id del envío al array para actulizar su estado posteriormente
+                    $successfulIds[] = $mailing->id_047;
+                }
+                else
+                {
+                    // error de envío, eliminamos el histórico antes creado
+                    EmailSendHistorical::destroy($emailSendHistorical->id_048);
+
+                    /// marcamos en error
+                    // TODO:AQUÍ MARCAMOS EL ERROR
+                }
+            }
+
+            // actualizamos el estado de los envíos a enviado
+            EmailSendQueue::whereIn('id_047', $successfulIds)->update([
+                // status_047 = 2 sent
+                'status_047' => 2
+            ]);
+        }
+        else
+        {
+            // desbloqueo de proceso de obtención de emails para ser enviados y se puedan hacer peticiones
+            Preference::setValue('emailServiceSendingEmails', 3, '0');
+        }
+    }
+
+
 
 
 
@@ -303,223 +467,13 @@ class Cron
         }
     }
 
-    /**
-     *  Función que recupera las llamadas a realizar que serán enviadas a nuestra cola de procesos, tanto de emails de campañas persistentes que no se hayan enviado,
-     *  como correos de campañas con fecha de envio anterior a la actual y que no se haya enviado.
-     *  Tanto de emails como de SMS
-     *
-     * @access	public
-     * @return	void
-     */
-    public static function checkCallsToQueue()
-    {
-        //listamos todas las campañas persistentes activas, que su fecha de envío sea anterior a la actual y ya hayan sido enviadas
-        $campanas = CampanaEmail::getCampanasWithPersistencia();
-
-        //enviamos a cola de proceso la comprobacion que no hay correos nuevos de los que hacer envío
-        foreach ($campanas as $campana)
-        {
-            $dataQueue = array(
-                'id'    => $campana->id_048
-            );
-            Queue::push('\Pulsar\Comunik\Libraries\Cron@checkEmailsToQueue', $dataQueue);
-        }
-
-        //listamos todas las campañas sin enviar que su fecha de envío sea anterior a la actual
-        $campanas = CampanaEmail::getCampanasWithoutSend();
-
-        //enviamos a cola de proceso la comprobacion que no hay correos nuevos de los que hacer envío
-        foreach ($campanas as $campana)
-        {
-            $dataQueue = array(
-                'id'    => $campana->id_048
-            );
-            Queue::push('\Pulsar\Comunik\Libraries\Cron@checkEmailsToQueue', $dataQueue);
-
-            if($campana->enviada_048 != true)
-            {
-                CampanaEmail::where('id_048', '=', $campana->id_048)->update(array(
-                    'enviada_048' => true
-                ));
-            }
-        }
-
-
-        //listamos todas las campañas persistentes activas, que su fecha de envío sea anterior a la actual y ya hayan sido enviadas
-        $campanas = CampanaSms::getCampanasWithPersistencia();
-
-        //enviamos a cola de proceso la comprobacion que no hay correos nuevos de los que hacer envío
-        foreach ($campanas as $campana)
-        {
-            $dataQueue = array(
-                'id'    => $campana->id_049
-            );
-            Queue::push('\Pulsar\Comunik\Libraries\Cron@checkSmsToQueue', $dataQueue);
-        }
-
-        //listamos todas las campañas sin enviar que su fecha de envío sea anterior a la actual
-        $campanas = CampanaSms::getCampanasWithoutSend();
-
-        //enviamos a cola de proceso la comprobacion que no hay correos nuevos de los que hacer envío
-        foreach ($campanas as $campana)
-        {
-            $dataQueue = array(
-                'id'    => $campana->id_049
-            );
-            Queue::push('\Pulsar\Comunik\Libraries\Cron@checkSmsToQueue', $dataQueue);
-
-            if($campana->enviada_049 != true)
-            {
-                CampanaSms::where('id_049', '=', $campana->id_048)->update(array(
-                    'enviada_049' => true
-                ));
-            }
-        }
-    }
 
 
 
-    /**
-     *  Función que chequea si hay hay que lanzar una queue para que haga un envío de emails
-     *  esta queue ejecutaría la función sendMails
-     *
-     * @access	public
-     * @return	array
-     */
-    public static function checkCallQueueSendEmails()
-    {
 
-        $nEnvios = ColaEnviosEmails::getNEnvios();
 
-        if($nEnvios > 0)
-        {
-            Queue::push('\Pulsar\Comunik\Libraries\Cron@sendEmails', array());
-        }
-    }
 
-    /**
-     *  Función llamada por la cola que lanza los emails
-     *
-     * @access	public
-     * @return	array
-     */
-    public static function sendEmails($job, $data)
-    {
-        $emailStateSendEmails = ConfigPulsar::getValue('emailStateSendEmails', 0);
 
-        // Comprobación para casos de errores o caídas del servidor, y no dejen bloqueda la entrada a peticiones
-        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailStateSendEmails->updated_at);
-        if($emailStateSendEmails->value_018 == 1 && date('U') - $update->getTimestamp() > 300)
-        {
-            ConfigPulsar::setValue('emailStateSendEmails', 0);
-        }
-
-        //en el caso que el estado de envio esté activo, eso siginifica que hay una petición en curso y está haciendo la petición 
-        //a la base de datos y esta sustrayendo los ids, para posteriormente cambiar el estado de envíos, solo en ese momento 
-        //cambiaremos el estado de envío de emails para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
-        //varias peticiones concurrentes del gestor de colas.
-        if($emailStateSendEmails->value_018)
-        {
-            $job->delete();
-            exit(0);
-        }
-        else
-        {
-            ConfigPulsar::setValue('emailStateSendEmails', 1);
-        }
-
-        // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
-        // solo de aquellos envíos que estén en estado 0
-        $envios = ColaEnviosEmails::getEnvios((int)ConfigPulsar::find('emailIntervaloProceso')->value_018, 0);
-
-        //Al cambiar la consulta a raw nos devuelve un array con objetos en vez de un objeto Collection
-        //$idsEnvios  = Miscellaneous::getIdsCollection($envios, 'id_056');
-        $idsEnvios = array();
-        foreach ($envios as $envio)
-        {
-            array_push($idsEnvios, $envio->id_056);
-        }
-
-        if(count($envios)>0)
-        {
-            //cambiamos el estado de send mail para que se puedan hacer peticiones
-            ColaEnviosEmails::whereIn('id_056',$idsEnvios)->update(array(
-                'estado_056' => 1
-            ));
-
-            //bloqueo de proceso a realizar con iron cache? o config?
-            ConfigPulsar::setValue('emailStateSendEmails', 0);
-
-            $idsEnviosEnviados = array();
-
-            foreach ($envios as $envio)
-            {
-                // Creamos el historico de envío con antelación para obtener el ID del histórico de envío y contabilizarlo
-                $historicoEnvioEmail = HistoricoEnviosEmails::create(array(
-                    'cola_envio_060'    => $envio->id_056,
-                    'campana_060'       => $envio->campana_056,
-                    'contacto_060'      => $envio->contacto_056,
-                    'enviado_060'       => date('U'),
-                    'visto_060'         => 0
-                ));
-
-                $dataEmail = array(
-                    'replyTo'   => $envio->reply_to_047 == null || $envio->reply_to_047 == "" ? null : $envio->reply_to_047,
-                    'email'     => $envio->email_030,
-                    'html'      => $envio->header_048 . $envio->body_048 . $envio->footer_048,
-                    'text'      => $envio->text_048,
-                    'asunto'    => $envio->asunto_048,
-                    'message'   => Crypt::encrypt($envio->id_048),
-                    'contact'   => Crypt::encrypt($envio->id_030),
-                    'company'   => isset($envio->empresa_030)? $envio->empresa_030 : '',
-                    'name'      => isset($envio->nombre_030)? $envio->nombre_030 : '',
-                    'surname'   => isset($envio->apellidos_030)? $envio->apellidos_030 : '',
-                    'birthday'  => isset($envio->nacimiento_030)?  date('d-m-Y', $envio->nacimiento_030) : '',
-                    'campana'   => Crypt::encrypt($envio->campana_056),
-                    'envio'     => Crypt::encrypt($historicoEnvioEmail->id_060) //dato para contabilizar en las estadísticas
-                );
-
-                //configuración servidor SMTP
-                Config::set('mail.host',        $envio->host_smtp_047);
-                Config::set('mail.port',        $envio->port_smtp_047);
-                Config::set('mail.from',        array('address' => $envio->email_047, 'name' => $envio->nombre_047));
-                Config::set('mail.encryption',  $envio->secure_smtp_047 == 'null'? null : $envio->secure_smtp_047);
-                Config::set('mail.username',    $envio->user_smtp_047);
-                Config::set('mail.password',    Crypt::decrypt($envio->pass_smtp_047));
-
-                $response = EmailServices::SendEmail($dataEmail);
-
-                if($response)
-                {
-                    //Agregamos el id del envío al array para actulizar su estado posteriormente
-                    array_push($idsEnviosEnviados, $envio->id_056);
-                }
-                else
-                {
-                    //Error de envío
-                    //Eliminamos en histórico antes creado
-                    HistoricoEnviosEmails::destroy($historicoEnvioEmail->id_060);
-
-                    ///Marcamos en error
-                    //***** AQUÍ MARCAMOS EL ERROR ******
-                }
-            }
-
-            //actualizamos el estado de los envíos a enviado
-            ColaEnviosEmails::whereIn('id_056',$idsEnviosEnviados)->update(array(
-                'estado_056' => 2
-            ));
-
-            $job->release(5);
-        }
-        else
-        {
-            //cambiamos el estado de send mail para que se puedan hacer peticiones
-            ConfigPulsar::setValue('emailStateSendEmails', 0);
-
-            $job->delete();
-        }
-    }
 
     /**
      *  Función que envía directamente una plantilla a los usuarios de test

@@ -10,9 +10,9 @@
                 $('.datatable-pulsar').dataTable({
                     'iDisplayStart' : {{ $offset }},
                     'aoColumnDefs': [
-                        { 'bSortable': false, 'aTargets': [9,10]},
-                        { 'sClass': 'checkbox-column', 'aTargets': [9]},
-                        { 'sClass': 'align-center', 'aTargets': [6,7,10]}
+                        { 'bSortable': false, 'aTargets': [8,9]},
+                        { 'sClass': 'checkbox-column', 'aTargets': [8]},
+                        { 'sClass': 'align-center', 'aTargets': [6,9]}
                     ],
                     "bProcessing": true,
                     "bServerSide": true,
@@ -37,7 +37,6 @@
         <th data-hide="phone,tablet">{{ trans_choice('pulsar::pulsar.country', 1) }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.mobile') }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.email') }}</th>
-        <th data-hide="phone,tablet">{{ trans('comunik::pulsar.sms') }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.email') }}</th>
         <th data-hide="phone,tablet">{{ trans_choice('pulsar::pulsar.group', 2) }}</th>
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>

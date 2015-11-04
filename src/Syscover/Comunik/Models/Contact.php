@@ -13,13 +13,13 @@ class Contact extends Model {
 	protected $table        = '005_041_contact';
     protected $primaryKey   = 'id_041';
     public $timestamps      = false;
-    protected $fillable     = ['id_041','company_041','name_041','surname_041','birthdate_041','country_041','prefix_041','mobile_041','email_041'];
+    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','country_041','prefix_041','mobile_041','email_041'];
     private static $rules   = [
         'groups'        => 'required',
         'company'       => 'between:2,100',
         'name'          => 'required|between:2,50',
         'surname'       => 'between:0,50',
-        'birthdate'     => 'date_format:d-m-Y',
+        'birthDate'     => 'date_format:d-m-Y',
         'country'       => 'not_in:null',
         'email'         => 'between:2,50|email|unique:005_041_contact,email_041',
         'prefix'        => 'between:0,5',
@@ -67,5 +67,31 @@ class Contact extends Model {
                     ->get();
             })
             ->orderBy('name_002')->get();
+    }
+
+    // Attention! function called from \Syscover\Comunik\Libraries\Cron
+    public static function getContactsEmailToInsert($campaign, $groups, $countries, $take, $skip)
+    {
+        return Contact::whereIn('id_041', function($query) use ($groups) {
+            // select contacts from this groups
+            $query->select('contact_042')
+                ->from('005_042_contacts_groups')
+                ->whereIn('group_042', $groups)
+                ->groupBy('contact_042')
+                ->get();
+        })
+            // and they are from this countries
+            ->whereIn('country_041', $countries)
+            // the contact isn't in mail queue in the same campaign
+            ->whereNotIn('id_041', function($query) use ($campaign) {
+                $query->select('contact_047')
+                ->from('005_047_email_send_queue')
+                ->where('campaign_047', $campaign)->get();
+        })
+            ->where('unsubscribe_email_041', false)
+            ->whereNotNull('email_041')
+            ->where('email_041', '<>', '')
+            ->take($take)->skip($skip)
+            ->get();
     }
 }
