@@ -128,47 +128,27 @@
             });
 
             /*TODO: revisar funcionalidades froala */
-            $.FroalaEditor.DefineIcon('name', {NAME: 'N', template: 'text'});
-            $.FroalaEditor.RegisterCommand('name', {
-                title: 'Insert name wildcard',
-                focus: true,
-                undo: true,
+            $.FroalaEditor.DefineIcon('wildcard', {NAME: 'fa fa-star'});
+            $.FroalaEditor.RegisterCommand('wildcard', {
+                title: '{{ trans_choice('pulsar::pulsar.wildcard', 2) }}',
+                type: 'dropdown',
+                focus: false,
+                undo: false,
                 refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#name#');
+                options: {
+                    'name': '{{ trans('pulsar::pulsar.name') }}',
+                    'surname': '{{ trans('pulsar::pulsar.surname') }}',
+                    'email': '{{ trans('pulsar::pulsar.email') }}',
+                    'unsubscribe': '{{ trans('comunik::pulsar.unsubscribe') }}'
+                },
+                callback: function (cmd, val) {
+                    if(val == 'name') this.html.insert('#name#')
+                    if(val == 'surname') this.html.insert('#surname#')
+                    if(val == 'email') this.html.insert('#email#')
+                    if(val == 'unsubscribe') this.html.insert('#unsubscribe#')
                 }
             });
-            $.FroalaEditor.DefineIcon('surname', {NAME: 'S', template: 'text'});
-            $.FroalaEditor.RegisterCommand('surname', {
-                title: 'Insert surname wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#surname#');
-                }
-            });
-            $.FroalaEditor.DefineIcon('email', {NAME: 'E', template: 'text'});
-            $.FroalaEditor.RegisterCommand('email', {
-                title: 'Insert email wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#email#');
-                }
-            });
-            $.FroalaEditor.DefineIcon('unsubscribe', {NAME: 'U', template: 'text'});
-            $.FroalaEditor.RegisterCommand('unsubscribe', {
-                title: 'Insert unsubscribe wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#unsubscribe#');
-                }
-            });
-/*
+
             $('.wysiwyg').froalaEditor({
                 language: '{{ config('app.locale') }}',
                 placeholderText: '{{ trans('cms::pulsar.type_something') }}',
@@ -176,11 +156,11 @@
                 toolbarSticky: true,
                 tabSpaces: true,
                 shortcutsEnabled: ['show', 'bold', 'italic', 'underline', 'strikeThrough', 'indent', 'outdent', 'undo', 'redo', 'insertImage', 'createLink'],
-                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'name', 'surname', 'email', 'unsubscribe', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
                 heightMin: 250,
                 enter: $.FroalaEditor.ENTER_BR,
                 key: '{{ config('pulsar.froalaEditorKey') }}'
-            });*/
+            });
 
             /*
              *   Cargamos los settings de un theme en el campo data, cuando cambiamos el selector de themes,
@@ -252,8 +232,8 @@
                 success:  function(data)
                 {
                     $('#header').val(data.header);
-                    $('.wysiwyg').val(html);
-                    //$('.wysiwyg').froalaEditor('html.set', html);
+                    //$('.wysiwyg').val(html);
+                    $('.wysiwyg').froalaEditor('html.set', html);
                     $('#footer').val(data.footer);
 
                     //$('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados
@@ -357,7 +337,7 @@
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.content', 2), 'icon' => 'fa fa-newspaper-o'])
     @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.template', 1), 'name' => 'template', 'value' => $object->template_044, 'objects' => $templates, 'idSelect' => 'id_043', 'nameSelect' => 'name_043', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
 
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => "Si no puede ver el correo correctamente pinche <a href='#link#' target='_blank'>pulse aquí</a>"]])
+    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => trans('comunik::pulsar.value_include_html_link')]])
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'unsubscribeLink', 'value' => "Si quiere dejar de recibir mensajes <a href='#unsubscribe#' target='_blank'>pulse aquí</a>"]])
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'trackPixel', 'value' => "<img height='1' width='1' src='http://pulsar.reservaycata.com/pulsar/comunik/email/services/campanas/analytics/#campana#/#envio#' />"]])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => $object->subject_044, 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])

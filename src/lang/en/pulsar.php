@@ -20,7 +20,9 @@ return [
     'interval_process'                      => 'Interval process',
     'sms'                                   => 'SMS',
     'include_html_link'                     => 'Include HTML link',
+    'value_include_html_link'               => 'If you can not see the email properly <a href=\'#link#\' target=\'_blank\'>click here</a>',
     'include_unsubscribe_link'              => 'Include unsubscribe link',
+    'value_include_unsubscribe_link'        => 'Include unsubscribe link',
     'include_track_pixel'                   => 'Include track pixel',
     'unsubscribe_link'                      => 'Unsubscribe link',
     'shipping_date'                         => 'Shipping date',
@@ -28,4 +30,5 @@ return [
     'sent_queue'                            => 'Sent to queue',
     'shipping_groups'                       => 'Shipping groups',
     'shipping_countries'                    => 'Shipping countries',
+    'unsubscribe'                           => 'Unsubscribe',
 ];

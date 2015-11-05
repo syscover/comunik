@@ -20,6 +20,7 @@ return [
     'interval_process'                      => 'Proceso de intervalo',
     'sms'                                   => 'SMS',
     'include_html_link'                     => 'Incluir link HTML',
+    'value_include_html_link'               => 'Si no puede ver el correo correctamente pinche <a href=\'#link#\' target=\'_blank\'>pulse aquí</a>',
     'include_unsubscribe_link'              => 'Incluir link unsubscribe',
     'include_track_pixel'                   => 'Include pixel se seguimiento',
     'unsubscribe_link'                      => 'Link unsubscribe',
@@ -28,4 +29,5 @@ return [
     'sent_queue'                            => 'Enviada a cola',
     'shipping_groups'                       => 'Grupos de envíos',
     'shipping_countries'                    => 'Países de envíos',
+    'unsubscribe'                           => 'Unsubscribe',
 ];
