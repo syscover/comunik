@@ -226,19 +226,20 @@ class Cron
                 ]);
 
                 $dataEmail = [
-                    'replyTo'   => empty($mailing->reply_to_013)? null : $mailing->reply_to_013,
-                    'email'     => $mailing->email_041,
-                    'html'      => $mailing->header_044 . $mailing->body_044 . $mailing->footer_044,
-                    'text'      => $mailing->text_044,
-                    'subject'   => $mailing->subject_044,
-                    'message'   => Crypt::encrypt($mailing->id_044),
-                    'contact'   => Crypt::encrypt($mailing->id_041),
-                    'company'   => isset($mailing->company_041)? $mailing->company_041 : '',
-                    'name'      => isset($mailing->name_041)? $mailing->name_041 : '',
-                    'surname'   => isset($mailing->surname_041)? $mailing->surname_041 : '',
-                    'birthday'  => isset($mailing->birth_date_041)?  date(config('pulsar.datePattern'), $mailing->birth_date_041) : '',
-                    'campaign'  => Crypt::encrypt($mailing->id_044),
-                    'sending'   => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
+                    'replyTo'       => empty($mailing->reply_to_013)? null : $mailing->reply_to_013,
+                    'email'         => $mailing->email_041,
+                    'html'          => $mailing->header_044 . $mailing->body_044 . $mailing->footer_044,
+                    'text'          => $mailing->text_044,
+                    'subject'       => $mailing->subject_044,
+                    //'message'   => Crypt::encrypt($mailing->id_044), ??es lo mismo que la campaña
+                    'contact'       => Crypt::encrypt($mailing->id_041),
+                    'company'       => isset($mailing->company_041)? $mailing->company_041 : '',
+                    'name'          => isset($mailing->name_041)? $mailing->name_041 : '',
+                    'surname'       => isset($mailing->surname_041)? $mailing->surname_041 : '',
+                    'birthDate'     => isset($mailing->birth_date_041)?  date(config('pulsar.datePattern'), $mailing->birth_date_041) : '',
+                    'campaign'      => Crypt::encrypt($mailing->id_044),
+                    'historicalId'  => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
+                    //'sending'   => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
                 ];
 
                 // config SMTP account

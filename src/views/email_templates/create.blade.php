@@ -270,7 +270,7 @@
 
             $.ajax({
                 type:       "POST",
-                url:        "{{ URL::to(Config::get('pulsar::pulsar.rootUri').'/comunik/email/services/spam/score') }}" ,
+                url:        "{{ URL::to(Config::get('pulsar.appName').'/comunik/email/services/spam/score') }}" ,
                 dataType:   "json",
                 data:       dataRequest,
                 success:  function(data) {

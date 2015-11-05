@@ -13,14 +13,14 @@ class Contact extends Model {
 	protected $table        = '005_041_contact';
     protected $primaryKey   = 'id_041';
     public $timestamps      = false;
-    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','country_041','prefix_041','mobile_041','email_041'];
+    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','country_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
     private static $rules   = [
         'groups'        => 'required',
         'company'       => 'between:2,100',
         'name'          => 'required|between:2,50',
         'surname'       => 'between:0,50',
         'birthDate'     => 'date_format:d-m-Y',
-        'country'       => 'not_in:null',
+        'country'       => 'required',
         'email'         => 'between:2,50|email|unique:005_041_contact,email_041',
         'prefix'        => 'between:0,5',
         'mobile'        => 'between:2,50|unique:005_041_contact,mobile_041'

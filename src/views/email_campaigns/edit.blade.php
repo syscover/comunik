@@ -139,13 +139,17 @@
                     'name': '{{ trans('pulsar::pulsar.name') }}',
                     'surname': '{{ trans('pulsar::pulsar.surname') }}',
                     'email': '{{ trans('pulsar::pulsar.email') }}',
-                    'unsubscribe': '{{ trans('comunik::pulsar.unsubscribe') }}'
+                    'birthDate': '{{ trans('pulsar::pulsar.birth_date') }}',
+                    'unsubscribe': '{{ trans('comunik::pulsar.unsubscribe') }}',
+                    'date': '{{ trans('pulsar::pulsar.date') }}',
                 },
                 callback: function (cmd, val) {
                     if(val == 'name') this.html.insert('#name#')
                     if(val == 'surname') this.html.insert('#surname#')
                     if(val == 'email') this.html.insert('#email#')
+                    if(val == 'birthDate') this.html.insert('#birthDate#')
                     if(val == 'unsubscribe') this.html.insert('#unsubscribe#')
+                    if(val == 'date') this.html.insert('#date#')
                 }
             });
 
@@ -280,7 +284,7 @@
 
             $.ajax({
                 type:       "POST",
-                url:        "{{ URL::to(Config::get('pulsar::pulsar.rootUri').'/comunik/email/services/spam/score') }}" ,
+                url:        "{{ URL::to(Config::get('pulsar.appName').'/comunik/email/services/spam/score') }}" ,
                 dataType:   "json",
                 data:       dataRequest,
                 success:  function(data) {
@@ -337,9 +341,9 @@
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.content', 2), 'icon' => 'fa fa-newspaper-o'])
     @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.template', 1), 'name' => 'template', 'value' => $object->template_044, 'objects' => $templates, 'idSelect' => 'id_043', 'nameSelect' => 'name_043', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
 
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => trans('comunik::pulsar.value_include_html_link')]])
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'unsubscribeLink', 'value' => "Si quiere dejar de recibir mensajes <a href='#unsubscribe#' target='_blank'>pulse aquí</a>"]])
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'trackPixel', 'value' => "<img height='1' width='1' src='http://pulsar.reservaycata.com/pulsar/comunik/email/services/campanas/analytics/#campana#/#envio#' />"]])
+    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => trans('comunik::pulsar.html_link_value')]])
+    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'unsubscribeLink', 'value' => trans('comunik::pulsar.unsubscribe_link_value')]])
+    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'trackPixel', 'value' =>trans('comunik::pulsar.track_pixel_value', ['url' => url(config('pulsar.appName') . config('comunik.trackPixel'))])]])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => $object->subject_044, 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
