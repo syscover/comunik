@@ -93,22 +93,5 @@ class EmailSendQueue extends Model {
                     ->get();
             })
             ->delete();
-        /*
-        EmailSendQueue::where('campaign_047', $campaign)
-            ->whereIn('contact_047', function($query) use ($oldGroups, $newGroups){
-                $query->select('contact_042')
-                    ->from('005_042_contacts_groups')
-                    ->whereIn('group_042', $oldGroups)
-                    ->whereNotIn('contact_042', function($query) use ($newGroups){
-                        $query->select('contact_042')
-                            ->from('005_042_contacts_groups')
-                            ->whereIn('group_042', $newGroups)
-                            ->get();
-                    })
-                    ->groupBy('contact_042')
-                    ->get();
-            })
-            ->delete();
-        */
     }
 }
