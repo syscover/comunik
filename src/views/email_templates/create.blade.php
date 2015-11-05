@@ -45,6 +45,7 @@
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/js/plugins/save.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/js/plugins/url.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/js/plugins/video.min.js') }}"></script>
+
     @if(config('app.locale') != 'en')
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/js/languages/' . config('app.locale') . '.js') }}"></script>
     @endif
@@ -56,89 +57,58 @@
 
             //$('#report').hide();
 
-            // bottoms to insert patterns
-            $('.actionB').bind("click", function () {
-                var insert = '#'+$(this).attr('data-template')+'#';
-                var target = $(this).attr('data-target');
-
-                insertAtCaret(target, insert);
-
-                $("[name='"+target+"']").focus();
-            });
-
             if($('[name="theme"]').val() == "") {
                 $('#btContent').hide();
             }
 
-            // set elements to email template
+            // checks to links
             $('[name="setHtmlLink"]').bind("click", function () {
-                if($('[name="setHtmlLink"]').is(':checked')) {
+                if($('[name="setHtmlLink"]').is(':checked'))
                     $('[name="htmlLink"]').attr('readonly', false);
-                }
                 else
-                {
                     $('[name="htmlLink"]').attr('readonly',true);
-                }
             });
+
             $('[name="setUnsubscribeLink"]').bind("click", function () {
-                if($('[name="setUnsubscribeLink"]').is(':checked')) {
+                if($('[name="setUnsubscribeLink"]').is(':checked'))
                     $('[name="unsubscribeLink"]').attr('readonly',false);
-                }
-                else{
+                else
                     $('[name="unsubscribeLink"]').attr('readonly',true);
-                }
             });
+
             $('[name="setTrackPixel"]').bind("click", function () {
-                if($('[name="setTrackPixel"]').is(':checked')){
+                if($('[name="setTrackPixel"]').is(':checked'))
                     $('[name="trackPixel"]').attr('readonly',false);
-                }
-                else{
+                else
                     $('[name="trackPixel"]').attr('readonly',true);
-                }
             });
 
             /*TODO: revisar funcionalidades froala */
-            $.FroalaEditor.DefineIcon('name', {NAME: 'N', template: 'text'});
-            $.FroalaEditor.RegisterCommand('name', {
-                title: 'Insert name wildcard',
-                focus: true,
-                undo: true,
+            $.FroalaEditor.DefineIcon('wildcard', {NAME: 'fa fa-star'});
+            $.FroalaEditor.RegisterCommand('wildcard', {
+                title: '{{ trans_choice('pulsar::pulsar.wildcard', 2) }}',
+                type: 'dropdown',
+                focus: false,
+                undo: false,
                 refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#name#');
+                options: {
+                    'name': '{{ trans('pulsar::pulsar.name') }}',
+                    'surname': '{{ trans('pulsar::pulsar.surname') }}',
+                    'email': '{{ trans('pulsar::pulsar.email') }}',
+                    'birthDate': '{{ trans('pulsar::pulsar.birth_date') }}',
+                    'unsubscribe': '{{ trans('comunik::pulsar.unsubscribe') }}',
+                    'date': '{{ trans('pulsar::pulsar.date') }}',
+                },
+                callback: function (cmd, val) {
+                    if(val == 'name') this.html.insert('#name#')
+                    if(val == 'surname') this.html.insert('#surname#')
+                    if(val == 'email') this.html.insert('#email#')
+                    if(val == 'birthDate') this.html.insert('#birthDate#')
+                    if(val == 'unsubscribe') this.html.insert('#unsubscribe#')
+                    if(val == 'date') this.html.insert('#date#')
                 }
             });
-            $.FroalaEditor.DefineIcon('surname', {NAME: 'S', template: 'text'});
-            $.FroalaEditor.RegisterCommand('surname', {
-                title: 'Insert surname wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#surname#');
-                }
-            });
-            $.FroalaEditor.DefineIcon('email', {NAME: 'E', template: 'text'});
-            $.FroalaEditor.RegisterCommand('email', {
-                title: 'Insert email wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#email#');
-                }
-            });
-            $.FroalaEditor.DefineIcon('unsubscribe', {NAME: 'U', template: 'text'});
-            $.FroalaEditor.RegisterCommand('unsubscribe', {
-                title: 'Insert unsubscribe wildcard',
-                focus: true,
-                undo: true,
-                refreshAfterCallback: true,
-                callback: function () {
-                    this.html.insert('#unsubscribe#');
-                }
-            });
-/*
+
             $('.wysiwyg').froalaEditor({
                 language: '{{ config('app.locale') }}',
                 placeholderText: '{{ trans('cms::pulsar.type_something') }}',
@@ -146,17 +116,27 @@
                 toolbarSticky: true,
                 tabSpaces: true,
                 shortcutsEnabled: ['show', 'bold', 'italic', 'underline', 'strikeThrough', 'indent', 'outdent', 'undo', 'redo', 'insertImage', 'createLink'],
-                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'name', 'surname', 'email', 'unsubscribe', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
                 heightMin: 250,
                 enter: $.FroalaEditor.ENTER_BR,
                 key: '{{ config('pulsar.froalaEditorKey') }}'
-            });*/
+            });
+
+            // on submit, get content from wysiwyg
+            $("#recordForm").on('submit', function(event) {
+                $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+            });
+
+
+
 
             /*
              *   Cargamos los settings de un theme en el campo data, cuando cambiamos el selector de themes,
              *   estos settings los cargaremos con javascript desde el content buider
              */
             $('[name="theme"]').on('change', function() {
+
+                // if theme is not select
                 if($('[name="theme"]').val() == '') {
                     $('#btContent').fadeOut();
 
@@ -171,6 +151,8 @@
                 {
                     $('#btContent').fadeIn();
                     var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body']) }}';
+
+                    // set link on btContent who has magnific popup loaded
                     $('#btContent').attr('href', url.replace('theme', $('[name="theme"]').val()));
 
                     $.ajax({
@@ -178,6 +160,8 @@
                         url:        "{{ asset(config('comunik.themesFolder')) }}/" + $('[name="theme"]').val() + '/settings.json',
                         dataType:   "json",
                         success:  function(data) {
+
+                            // include settings from theme in data field
                             $('#data').val(JSON.stringify(data));
 
                             $('[name="setHtmlLink"]').prop('checked', false);
@@ -210,7 +194,6 @@
         var getValueContentBuilder = function(html) {
 
             var url = '{{ route('contentbuilderBlocks', ['theme' => 'theme']) }}';
-
             $.ajax({
                 type:       "POST",
                 url:        url.replace('theme', $('[name="theme"]').val()),
@@ -222,94 +205,11 @@
                 success:  function(data)
                 {
                     $('#header').val(data.header);
-                    $('.wysiwyg').val(html);
-                    //$('.wysiwyg').froalaEditor('html.set', html);
+                    //$('.wysiwyg').val(html);
+                    $('.wysiwyg').froalaEditor('html.set', html);
                     $('#footer').val(data.footer);
 
                     //$('#data').val(JSON.stringify(dataRequest));  //establecemos los valores actualizados
-                },
-                error:function(objXMLHttpRequest){
-                    //error
-                }
-            });
-        }
-
-        var checkSpamScore = function() {
-
-            var email = $('#header').val() + $('#body').val() + $('#footer').val();
-
-            if(email == "") {
-                $.msgbox("<div style=\"font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">No hay contenidos que valorar</div><br><br>", {type:"alert", buttons: [{type: "submit", value: "Aceptar"}]});
-                return;
-            }
-            else {
-                var emlHeaders  = $('#emlHeaders').val();
-                var d           = new Date();
-                var days        = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                var months      = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                var date        = days[d.getDay()] + ', ' + d.getDate() + ' '+ months[d.getMonth()] + ' ' + d.getFullYear() + ' ' + (d.getHours() <10?'0':'') + d.getHours() + ':' + (d.getMinutes() <10?'0':'') + d.getMinutes() + ':' + (d.getSeconds() <10?'0':'') + d.getSeconds() + ' +0000';
-
-                emlHeaders = emlHeaders.replace('#returpath#',  'info@syscover.com');
-                emlHeaders = emlHeaders.replace('#date#',       date);
-                emlHeaders = emlHeaders.replace('#subject#',    $('[name="asunto"]').val());
-                emlHeaders = emlHeaders.replace('#from#',       'info@syscover.com');
-                emlHeaders = emlHeaders.replace('#to#',         'info@syscover.com');
-                emlHeaders = emlHeaders.replace('#envelopeto#', 'info@syscover.com');
-                emlHeaders = emlHeaders.replace('#text#',       $('[name="text"]').val());
-                emlHeaders = emlHeaders.replace('#html#',       email);
-            }
-
-            $.cssLoader.show({
-                useLayer: false
-            });
-
-            var dataRequest = {
-                email:      emlHeaders,
-                options:    "long"
-            };
-
-            $.ajax({
-                type:       "POST",
-                url:        "{{ URL::to(Config::get('pulsar.appName').'/comunik/email/services/spam/score') }}" ,
-                dataType:   "json",
-                data:       dataRequest,
-                success:  function(data) {
-
-                    $('#report').html(data.report);
-                    $('#report').fadeIn();
-                    $('.knob').countTo({
-                        from: 0,
-                        to: data.score,
-                        speed: 1000,
-                        decimals: 2,
-                        refreshInterval: 10,
-                        onUpdate: function(value) {
-                            $(this).val(value.toFixed(2));
-                            $(".knob").trigger('change');
-                        },
-                        onComplete: function(value) {
-
-                            $('#knob-color').countTo({
-                                from: 0,
-                                to: data.score,
-                                speed: 1000,
-                                decimals: 2,
-                                refreshInterval: 10,
-                                onUpdate: function(value)
-                                {
-                                    var color = getColorForPercentage((10 - (value / 2)) / 10);
-                                    $(".knob").trigger('configure', { 'fgColor': color });
-                                    $(".knob").trigger('change');
-                                },
-                                onComplete: function(value)
-                                {
-                                    $.cssLoader.hide();
-                                    $.msgbox("<div style=\"font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;\">Comprobación finalizada</div><div>Su puntuación ha sido de: "+ value + " Spam score</div>", {type:"info", buttons: [{type: "submit", value: "Aceptar"}]});
-                                }
-                            });
-                            $(".knob").trigger('change');
-                        }
-                    });
                 },
                 error:function(objXMLHttpRequest){
                     //error
@@ -333,9 +233,10 @@
         <div class="col-md-10">
             <input type="hidden" id="emlHeaders" name="emlHeaders" value="{{ $emlHeaders }}">
             <input type="hidden" id="header" name="header" value="{{ htmlspecialchars(Input::old('header')) }}">
+            <input type="hidden" id="body" name="body" value="{{ htmlspecialchars(Input::old('body')) }}">
             <input type="hidden" id="footer" name="footer" value="{{ htmlspecialchars(Input::old('footer')) }}">
             <input type="hidden" id="text" name="text" value="{{ htmlspecialchars(Input::old('text')) }}">
-            <textarea id="body" name="body" class="form-control limited required wysiwyg" cols="5" rows="10">{{ Input::old('body') }}</textarea>
+            <textarea id="body" name="wysiwyg" class="form-control limited required wysiwyg" cols="5" rows="10">{{ Input::old('body') }}</textarea>
             {{ $errors->first('header', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('body', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}

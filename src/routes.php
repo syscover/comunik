@@ -151,14 +151,14 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
 
 /*
 |--------------------------------------------------------------------------
-| EMAIL SERVICES CAMPAIGNS
+| MOD. EMAIL SERVICES CAMPAIGNS (show campaign)
 |--------------------------------------------------------------------------
 */
-Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{contact}',    ['as'=>'showComunikEmailCampaign', 'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@show']);
+Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{contactKey}',  ['as'=>'showComunikEmailCampaign', 'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@showCampaign']);
 
 /*
 |--------------------------------------------------------------------------
-| MOD. CONTACTS
+| MOD. CONTACTS (UNSUBSCRIBE)
 |--------------------------------------------------------------------------
 */
 Route::get(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email/{key}', ['as'=>'getUnsubscribeComunikContact', 'uses'=>'Syscover\Comunik\Controllers\ContactsController@getEmailToUnsubscribe']);

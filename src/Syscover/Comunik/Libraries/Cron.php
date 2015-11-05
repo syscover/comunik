@@ -232,7 +232,7 @@ class Cron
                     'text'          => $mailing->text_044,
                     'subject'       => $mailing->subject_044,
                     //'message'   => Crypt::encrypt($mailing->id_044), ??es lo mismo que la campaña
-                    'contact'       => Crypt::encrypt($mailing->id_041),
+                    'contactKey'    => Crypt::encrypt($mailing->id_041),
                     'company'       => isset($mailing->company_041)? $mailing->company_041 : '',
                     'name'          => isset($mailing->name_041)? $mailing->name_041 : '',
                     'surname'       => isset($mailing->surname_041)? $mailing->surname_041 : '',

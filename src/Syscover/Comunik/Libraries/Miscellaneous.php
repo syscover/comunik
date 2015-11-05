@@ -10,6 +10,64 @@ class Miscellaneous
      * Function to get default email header
      *
      * @access  public
+     * @param   \lluminate\Http\Request     $request
+     * @param   array                       $parameters
+     * @return  array
+     */
+    public static function setMailingLinks($request, $parameters)
+    {
+        // check if header is include inside body field
+        if($request->has('theme') && $request->input('header') == "" && strpos($request->input('body'), "<!DOCTYPE html") === false)
+        {
+            $response['header'] =   self::getHeader(public_path() . config('comunik.themesFolder') . $request->input('theme') . '/header.html');
+        }
+        else
+        {
+            $response['header'] = $request->input('header');
+        }
+
+        // check if include html link
+        if($request->has('setHtmlLink'))
+        {
+            $response['body'] = self::setHtmlLink($request, $request->input('body'));
+        }
+        else
+        {
+            $response['body'] = $request->input('body');
+        }
+
+        // check if include unsubscribe link
+        if($request->has('setUnsubscribeLink'))
+        {
+            $response['body'] = self::setUnsubscribe($request, $response['body']);
+        }
+
+        // check if include track pixel
+        if($request->has('isPixel'))
+        {
+            $response['body'] = self::setTrackingPixel($request, $response['body']);
+        }
+
+        // check if footer is include inside body field
+        if($request->has('theme') && $request->input('footer') == "" && strpos($request->input('body'), "</html>") === false)
+        {
+            $response['footer'] = self::getFooter(public_path() . config('comunik.themesFolder') . $request->input('theme') . '/footer.html');
+        }
+        else
+        {
+            $response['footer'] = $request->input('footer');
+        }
+
+        // convert html to text, to send text version email
+        $response['text'] = self::htmlToText($response['header'] . $response['body'] . $response['footer']);
+
+        return $response;
+    }
+
+    /**
+     * Function to get default email header
+     *
+     * @access  public
      * @param   string $path
      * @return  string
      * @throws  \Exception
@@ -122,7 +180,7 @@ class Miscellaneous
     public static function setHtmlLink($request, $html)
     {
         // create link
-        $htmlLink = str_replace("#link#", route('showComunikEmailCampaign', ['campaign' => '#campaign#', 'contact' => '#contact#']), $request->input('htmlLink'));
+        $htmlLink = str_replace("#link#", route('showComunikEmailCampaign', ['campaign' => '#campaign#', 'contactKey' => '#contactKey#']), $request->input('htmlLink'));
 
         $piece = '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
             . $htmlLink .
@@ -161,10 +219,10 @@ class Miscellaneous
     public static function setUnsubscribe($request, $html)
     {
         // create link
-        $unsubscribe = str_replace("#unsubscribe#", route('showUnsubscribeComunikContact', ['contact' => '#contact#']), $request->input('unsubscribe'));
+        $unsubscribeLink = str_replace("#unsubscribe#", route('getUnsubscribeComunikContact', ['contactKey' => '#contactKey#']), $request->input('unsubscribeLink'));
 
         $piece = '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
-            . $unsubscribe .
+            . $unsubscribeLink .
             '</td></tr></table>';
 
         $indexBodyTag = strpos($html, "</body>");
