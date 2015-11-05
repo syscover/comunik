@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     Route::get(config('pulsar.appName') . '/comunik/email/services/templates/create/{offset}',            ['as'=>'createComunikEmailTemplate',        'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@createRecord',           'resource' => 'comunik-email-template',        'action' => 'create']);
     Route::post(config('pulsar.appName') . '/comunik/email/services/templates/store/{offset}',            ['as'=>'storeComunikEmailTemplate',         'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@storeRecord',            'resource' => 'comunik-email-template',        'action' => 'create']);
     Route::get(config('pulsar.appName') . '/comunik/email/services/templates/{id}/edit/{offset}',         ['as'=>'editComunikEmailTemplate',          'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@editRecord',             'resource' => 'comunik-email-template',        'action' => 'access']);
-    Route::put(config('pulsar.appName') . '/comunik/email/services/templates/update/{offset}',            ['as'=>'updateComunikEmailTemplate',        'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@updateRecord',           'resource' => 'comunik-email-template',        'action' => 'edit']);
+    Route::put(config('pulsar.appName') . '/comunik/email/services/templates/update/{id}/{offset}',       ['as'=>'updateComunikEmailTemplate',        'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@updateRecord',           'resource' => 'comunik-email-template',        'action' => 'edit']);
     Route::get(config('pulsar.appName') . '/comunik/email/services/templates/delete/{id}',                ['as'=>'deleteComunikEmailTemplate',        'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@deleteRecord',           'resource' => 'comunik-email-template',        'action' => 'delete']);
     Route::delete(config('pulsar.appName') . '/comunik/email/services/templates/delete/select/elements',  ['as'=>'deleteSelectComunikEmailTemplate',  'uses'=>'Syscover\Comunik\Controllers\EmailTemplatesController@deleteRecordsSelect',    'resource' => 'comunik-email-template',        'action' => 'delete']);
 
@@ -66,22 +66,18 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     | MOD. EMAIL SERVICES CAMPAIGNS
     |--------------------------------------------------------------------------
     */
-    Route::any(config('pulsar.appName') . '/comunik/email/services/campaigns/{offset?}',                    ['as'=>'ComunikEmailCampaign',                  'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@index',          'resource' => 'comunik-email-campaign',     'action' => 'access']);
-    Route::any(config('pulsar.appName') . '/comunik/email/services/campaigns/json/data',                    ['as'=>'jsonDataComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@jsonData',       'resource' => 'comunik-email-campaign',     'action' => 'access']);
-    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/create/{offset}/{id?}',        ['as'=>'createComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@createRecord',   'resource' => 'comunik-email-campaign',     'action' => 'create']);
-    Route::post(config('pulsar.appName') . '/comunik/email/services/campaigns/store/{offset}',              ['as'=>'storeComunikEmailCampaign',             'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@storeRecord',    'resource' => 'comunik-email-campaign',     'action' => 'create']);
-    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/{id}/edit/{offset}',           ['as'=>'editComunikEmailCampaign',              'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@editRecord',     'resource' => 'comunik-email-campaign',     'action' => 'access']);
-    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/delete/{id}',                        ['as'=>'deleteComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@delete']);
+    Route::any(config('pulsar.appName') . '/comunik/email/services/campaigns/{offset?}',                    ['as'=>'ComunikEmailCampaign',                  'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@index',                  'resource' => 'comunik-email-campaign',     'action' => 'access']);
+    Route::any(config('pulsar.appName') . '/comunik/email/services/campaigns/json/data',                    ['as'=>'jsonDataComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@jsonData',               'resource' => 'comunik-email-campaign',     'action' => 'access']);
+    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/create/{offset}/{id?}',        ['as'=>'createComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@createRecord',           'resource' => 'comunik-email-campaign',     'action' => 'create']);
+    Route::post(config('pulsar.appName') . '/comunik/email/services/campaigns/store/{offset}',              ['as'=>'storeComunikEmailCampaign',             'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@storeRecord',            'resource' => 'comunik-email-campaign',     'action' => 'create']);
+    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/{id}/edit/{offset}',           ['as'=>'editComunikEmailCampaign',              'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@editRecord',             'resource' => 'comunik-email-campaign',     'action' => 'access']);
+    Route::put(config('pulsar.appName') . '/comunik/email/services/campaigns/update/{id}/{offset}',         ['as'=>'updateComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@updateRecord',           'resource' => 'comunik-email-campaign',     'action' => 'edit']);
+    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/delete/{id}',                  ['as'=>'deleteComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@deleteRecord',           'resource' => 'comunik-email-campaign',     'action' => 'delete']);
+    Route::delete(config('pulsar.appName') . '/comunik/email/services/campaigns/delete/select/elements',    ['as'=>'deleteSelectComunikEmailCampaign',      'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@deleteRecordsSelect',    'resource' => 'comunik-email-campaign',     'action' => 'delete']);
+
 
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/send/test/{campana}/{offset?}',      ['as'=>'sendTestComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@sendTest']);
-
-
     Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/preview/{id}',                       ['as'=>'previewComunikEmailCampaign',           'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@preview']);
-
-
-    Route::put(config('pulsar.appName').'/comunik/email/services/campaigns/update/{offset}',                    ['as'=>'updateComunikEmailCampaign',            'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@update']);
-
-    Route::delete(config('pulsar.appName').'/comunik/email/services/campaigns/delete/select/elements',          ['as'=>'deleteSelectComunikEmailCampaign',      'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@deleteSelect']);
 
 
 

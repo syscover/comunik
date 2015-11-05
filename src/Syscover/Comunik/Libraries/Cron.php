@@ -19,6 +19,7 @@
  */
 // ------------------------------------------------------------------------
 
+use Illuminate\Support\Facades\Crypt;
 use Syscover\Comunik\Models\EmailSendHistorical;
 use Syscover\Comunik\Models\EmailSendQueue;
 use Syscover\Pulsar\Libraries\EmailServices;
@@ -197,6 +198,7 @@ class Cron
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
         // solo de aquellos envíos que estén en estado: 0 = waiting to be sent
         $mailings   = EmailSendQueue::getMailings((int)Preference::find('emailServiceIntervalProcess')->value_018, 0);
+
         $mailingIds = $mailings->pluck('id_047')->toArray();
 
         if(count($mailings) > 0)
@@ -228,15 +230,15 @@ class Cron
                     'email'     => $mailing->email_041,
                     'html'      => $mailing->header_044 . $mailing->body_044 . $mailing->footer_044,
                     'text'      => $mailing->text_044,
-                    'asunto'    => $mailing->subject_044,
+                    'subject'   => $mailing->subject_044,
                     'message'   => Crypt::encrypt($mailing->id_044),
                     'contact'   => Crypt::encrypt($mailing->id_041),
                     'company'   => isset($mailing->company_041)? $mailing->company_041 : '',
                     'name'      => isset($mailing->name_041)? $mailing->name_041 : '',
                     'surname'   => isset($mailing->surname_041)? $mailing->surname_041 : '',
-                    'birthday'  => isset($mailing->birth_date_041)?  date('d-m-Y', $mailing->birth_date_041) : '',
-                    'campana'   => Crypt::encrypt($mailing->id_044),
-                    'envio'     => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
+                    'birthday'  => isset($mailing->birth_date_041)?  date(config('pulsar.datePattern'), $mailing->birth_date_041) : '',
+                    'campaign'  => Crypt::encrypt($mailing->id_044),
+                    'sending'   => Crypt::encrypt($emailSendHistorical->id_048) // dato para contabilizar en las estadísticas
                 ];
 
                 // config SMTP account

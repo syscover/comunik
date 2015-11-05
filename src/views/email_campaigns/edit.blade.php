@@ -1,8 +1,8 @@
-@extends('pulsar::layouts.form', ['action' => 'store'])
+@extends('pulsar::layouts.form', ['action' => 'update'])
 
 @section('script')
     @parent
-    <!-- comunik::email_templates.create -->
+    <!-- comunik::email_campaigns.edit -->
     <!-- Froala -->
     <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/css/froala_editor.min.css') }}">
     <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/wysiwyg.froala/css/froala_style.min.css') }}">
@@ -60,8 +60,14 @@
 
             //--------------- Customm Dual multi select ------------------//
             $.configureBoxes({
-                textShowing: 'Mostrando',
-                textOf: 'de',
+                textShowing: '{{ trans('pulsar::pulsar.showing') }}',
+                textOf: '{{ trans('pulsar::pulsar.of') }}'
+            });
+
+            //--------------- Customm Dual multi select ------------------//
+            $.configureBoxes({
+                textShowing: '{{ trans('pulsar::pulsar.showing') }}',
+                textOf: '{{ trans('pulsar::pulsar.of') }}',
                 box1View: 'box3View',
                 box1Storage: 'box3Storage',
                 box1Filter: 'box3Filter',
@@ -77,10 +83,6 @@
                 allTo1: 'allTo3',
                 allTo2: 'allTo4'
             });
-
-
-
-
 
             //$('#report').hide();
 
@@ -345,50 +347,50 @@
             });
         }
     </script>
-    <!-- /comunik::email_templates.create -->
+    <!-- /comunik::email_campaigns.edit -->
 @stop
 @section('rows')
-    <!-- comunik::email_templates.create -->
-    @include('pulsar::includes.html.form_text_group', ['label' => 'ID', 'name' => 'id', 'readOnly' => true, 'fieldSize' => 2])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.name'), 'name' => 'name', 'value' => Input::old('name'), 'maxLength' => '50', 'rangeLength' => '2,50', 'required' => true])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.account', 1), 'name' => 'emailAccount', 'value' => Input::old('emailAccount'), 'objects' => $emailAccounts, 'idSelect' => 'id_013', 'nameSelect' => 'email_013', 'class' => 'form-control select2', 'required' => true, 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
+    <!-- comunik::email_campaigns.edit -->
+    @include('pulsar::includes.html.form_text_group', ['label' => 'ID', 'name' => 'id', 'value' => $object->id_044, 'readOnly' => true, 'fieldSize' => 2])
+    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.name'), 'name' => 'name', 'value' => $object->name_044, 'maxLength' => '50', 'rangeLength' => '2,50', 'required' => true])
+    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.account', 1), 'name' => 'emailAccount', 'value' => $object->email_account_044, 'objects' => $emailAccounts, 'idSelect' => 'id_013', 'nameSelect' => 'email_013', 'class' => 'form-control select2', 'required' => true, 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.content', 2), 'icon' => 'fa fa-newspaper-o'])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.template', 1), 'name' => 'template', 'value' => Input::old('template'), 'objects' => $templates, 'idSelect' => 'id_043', 'nameSelect' => 'name_043', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
+    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.template', 1), 'name' => 'template', 'value' => $object->template_044, 'objects' => $templates, 'idSelect' => 'id_043', 'nameSelect' => 'name_043', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
 
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => "Si no puede ver el correo correctamente pinche <a href='#link#' target='_blank'>pulse aquí</a>"]])
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'unsubscribeLink', 'value' => "Si quiere dejar de recibir mensajes <a href='#unsubscribe#' target='_blank'>pulse aquí</a>"]])
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'trackPixel', 'value' => "<img height='1' width='1' src='http://pulsar.reservaycata.com/pulsar/comunik/email/services/campanas/analytics/#campana#/#envio#' />"]])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => Input::old('subject'), 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])
+    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => $object->subject_044, 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
         <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::includes.html.required')</label>
         <div class="col-md-10">
             <input type="hidden" id="emlHeaders" name="emlHeaders" value="{{ $emlHeaders }}">
-            <input type="hidden" id="header" name="header" value="{{ htmlspecialchars(Input::old('header')) }}">
-            <input type="hidden" id="footer" name="footer" value="{{ htmlspecialchars(Input::old('footer')) }}">
+            <input type="hidden" id="header" name="header" value="{{ htmlspecialchars($object->header_044) }}">
+            <input type="hidden" id="footer" name="footer" value="{{ htmlspecialchars($object->footer_044) }}">
             <input type="hidden" id="text" name="text" value="{{ htmlspecialchars(Input::old('text')) }}">
-            <textarea id="body" name="body" class="form-control limited required wysiwyg" cols="5" rows="10">{{ Input::old('body') }}</textarea>
+            <textarea id="body" name="body" class="form-control limited required wysiwyg" cols="5" rows="10">{{ $object->body_044 }}</textarea>
             {{ $errors->first('header', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('body', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
         </div>
     </div>
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => Input::old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
+    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => $object->theme_044, 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
             <div><a id="btContent" class="btn btn-info mfp-iframe">Insertar theme</a></div>
         </div>
     </div>
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.preference', 2), 'icon' => 'fa fa-cog'])
-    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.shipping_date'), 'name' => 'shippingDate', 'value' => Input::old('shippingDate'), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')]])
+    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.shipping_date'), 'name' => 'shippingDate', 'value' => date(config('pulsar.datePattern') . ' H:i', $object->shipping_date_044), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')]])
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <small>En caso de no seleccionar ninguna fecha, el envío se realizará de forma inmediata.</small>
         </div>
     </div>
-    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.persistence_date'), 'name' => 'persistenceDate', 'value' => Input::old('persistenceDate'), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')], 'inputs' => [
-        ['label' => trans('pulsar::pulsar.sorting'), 'name' => 'sorting', 'labelSize' => 2, 'fieldSize' => 2]
+    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.persistence_date'), 'name' => 'persistenceDate', 'value' => date(config('pulsar.datePattern') . ' H:i', $object->persistence_date_044), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')], 'inputs' => [
+        ['label' => trans('pulsar::pulsar.sorting'), 'name' => 'sorting', 'labelSize' => 2, 'fieldSize' => 2, 'value' => $object->sorting_044]
     ]])
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
@@ -397,8 +399,8 @@
         </div>
     </div>
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'value' => Input::old('groups'), 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2])
+    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'objectsSelect' => $object->groups, 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2, 'required' => true])
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'value' => Input::old('countries'), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4])
-    <!-- /comunik::email_templates.create -->
+    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->countries->where('lang_002', Auth::user()->lang_010), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
+    <!-- /comunik::email_campaigns.edit -->
 @stop
