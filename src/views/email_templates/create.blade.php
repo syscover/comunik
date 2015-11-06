@@ -109,6 +109,28 @@
                 }
             });
 
+            $.FroalaEditor.DefineIcon('preview', {NAME: 'fa fa-eye'});
+            $.FroalaEditor.RegisterCommand('preview', {
+                title: '{{ trans('pulsar::pulsar.preview') }}',
+                focus: false,
+                undo: false,
+                refreshAfterCallback: false,
+                callback: function () {
+                    $.magnificPopup.open({
+                        type: 'iframe',
+                        iframe: {
+                            markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
+                            '<div class="mfp-close"></div>'+
+                            '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                            '</div>'
+                        },
+                        items: {
+                            src: 'http://www.syscover.com'
+                        }
+                    });
+                }
+            });
+
             $('.wysiwyg').froalaEditor({
                 language: '{{ config('app.locale') }}',
                 placeholderText: '{{ trans('cms::pulsar.type_something') }}',
@@ -116,7 +138,7 @@
                 toolbarSticky: true,
                 tabSpaces: true,
                 shortcutsEnabled: ['show', 'bold', 'italic', 'underline', 'strikeThrough', 'indent', 'outdent', 'undo', 'redo', 'insertImage', 'createLink'],
-                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', 'preview', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
                 heightMin: 250,
                 enter: $.FroalaEditor.ENTER_BR,
                 key: '{{ config('pulsar.froalaEditorKey') }}'

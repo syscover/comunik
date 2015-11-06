@@ -2,13 +2,13 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        //--------------- Customm Dual multi select ------------------//
+        // custom Dual multi select
         $.configureBoxes({
             textShowing: '{{ trans('pulsar::pulsar.showing') }}',
             textOf: '{{ trans('pulsar::pulsar.of') }}'
         });
 
-        //--------------- Customm Dual multi select ------------------//
+        // custom Dual multi select
         $.configureBoxes({
             textShowing: '{{ trans('pulsar::pulsar.showing') }}',
             textOf: '{{ trans('pulsar::pulsar.of') }}',
