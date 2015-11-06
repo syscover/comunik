@@ -38,7 +38,7 @@ class EmailTemplatesController extends Controller {
             'header_043'    => $htmlLinks['header'],
             'body_043'      => $htmlLinks['body'],
             'footer_043'    => $htmlLinks['footer'],
-            'text_044'      => $htmlLinks['text'],
+            'text_043'      => $htmlLinks['text'],
             'data_043'      => $request->input('data')
         ]);
     }
@@ -62,7 +62,7 @@ class EmailTemplatesController extends Controller {
             'header_043'    => $htmlLinks['header'],
             'body_043'      => $htmlLinks['body'],
             'footer_043'    => $htmlLinks['footer'],
-            'text_044'      => $htmlLinks['text'],
+            'text_043'      => $htmlLinks['text'],
             'data_043'      => $request->input('data')
         ]);
     }

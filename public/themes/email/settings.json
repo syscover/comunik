@@ -8,17 +8,16 @@
     "setWidth": false,
     "width": 600,
 
-
     "setBackgroundColor": true,
-    "backgroundColor": "#F4F4F4",
+    "background-color": "#F4F4F4",
     "setCanvasColor": false,
-    "canvasColor": "#F8F8F8",
+    "canvas-color": "#F8F8F8",
     "setHighlightColor": true,
-    "highlightColor": "#F07800",
+    "highlight-color": "#F07800",
     "setTextColor": true,
-    "textColor" : "#787878",
+    "text-color" : "#787878",
     "setTitleColor": true,
-    "titleColor" : "#F07800",
+    "title-color" : "#F07800",
     "setLinkColor": true,
-    "linkColor" : "#F07800"
+    "link-color" : "#F07800"
 }
