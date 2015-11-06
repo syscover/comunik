@@ -1,32 +1,6 @@
-<!-- comunik::email_campaigns.includes.common_script -->
+<!-- comunik::email_templates.includes.common_script -->
 <script type="text/javascript">
     $(document).ready(function() {
-
-        // custom Dual multi select
-        $.configureBoxes({
-            textShowing: '{{ trans('pulsar::pulsar.showing') }}',
-            textOf: '{{ trans('pulsar::pulsar.of') }}'
-        });
-
-        // custom Dual multi select
-        $.configureBoxes({
-            textShowing: '{{ trans('pulsar::pulsar.showing') }}',
-            textOf: '{{ trans('pulsar::pulsar.of') }}',
-            box1View: 'box3View',
-            box1Storage: 'box3Storage',
-            box1Filter: 'box3Filter',
-            box1Clear: 'box3Clear',
-            box1Counter: 'box3Counter',
-            box2View: 'box4View',
-            box2Storage: 'box4Storage',
-            box2Filter: 'box4Filter',
-            box2Clear: 'box4Clear',
-            box2Counter: 'box4Counter',
-            to1: 'to3',
-            to2: 'to4',
-            allTo1: 'allTo3',
-            allTo2: 'allTo4'
-        });
 
         if($('[name="theme"]').val() == "") {
             $('#btContent').hide();
@@ -103,7 +77,6 @@
                         {
                             $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
                             $('.mfp-iframe').contents().find('html').html($('[name=header]').val() + $('[name=body]').val() + $('[name=footer]').val());
-                            console.log($('[name=header]').val() + $('[name=body]').val() + $('[name=footer]').val())
                         }
                     }
                 });
@@ -125,6 +98,10 @@
 
         // on submit, get content from wysiwyg
         $("#recordForm").on('submit', function(event) {
+            $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+        });
+
+        $('#btContent').on('click', function(){
             $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
         });
 
@@ -159,8 +136,8 @@
                     type:       "POST",
                     url:        "{{ asset(config('comunik.themesFolder')) }}/" + $('[name="theme"]').val() + '/settings.json',
                     dataType:   "json",
-                    success:  function(data)
-                    {
+                    success:  function(data) {
+
                         // include settings from theme in data field
                         $('#data').val(JSON.stringify(data));
 
@@ -173,8 +150,7 @@
                             $.uniform.update();
                         @endif
                     },
-                    error:function(objXMLHttpRequest)
-                    {
+                    error:function(objXMLHttpRequest){
                         //error
                     }
                 });
@@ -192,52 +168,9 @@
             }
         });
 
-        // when change template
-        $("[name='template']").on('change', function() {
-            if($(this).val() != "")
-            {
-                var url = '{{ route('apiShowComunikEmailTemplate', ['id' => 'id', 'api' => 1]) }}';
-                $.ajax({
-                    type: "POST",
-                    url: url.replace('id', $('[name=template]').val()),
-                    dataType: 'json',
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    success: function(data)
-                    {
-                        $("[name='subject']").val(data.subject_043);
-                        $("[name='header']").val(data.header_043);
-                        $("[name='body']").val(data.body_043);
-                        $("[name='footer']").val(data.footer_043);
-                        $("[name='data']").val(data.data_043);
-                        $("[name='theme']").val(data.theme_043).select2();
-
-                        $('.wysiwyg').froalaEditor('html.set', data.body_043);
-
-                        if($('[name="theme"]').val() == '') {
-                            $('#btContent').fadeOut();
-                        }
-                        else
-                        {
-                            $('#btContent').fadeIn();
-                            var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body']) }}';
-
-                            // set link on btContent who has magnific popup loaded
-                            $('#btContent').attr('href', url.replace('theme', $('[name="theme"]').val()));
-                        }
-
-                        $('[name="htmlLink"]').attr('readonly', true);
-                        $('[name="unsubscribeLink"]').attr('readonly', true);
-                        $('[name="trackPixel"]').attr('readonly', true);
-
-                        $('[name="setHtmlLink"]').attr('checked', false);
-                        $('[name="setUnsubscribeLink"]').attr('checked', false);
-                        $('[name="setTrackPixel"]').attr('checked', false);
-
-                        $.uniform.update();
-                    }
-                });
-            }
-        });
+        @if($action == 'update')
+            $('[name="theme"]').trigger('change');
+        @endif
     });
 
     // function called from pulsar::contentbuilder.index
@@ -269,4 +202,4 @@
         });
     }
 </script>
-<!-- /comunik::email_campaigns.includes.common_script -->
+<!-- /comunik::email_templates.includes.common_script -->

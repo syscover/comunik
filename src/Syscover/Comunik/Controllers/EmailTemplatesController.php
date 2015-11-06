@@ -4,7 +4,6 @@ use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\EmailTemplate;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
-use Syscover\Comunik\Models\Contact;
 
 class EmailTemplatesController extends Controller {
 
@@ -21,7 +20,6 @@ class EmailTemplatesController extends Controller {
 
     public function createCustomRecord($request, $parameters)
     {
-        $parameters['emlHeaders']   = MiscellaneousComunik::getEmlHeaders();
         $parameters['themes']       = MiscellaneousComunik::getThemes();
 
         return $parameters;
@@ -45,7 +43,6 @@ class EmailTemplatesController extends Controller {
 
     public function editCustomRecord($request, $parameters)
     {
-        $parameters['emlHeaders']   = MiscellaneousComunik::getEmlHeaders();
         $parameters['themes']       = MiscellaneousComunik::getThemes();
 
         return $parameters;

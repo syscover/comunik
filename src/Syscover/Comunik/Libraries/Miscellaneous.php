@@ -43,7 +43,7 @@ class Miscellaneous
         }
 
         // check if include track pixel
-        if($request->has('isPixel'))
+        if($request->has('setTrackPixel'))
         {
             $response['body'] = self::setTrackingPixel($request, $response['body']);
         }
@@ -251,7 +251,7 @@ class Miscellaneous
     {
         $trackPixel = $request->input('trackPixel');
 
-        $indexBodyTag = strpos($html, "</body>");
+        $indexBodyTag = strpos($html, '</body>');
 
         if($indexBodyTag === false)
         {
@@ -264,87 +264,6 @@ class Miscellaneous
 
         return $html;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-     *  Función busca una coincidencia con los patrones de emails para detectar correos rebotados
-     *
-     * @access	public
-     * @return	array
-     */
-    public static function checkEmailPattern($message, $patterns)
-    {
-        $response = array();
-
-        $matchPattern   = false;
-        $objPattern     = null;
-        $subject        = $message->getSubject();
-        $body           = $message->getMessageBody();
-
-        // Proceso de comprobación de patrones
-        foreach($patterns as $pattern)
-        {
-            $matchSubject = false;
-            $matchMessage = false;
-
-            if(empty($pattern->subject_079) == false && strpos($subject, $pattern->subject_079) !== false)
-            {
-                $matchSubject = true;
-            }
-
-            if(empty($pattern->message_079) === false && strpos($body, $pattern->message_079) !== false)
-            {
-                $matchMessage = true;
-            }
-
-            if($pattern->summation_079 == 'AND' && $matchSubject && $matchMessage)
-            {
-                $matchPattern   = true;
-                $objPattern     = $pattern;
-                break;
-            }
-            elseif(($pattern->summation_079 == 'OR' || $pattern->summation_079 == null) && ($matchSubject || $matchMessage))
-            {
-                $matchPattern   = true;
-                $objPattern     = $pattern;
-                break;
-            }
-        }
-
-        if($matchPattern)
-        {
-            $response['success']    = true;
-            $response['pattern']    = $objPattern;
-            $emails                 = MiscellaneousPulsar::extractEmail($body);
-            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
-        }
-        else
-        {
-            $response['success']    = false;
-            $response['pattern']    = false;
-            $emails                 = MiscellaneousPulsar::extractEmail($body);
-            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
-        }
-
-        return $response;
-    }
-
 
     /**
      * Function to convert html to text
@@ -574,5 +493,76 @@ class Miscellaneous
         }
 
         return $output;
+    }
+
+
+
+
+
+
+
+
+
+    /*
+     *  Función busca una coincidencia con los patrones de emails para detectar correos rebotados
+     *
+     * @access	public
+     * @return	array
+     */
+    public static function checkEmailPattern($message, $patterns)
+    {
+        $response = array();
+
+        $matchPattern   = false;
+        $objPattern     = null;
+        $subject        = $message->getSubject();
+        $body           = $message->getMessageBody();
+
+        // Proceso de comprobación de patrones
+        foreach($patterns as $pattern)
+        {
+            $matchSubject = false;
+            $matchMessage = false;
+
+            if(empty($pattern->subject_079) == false && strpos($subject, $pattern->subject_079) !== false)
+            {
+                $matchSubject = true;
+            }
+
+            if(empty($pattern->message_079) === false && strpos($body, $pattern->message_079) !== false)
+            {
+                $matchMessage = true;
+            }
+
+            if($pattern->summation_079 == 'AND' && $matchSubject && $matchMessage)
+            {
+                $matchPattern   = true;
+                $objPattern     = $pattern;
+                break;
+            }
+            elseif(($pattern->summation_079 == 'OR' || $pattern->summation_079 == null) && ($matchSubject || $matchMessage))
+            {
+                $matchPattern   = true;
+                $objPattern     = $pattern;
+                break;
+            }
+        }
+
+        if($matchPattern)
+        {
+            $response['success']    = true;
+            $response['pattern']    = $objPattern;
+            $emails                 = MiscellaneousPulsar::extractEmail($body);
+            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
+        }
+        else
+        {
+            $response['success']    = false;
+            $response['pattern']    = false;
+            $emails                 = MiscellaneousPulsar::extractEmail($body);
+            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
+        }
+
+        return $response;
     }
 }

@@ -68,7 +68,7 @@
 
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => false, 'inputText' => ['name' => 'htmlLink', 'value' => trans('comunik::pulsar.html_link_value')]])
     @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => false, 'inputText' => ['name' => 'unsubscribeLink', 'value' => trans('comunik::pulsar.unsubscribe_link_value')]])
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => false, 'inputText' => ['name' => 'trackPixel', 'value' =>trans('comunik::pulsar.track_pixel_value', ['url' => url(config('pulsar.appName') . config('comunik.trackPixel'))])]])
+    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => false, 'inputText' => ['name' => 'trackPixel', 'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "' />"]])
     @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => $object->subject_044, 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
@@ -76,9 +76,10 @@
         <div class="col-md-10">
             <input type="hidden" id="emlHeaders" name="emlHeaders" value="{{ $emlHeaders }}">
             <input type="hidden" id="header" name="header" value="{{ htmlspecialchars($object->header_044) }}">
+            <input type="hidden" id="body" name="body" value="{{ htmlspecialchars($object->body_044) }}">
             <input type="hidden" id="footer" name="footer" value="{{ htmlspecialchars($object->footer_044) }}">
-            <input type="hidden" id="text" name="text" value="{{ htmlspecialchars(Input::old('text')) }}">
-            <textarea id="body" name="body" class="form-control limited required wysiwyg" cols="5" rows="10">{{ $object->body_044 }}</textarea>
+            <input type="hidden" id="text" name="text" value="{{ htmlspecialchars($object->text_044) }}">
+            <textarea name="wysiwyg" class="form-control limited required wysiwyg" cols="5" rows="10">{{ $object->body_044 }}</textarea>
             {{ $errors->first('header', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('body', config('pulsar::pulsar.errorDelimiters')) }}
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
