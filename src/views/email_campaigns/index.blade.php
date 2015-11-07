@@ -24,10 +24,6 @@
     <!-- comunik::email_campaigns.index -->
 @stop
 
-@section('headButtons')
-
-@stop
-
 @section('tHead')
     <!-- comunik::email_campaigns.index -->
     <tr>

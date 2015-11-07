@@ -2,6 +2,21 @@
 
 @section('script')
     @parent
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/cropper/cropper.css') }}">
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/filedrop/filedrop.css') }}">
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/getfile/css/getfile.css') }}">
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/magnific-popup.css') }}">
+@stop
+
+@section('script')
+    @parent
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/cropper/cropper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/cssloader/js/jquery.cssloader.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/mobiledetect/mdetect.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getfile/libs/filedrop/filedrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getfile/js/jquery.getfile.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+
     <!-- comunik::contacts.index -->
     <script type="text/javascript">
         $(document).ready(function() {
@@ -19,6 +34,47 @@
                     "sAjaxSource": "{{ route('jsonData' . $routeSuffix) }}"
                 }).fnSetFilteringDelay();
             }
+
+            $('#csv').getFile({
+                    urlPlugin:      '/packages/syscover/pulsar/vendor',
+                    folder:         '/packages/syscover/pulsar/storage/tmp',
+                    tmpFolder:      '/packages/syscover/pulsar/storage/tmp',
+                    encryption:     true,
+                    mimesAccept:    [
+                        'text/plain',
+                        'text/csv',
+                        'application/csv'
+                    ]
+                },
+                function(data) {
+                    /*
+                    $.lightbox("{{ URL::to(Config::get('pulsar::pulsar.rootUri')) }}/comunik/contactos/import/excel/preview/"+data.name, {
+                        'width'       : '90p',
+                        'height'      : '90p',
+                        'iframe'      : true,
+                        'onClose'     : function() {
+                            location.reload();
+                        }
+                    });*/
+
+                    var url = '{{ route('importPreviewComunikContact', ['file' => 'file']) }}';
+console.log(url.replace('file', data.name));
+                    $.magnificPopup.open({
+                        type: 'iframe',
+                        iframe: {
+                            markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
+                            '<div class="mfp-close"></div>'+
+                            '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                            '</div>'
+                        },
+                        items: {
+                            src: url.replace('file', data.name)
+                        }
+                    });
+
+                    return false;
+                }
+            );
         });
     </script>
     <!-- comunik::contacts.index -->
@@ -31,7 +87,7 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a id="csv" href="#" style="overflow: hidden"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+            <li><a id="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
         </ul>
     </div>
 @stop
