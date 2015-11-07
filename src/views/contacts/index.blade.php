@@ -25,7 +25,15 @@
 @stop
 
 @section('headButtons')
-
+    <div class="btn-group marginB10 marginL10">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-download"></i> Importación
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a id="csv" href="#" style="overflow: hidden"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+        </ul>
+    </div>
 @stop
 
 @section('tHead')

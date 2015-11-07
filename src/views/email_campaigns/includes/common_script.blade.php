@@ -101,6 +101,8 @@
                     callbacks: {
                         open: function()
                         {
+                            // set iframe background color
+                            $('.mfp-iframe-scaler iframe').css('background', '#fff');
                             $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
                             $('.mfp-iframe').contents().find('html').html($('[name=header]').val() + $('[name=body]').val() + $('[name=footer]').val());
                             console.log($('[name=header]').val() + $('[name=body]').val() + $('[name=footer]').val())
@@ -117,7 +119,7 @@
             toolbarSticky: true,
             tabSpaces: true,
             shortcutsEnabled: ['show', 'bold', 'italic', 'underline', 'strikeThrough', 'indent', 'outdent', 'undo', 'redo', 'insertImage', 'createLink'],
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', 'preview', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '|', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', '|', 'wildcard', 'preview', '-', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
             heightMin: 250,
             enter: $.FroalaEditor.ENTER_BR,
             key: '{{ config('pulsar.froalaEditorKey') }}'
