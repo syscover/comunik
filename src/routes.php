@@ -153,8 +153,8 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
 | MOD. EMAIL SERVICES CAMPAIGNS (show campaign and est
 |--------------------------------------------------------------------------
 */
-Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{contactKey}',         ['as'=>'showComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@showCampaign']);
-Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/statistics/{campaign}/{historicalId}', ['as'=>'statisticsComunikEmailCampaign',    'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@statistics']);
+Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{historicalId}',       ['as'=>'showComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@showCampaign']);
+Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/statistics/{campaign}/{historicalId}', ['as'=>'statisticsComunikEmailCampaign',    'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@recordStatistic']);
 
 /*
 |--------------------------------------------------------------------------

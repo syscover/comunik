@@ -32,4 +32,13 @@ return [
     'shipping_groups'                       => 'Grupos de envíos',
     'shipping_countries'                    => 'Países de envíos',
     'unsubscribe'                           => 'Unsubscribe',
+    'statistic'                             => 'Estadística|Estadísticas',
+    'total_mailings'                        => 'Emails totales',
+    'view_mailings'                         => 'Emails vistos',
+    'sent_mailings'                         => 'Emails enviados',
+    'for_sending_emails'                    => 'Emails por enviar',
+    'mails_seen_unique'                     => 'Emails vistos únicos',
+    'campaign_effectiveness'                => 'Efectividad de campaña',
+    'shipping_date_notice'                  => 'En caso de no seleccionar ninguna fecha, el envío se realizará de forma inmediata.',
+    'campaign_persistence_notice'           => 'Fecha de finalización de campaña, se enviará esta campaña a todos los nuevos contactos asignados a los grupos de esta campaña, no rellenar en caso de no desear activar la persistencia.'
 ];

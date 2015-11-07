@@ -32,4 +32,13 @@ return [
     'shipping_groups'                       => 'Shipping groups',
     'shipping_countries'                    => 'Shipping countries',
     'unsubscribe'                           => 'Unsubscribe',
+    'statistic'                             => 'Statistic|Statistics',
+    'total_mailings'                        => 'Total emails',
+    'view_mailings'                         => 'View mailings',
+    'sent_mailings'                         => 'Sent mailings',
+    'for_sending_emails'                    => 'For sending emails',
+    'mails_seen_unique'                     => 'Mails seen, unique',
+    'campaign_effectiveness'                => 'Campaign Effectiveness',
+    'shipping_date_notice'                  => 'If don\'t select any date, the shipment will be made immediately.',
+    'campaign_persistence_notice'           => 'Campaign end date, the campaign will be sent to all new contacts assigned to the groups in this campaign not fill if you do not wish to activate the persistence.'
 ];

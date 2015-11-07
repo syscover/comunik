@@ -155,7 +155,6 @@ class Cron
      */
     public static function checkSendEmails()
     {
-
         $nMailings = EmailSendQueue::getNMailings();
 
         if($nMailings > 0)

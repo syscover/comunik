@@ -180,7 +180,7 @@ class Miscellaneous
     public static function setHtmlLink($request, $html)
     {
         // create link
-        $htmlLink = str_replace("#link#", route('showComunikEmailCampaign', ['campaign' => '#campaign#', 'contactKey' => '#contactKey#']), $request->input('htmlLink'));
+        $htmlLink = str_replace("#link#", route('showComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']), $request->input('htmlLink'));
 
         $piece = '<table align="center" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;padding-top: 10px;padding-bottom: 10px;">'
             . $htmlLink .

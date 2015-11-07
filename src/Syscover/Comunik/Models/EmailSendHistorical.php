@@ -18,4 +18,16 @@ class EmailSendHistorical extends Model {
     {
         return Validator::make($data, static::$rules);
 	}
+
+    public static function getRecords($parameters)
+    {
+        $query = EmailSendHistorical::join('005_041_contact', '005_048_email_send_historical.contact_048', '=', '005_041_contact.id_041')
+            ->newQuery();
+
+        if(isset($parameters['id_048'])) $query->where('id_048', $parameters['id_048']);
+        if(isset($parameters['campaign_048'])) $query->where('campaign_048', $parameters['campaign_048']);
+        if(isset($parameters['contact_048'])) $query->where('contact_048', $parameters['contact_048']);
+
+        return $query->get();
+    }
 }

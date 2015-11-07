@@ -1,6 +1,8 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Syscover\Comunik\Models\EmailSendHistorical;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Libraries\EmailServices;
 use Syscover\Pulsar\Traits\TraitController;
@@ -63,12 +65,19 @@ class EmailCampaignsController extends Controller {
 
     public function editCustomRecord($request, $parameters)
     {
-        $parameters['emailAccounts']    = EmailAccount::all();
-        $parameters['templates']        = EmailTemplate::all();
-        $parameters['themes']           = MiscellaneousComunik::getThemes();
-        $parameters['emlHeaders']       = MiscellaneousComunik::getEmlHeaders();
-        $parameters['groups']           = Group::all();
-        $parameters['countries']        = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
+        $parameters['emailAccounts']        = EmailAccount::all();
+        $parameters['templates']            = EmailTemplate::all();
+        $parameters['themes']               = MiscellaneousComunik::getThemes();
+        $parameters['emlHeaders']           = MiscellaneousComunik::getEmlHeaders();
+        $parameters['groups']               = Group::all();
+        $parameters['countries']            = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
+
+        // statistics
+        $parameters['totalMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();
+        $parameters['sentMailings']         = EmailSendHistorical::where('campaign_048', $parameters['id'])->count();
+        $parameters['noSentMailings']       = EmailSendQueue::where('campaign_047', $parameters['id'])->where('status_047', 0)->count();
+        $parameters['uniqueViewMailings']   = EmailSendHistorical::where('campaign_048', $parameters['id'])->where('viewed_048', '>' ,0)->count();
+        $parameters['effectiveness']        = $parameters['uniqueViewMailings'] > 0? round($parameters['uniqueViewMailings'] / $parameters['sentMailings'] * 100, 2) : 0;
 
         return $parameters;
     }
@@ -104,26 +113,42 @@ class EmailCampaignsController extends Controller {
         EmailSendQueue::deleteMailingWithoutGroupSendQueue($request->input('groups'), $emailCampaign->id_044);
     }
 
-
-    public function showCampaign($emailCampaign, $contactKey)
+    public function showCampaign($emailCampaignId, $historicalId)
     {
         // function to view online the campaign
-        $emailCampaign  = EmailCampaign::find(Crypt::decrypt($emailCampaign));
-        $contact        = Contact::find(Crypt::decrypt($contactKey));
+        $emailCampaign          = EmailCampaign::find(Crypt::decrypt($emailCampaignId));
+        $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($historicalId)])->first();
+
         $data           = [
-            'email'         => $contact->email_041,
+            'email'         => $emailSendHistorical->email_041,
             'html'          => $emailCampaign->header_044 . $emailCampaign->body_044 . $emailCampaign->footer_044,
             'subject'       => $emailCampaign->subject_044,
             'campaign'      => Crypt::encrypt($emailCampaign->id_044),
-            'contactKey'    => Crypt::encrypt($contact->id_041),
-            'company'       => isset($contact->company_041)? $contact->company_041 : null,
-            'name'          => isset($contact->name_041)? $contact->name_041 : null,
-            'surname'       => isset($contact->surname_041)? $contact->surname_041 : null,
-            'birthDay'      => isset($contact->birth_date_041)?  date(config('pulsar.datePattern'), $contact->birth_date_041) : null,
+            'contactKey'    => Crypt::encrypt($emailSendHistorical->id_041),
+            'company'       => isset($emailSendHistorical->company_041)? $emailSendHistorical->company_041 : null,
+            'name'          => isset($emailSendHistorical->name_041)? $emailSendHistorical->name_041 : null,
+            'surname'       => isset($emailSendHistorical->surname_041)? $emailSendHistorical->surname_041 : null,
+            'birthDay'      => isset($emailSendHistorical->birth_date_041)?  date(config('pulsar.datePattern'), $emailSendHistorical->birth_date_041) : null,
+            'historicalId'  => $historicalId,
         ];
 
         $data = EmailServices::setTemplate($data);
 
         return view('pulsar::common.views.html_display', $data);
+    }
+
+    public function recordStatistic(Request $request)
+    {
+        // get parameters from url route
+        $parameters     = $request->route()->parameters();
+
+        $campaign       = Crypt::decrypt($parameters['campaign']);
+        $historicalId   = Crypt::decrypt($parameters['historicalId']);
+
+        // add a viewed to the campaign
+        EmailCampaign::where('id_044', $campaign)->increment('viewed_044');
+
+        // add a viewed to the historical
+        EmailSendHistorical::where('id_048', $historicalId)->increment('viewed_048');
     }
 }

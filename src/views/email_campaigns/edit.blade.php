@@ -96,7 +96,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <small>En caso de no seleccionar ninguna fecha, el envío se realizará de forma inmediata.</small>
+            <small>{{ trans('comunik::pulsar.shipping_date_notice') }}</small>
         </div>
     </div>
     @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.persistence_date'), 'name' => 'persistenceDate', 'value' => empty($object->persistence_date_044)? null : date(config('pulsar.datePattern') . ' H:i', $object->persistence_date_044), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')], 'inputs' => [
@@ -105,12 +105,23 @@
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <small>Fecha de finalización de campaña, se enviará esta campaña a todos los nuevos concactos asignados a los grupos de esta campaña, no rellenar en caso de no desear activar la persistencia.</small>
+            <small>{{ trans('comunik::pulsar.campaign_persistence_notice') }}</small>
         </div>
     </div>
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
     @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'objectsSelect' => $object->groups, 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2, 'required' => true])
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
     @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->countries->where('lang_002', Auth::user()->lang_010), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
+
+    @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('comunik::pulsar.statistic', 2), 'icon' => 'fa fa-area-chart'])
+    @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.total_mailings'), 'name' => '', 'value' => $totalMailings, 'readOnly' => true, 'inputs' => [
+        ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.view_mailings'), 'name' => '', 'value' => $object->viewed_044, 'readOnly' => true]
+    ]])
+    @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.sent_mailings'), 'name' => '', 'value' => $sentMailings, 'readOnly' => true, 'inputs' => [
+        ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.mails_seen_unique'), 'name' => '', 'value' => $uniqueViewMailings, 'readOnly' => true]
+    ]])
+    @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.for_sending_emails'), 'name' => '', 'value' => $noSentMailings, 'readOnly' => true, 'inputs' => [
+        ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.campaign_effectiveness'), 'name' => '', 'value' => $effectiveness, 'readOnly' => true]
+    ]])
     <!-- /comunik::email_campaigns.edit -->
 @stop
