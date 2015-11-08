@@ -21,8 +21,8 @@ class Contact extends Model {
         'surname'       => 'between:0,50',
         'country'       => 'required',
         'email'         => 'between:2,50|email|unique:005_041_contact,email_041',
-        'prefix'        => 'between:0,5',
-        'mobile'        => 'between:2,50|unique:005_041_contact,mobile_041'
+        'prefix'        => 'numeric|digits_between:0,5',
+        'mobile'        => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041'
     ];
 
     public static function validate($data, $specialRules = [])

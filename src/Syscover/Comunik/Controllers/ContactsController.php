@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Models\Country;
@@ -110,7 +111,7 @@ class ContactsController extends Controller {
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
         $data['fields']     = [
             (object)['id' => 'id_040',      'name' => trans('comunik::pulsar.group_id')],
-            (object)['id' => 'company_041', 'name' => trans('pulsar::pulsar.company')],
+            (object)['id' => 'company_041', 'name' => trans_choice('pulsar::pulsar.company', 1)],
             (object)['id' => 'name_041',    'name' => trans('pulsar::pulsar.name')],
             (object)['id' => 'surname_041', 'name' => trans('pulsar::pulsar.surname')],
             (object)['id' => 'country_041', 'name' => trans('comunik::pulsar.country_id')],
@@ -146,10 +147,9 @@ class ContactsController extends Controller {
         }
 
         $data['data']       = $arrayData;
-
         $data['file']       = $parameters['file'];
         $data['nColumns']   = $highestColumnIndex;
-        $data['nRows']      = $highestRow - 1;
+        $data['nRows']      = $highestRow;
 
         return view('comunik::contacts.preview_import', $data);
     }
@@ -157,11 +157,12 @@ class ContactsController extends Controller {
     public function importRecords(Request $request){
         $data           = [];
         $jsonData       = json_decode($request->input('data'));
-        $groups         = $request->input('groups');
+        $countries      = Country::getTranslationsRecords($request->user()->lang_010);
+        $groups         = Group::all();
+        $group          = $request->input('groups');
         $country        = $request->input('country');
-
+        $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $request->input('file');
         $fields         = [];
-        $inputFileName  = public_path() . '/packages/pulsar/pulsar/storage/tmp/' . $file;
 
         if(!empty($country))
             $country = Country::getTranslationRecord($country, $request->user()->lang_010);
@@ -186,16 +187,17 @@ class ContactsController extends Controller {
         for ($row = 1; $row <= $highestRow; ++$row)
         {
             // comprobamos si esta fila no debe de ser insertada
-            if(!in_array($row - 1, $jsonData['rowsDel']))
+
+            if(!in_array($row - 1, $jsonData->deleteRows))
             {
                 $dbRow = [];
 
                 for ($col = 0; $col < $highestColumnIndex; ++$col)
                 {
                     // validamos los datos comunes (group)
-                    if(!empty($groups))
+                    if(!empty($group))
                     {
-                        $dbRow['id_040'] = $groups;
+                        $dbRow['id_040'] = $group;
                     }
 
                     // validamos los datos comunes (country)
@@ -211,17 +213,22 @@ class ContactsController extends Controller {
                         $dbRow[$request->input('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
                         // en la primera vuelta del bucle, obtenemos el campo que se graba para usarlo posteriormente para los datos erroneos
-                        if($row == 1) $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1 && $request->input('column' . $col) == "name_041")    array_push($fields, $field);
-                        if($row == 1 && $request->input('column' . $col) == "surname_041") array_push($fields, $field);
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
                     elseif ($request->input('column' . $col) == "email_041")
                     {
                         // eliminamos espacios en blanco y ponemos el mail en minúsculas
                         $dbRow[$request->input('column' . $col)] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1)   $fields[] = $field;
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
                     elseif ($request->input('column' . $col) == "prefix_041" && $paisObj == null)
                     {
@@ -229,65 +236,77 @@ class ContactsController extends Controller {
                         // ponemos el mail en minúsculas
                         $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
-                    elseif ($request->input('column' . $col) == "movil_030")
+                    elseif ($request->input('column' . $col) == "mobile_041")
                     {
                         // eliminamos espacios en blanco en el contenido
                         // ponemos el mail en minúsculas
                         $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
-                    elseif ($gruposSelect == null && $request->input('column' . $col) == "id_029")
+                    elseif ($group == null && $request->input('column' . $col) == "id_040")
                     {
                         $grupo = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        $dbRow[$request->input('column' . $col)] = $grupo;
+                        $dbRow[$request->input('column' . $col)] = $group;
 
-                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
-                    elseif ($paisSelect == 'null' && $request->input('column' . $col) == "pais_030")
+                    elseif ($country == '' && $request->input('column' . $col) == "country_041")
                     {
                         $dbRow[$request->input('column' . $col)] = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
+                        if($row == 1)
+                        {
+                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                            //$fields[] = $field;
+                        }
                     }
                 }
 
                 // asignación de prefijo si hay pais selecionado para todos los datos
-                if($paisObj != null)
+                if(!empty($country))
                     $dbRow['prefix_041'] = $country->prefix_002;
 
                 $rules = [
-                    'email_041'     => 'email',
-                    'prefix_041'    => 'numeric',
-                    'mobile_041'    => 'numeric|digits_between:6,15'
+                    'email_041'     => 'email|between:2,50',
+                    'prefix_041'    => 'numeric|digits_between:0,5',
+                    'mobile_041'    => 'numeric|digits_between:2,50'
                 ];
 
                 if(!array_key_exists('email_041', $dbRow) && array_key_exists('mobile_041', $dbRow))
                 {
-                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:2,50';
                 }
 
                 if(!array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow))
                 {
-                    $rules['email_041']     = 'required|email';
+                    $rules['email_041']     = 'required|email|between:2,50';
                 }
 
                 if(array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow) && $dbRow['mobile_041'] == "" && $dbRow['email_041'] == "")
                 {
                     $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
-                    $rules['email_041']     = 'required|email';
+                    $rules['email_041']     = 'required|email|between:2,50';
                 }
 
                 if(!array_key_exists('mobile_041', $dbRow) && !array_key_exists('email_041', $dbRow))
                 {
                     $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
-                    $rules['email_041']     = 'required|email';
+                    $rules['email_041']     = 'required|email|between:2,50';
                 }
 
                 // Realizamos una primara validación de los datos
@@ -315,21 +334,21 @@ class ContactsController extends Controller {
                         'message'   => $txtError
                     ];
                 }
-                elseif($paisSelect == 'null' && !isset($dbRow['pais_030']))
+                elseif(empty($country) && !isset($dbRow['country_041']))
                 {
                     $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => 'No hay país asignado'
                     ];
                 }
-                elseif($paisSelect == 'null' && $paises->find($dbRow['pais_030']) == null)
+                elseif(empty($country) && $countries->find($dbRow['country_041']) == null)
                 {
                     $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => 'El país asignado no existe'
                     ];
                 }
-                elseif($gruposSelect == null && $grupos->find($grupo) == null)
+                elseif(empty($group) && $groups->find($group) == null)
                 {
                     $arrayDataFail[] = [
                         'row'       => $dbRow,
