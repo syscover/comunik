@@ -108,22 +108,32 @@ class ContactsController extends Controller {
         $data['countries']  = Country::getTranslationsRecords($request->user()->lang_010);
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
+        $data['fields']     = [
+            (object)['id' => 'id_040',      'name' => trans('comunik::pulsar.group_id')],
+            (object)['id' => 'company_041', 'name' => trans('pulsar::pulsar.company')],
+            (object)['id' => 'name_041',    'name' => trans('pulsar::pulsar.name')],
+            (object)['id' => 'surname_041', 'name' => trans('pulsar::pulsar.surname')],
+            (object)['id' => 'country_041', 'name' => trans('comunik::pulsar.country_id')],
+            (object)['id' => 'prefix_041',  'name' => trans('pulsar::pulsar.prefix')],
+            (object)['id' => 'mobile_041',  'name' => trans('pulsar::pulsar.mobile')],
+            (object)['id' => 'email_041',   'name' => trans('pulsar::pulsar.email')]
+        ];
 
-        $objReader      = new \PHPExcel_Reader_CSV();       // Creamos un objeto CSV Reader
+        $objReader =  \PHPExcel_IOFactory::createReader('CSV')
+            ->setDelimiter(";")                                         // configura el reader para tener en los ';' como elemento separador
+            ->setReadDataOnly(true);                                    // configura el reader para ignorar estilos, solo leerá los datos
 
-        $objReader->setReadDataOnly(true);                  // Configura el reader para ignorar estilos, solo leerá los datos
-        $objReader->setDelimiter(";");                      // Configura el reader para tener en cuenta el ; como elmento separador
-        $objPHPExcel    = $objReader->load($inputFileName); // Cargamos el fichero y obtenemos el objeto PHPExcel
+        $objPHPExcel    = $objReader->load($inputFileName);             // cargamos el fichero y obtenemos el objeto PHPExcel
 
-        //$totalSheets = $objPHPExcel->getSheetCount();       // Función para obtener el número de libros de la hoja de cálculo
-        //$allSheetName = $objPHPExcel->getSheetNames();      // Función para obtener los nombres de los libros de las hojas de cálculo
+        //$totalSheets = $objPHPExcel->getSheetCount();       // función para obtener el número de libros de la hoja de cálculo
+        //$allSheetName = $objPHPExcel->getSheetNames();      // función para obtener los nombres de los libros de las hojas de cálculo
 
         $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);     // Por defecto recuperamos el primer libro de la hoja de excel
         $highestRow         = $objWorksheet->getHighestRow();           // Recuperamos el número de fila más alto (dato numérico, empezando por 1)
         $highestColumn      = $objWorksheet->getHighestColumn();        // Recuperamos la columma mas alta (data string)
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn); // Pasamos del dato string de columna a un dato numérico
 
-        //limitamos las filas para ralizar un preview
+        // limitamos las filas para ralizar un preview
         if($highestRow > 51) $highestRow = 51;  // obtenemos las 50 primeras filas
 
         for ($row = 1; $row <= $highestRow; ++$row)
@@ -136,36 +146,32 @@ class ContactsController extends Controller {
         }
 
         $data['data']       = $arrayData;
+
         $data['file']       = $parameters['file'];
         $data['nColumns']   = $highestColumnIndex;
         $data['nRows']      = $highestRow - 1;
-
-        $data['javascriptView'] = 'comunik::pulsar.comunik.contactos.js.preview_import';
 
         return view('comunik::contacts.preview_import', $data);
     }
 
     public function importRecords(Request $request){
         $data           = [];
-        $jsonData       = json_decode($request->input('data'), true);
-        $grupos         = Grupo::all();
-        $paises         = Pais::all();
-        $gruposSelect   = Input::get('grupos');
-        $paisSelect     = Input::get('pais');
-        $fields         = array();
-        $inputFileName  = public_path().'/packages/pulsar/pulsar/storage/tmp/'.$file;
-        $paisObj        = null;
+        $jsonData       = json_decode($request->input('data'));
+        $groups         = $request->input('groups');
+        $country        = $request->input('country');
 
-        if($paisSelect != 'null')
-        {
-            $paisObj = Pais::getPais($paisSelect, Session::get('idiomaBase')->id_001);
-        }
+        $fields         = [];
+        $inputFileName  = public_path() . '/packages/pulsar/pulsar/storage/tmp/' . $file;
 
-        $objReader      = new \PHPExcel_Reader_CSV();       // Creamos un objeto CSV Reader
+        if(!empty($country))
+            $country = Country::getTranslationRecord($country, $request->user()->lang_010);
 
-        $objReader->setReadDataOnly(true);                  // Configura el reader para ignorar estilos, solo leerá los datos
-        $objReader->setDelimiter(";");                      // Configura el reader para tener en cuenta el ; como elmento separador
-        $objPHPExcel    = $objReader->load($inputFileName); // Cargamos el fichero y obtenemos el objeto PHPExcel
+
+        $objReader =  \PHPExcel_IOFactory::createReader('CSV')
+            ->setDelimiter(";")                                     // configura el reader para tener en los ';' como elemento separador
+            ->setReadDataOnly(true);                                // configura el reader para ignorar estilos, solo leerá los datos
+
+        $objPHPExcel    = $objReader->load($inputFileName);         // Cargamos el fichero y obtenemos el objeto PHPExcel
 
         //$totalSheets = $objPHPExcel->getSheetCount();       // Función para obtener el número de libros de la hoja de cálculo
         //$allSheetName = $objPHPExcel->getSheetNames();      // Función para obtener los nombres de los libros de las hojas de cálculo
@@ -175,117 +181,113 @@ class ContactsController extends Controller {
         $highestColumn      = $objWorksheet->getHighestColumn();    // Recuperamos la columma mas alta (data string)
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);    // Pasamos del dato string de columna a un dato numérico
 
-        $arrayDataFail = array();
+        $arrayDataFail = [];
 
         for ($row = 1; $row <= $highestRow; ++$row)
         {
             // comprobamos si esta fila no debe de ser insertada
             if(!in_array($row - 1, $jsonData['rowsDel']))
             {
-                $dbRow = array();
+                $dbRow = [];
 
                 for ($col = 0; $col < $highestColumnIndex; ++$col)
                 {
-                    // validamos los datos comunes (grupo)
-                    if($gruposSelect != null)
+                    // validamos los datos comunes (group)
+                    if(!empty($groups))
                     {
-                        $grupo = $gruposSelect;
-                        $dbRow['id_029'] = $grupo;
+                        $dbRow['id_040'] = $groups;
                     }
 
-                    // validamos los datos comunes (pais)
-                    if($paisSelect != 'null')
+                    // validamos los datos comunes (country)
+                    if(!empty($selectCountry))
                     {
-                        $dbRow['pais_030']  = $paisSelect;
+                        $dbRow['country_041']  = $country->id_002;
                     }
 
-                    // Damos formato a los datos a insertar
-                    if (Input::get('column' . $col) == "nombre_030" || Input::get('column' . $col) == "apellidos_030")
+                    // damos formato a los datos a insertar
+                    if ($request->input('column' . $col) == "name_041" || $request->input('column' . $col) == "surname_041")
                     {
                         // nombre y apellidos en minúsculas con la primera en mayúscula
-                        $dbRow[Input::get('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $dbRow[$request->input('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
                         // en la primera vuelta del bucle, obtenemos el campo que se graba para usarlo posteriormente para los datos erroneos
-                        if($row == 1) $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
-                        if($row == 1 && Input::get('column' . $col) == "nombre_030")    array_push($fields, $field);
-                        if($row == 1 && Input::get('column' . $col) == "apellidos_030") array_push($fields, $field);
+                        if($row == 1) $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                        if($row == 1 && $request->input('column' . $col) == "name_041")    array_push($fields, $field);
+                        if($row == 1 && $request->input('column' . $col) == "surname_041") array_push($fields, $field);
                     }
-                    elseif (Input::get('column' . $col) == "email_030")
+                    elseif ($request->input('column' . $col) == "email_041")
                     {
-                        // eliminamos espacios en blanco
-                        // ponemos el mail en minúsculas
-                        $dbRow[Input::get('column' . $col)] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        // eliminamos espacios en blanco y ponemos el mail en minúsculas
+                        $dbRow[$request->input('column' . $col)] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
+                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                        if($row == 1)   $fields[] = $field;
                     }
-                    elseif (Input::get('column' . $col) == "prefijo_030" && $paisObj == null)
-                    {
-                        // eliminamos espacios en blanco en el contenido
-                        // ponemos el mail en minúsculas
-                        $dbRow[Input::get('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
-
-                        if($row == 1)   $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
-                        if($row == 1)   array_push($fields, $field);
-                    }
-                    elseif (Input::get('column' . $col) == "movil_030")
+                    elseif ($request->input('column' . $col) == "prefix_041" && $paisObj == null)
                     {
                         // eliminamos espacios en blanco en el contenido
                         // ponemos el mail en minúsculas
-                        $dbRow[Input::get('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
+                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
                         if($row == 1)   array_push($fields, $field);
                     }
-                    elseif ($gruposSelect == null && Input::get('column' . $col) == "id_029")
+                    elseif ($request->input('column' . $col) == "movil_030")
+                    {
+                        // eliminamos espacios en blanco en el contenido
+                        // ponemos el mail en minúsculas
+                        $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+
+                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
+                        if($row == 1)   array_push($fields, $field);
+                    }
+                    elseif ($gruposSelect == null && $request->input('column' . $col) == "id_029")
                     {
                         $grupo = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        $dbRow[Input::get('column' . $col)] = $grupo;
+                        $dbRow[$request->input('column' . $col)] = $grupo;
 
-                        if($row == 1)   $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
+                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
                         if($row == 1)   array_push($fields, $field);
                     }
-                    elseif ($paisSelect == 'null' && Input::get('column' . $col) == "pais_030")
+                    elseif ($paisSelect == 'null' && $request->input('column' . $col) == "pais_030")
                     {
-                        $dbRow[Input::get('column' . $col)] = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $dbRow[$request->input('column' . $col)] = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)   $field = $this->searchField(Input::get('column' . $col), $jsonData['fields']);
+                        if($row == 1)   $field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
                         if($row == 1)   array_push($fields, $field);
                     }
                 }
 
                 // asignación de prefijo si hay pais selecionado para todos los datos
                 if($paisObj != null)
+                    $dbRow['prefix_041'] = $country->prefix_002;
+
+                $rules = [
+                    'email_041'     => 'email',
+                    'prefix_041'    => 'numeric',
+                    'mobile_041'    => 'numeric|digits_between:6,15'
+                ];
+
+                if(!array_key_exists('email_041', $dbRow) && array_key_exists('mobile_041', $dbRow))
                 {
-                    $dbRow['prefijo_030'] = $paisObj->prefijo_002;
+                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
                 }
 
-                $rules = array(
-                    'email_030'     => 'email',
-                    'prefijo_030'   => 'numeric',
-                    'movil_030'     => 'numeric|digits_between:6,15'
-                );
-
-                if(!array_key_exists('email_030', $dbRow) && array_key_exists('movil_030', $dbRow))
+                if(!array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow))
                 {
-                    $rules['movil_030'] = 'required|numeric|digits_between:6,15';
+                    $rules['email_041']     = 'required|email';
                 }
 
-                if(!array_key_exists('movil_030', $dbRow) && array_key_exists('email_030', $dbRow))
+                if(array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow) && $dbRow['mobile_041'] == "" && $dbRow['email_041'] == "")
                 {
-                    $rules['email_030'] = 'required|email';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
+                    $rules['email_041']     = 'required|email';
                 }
 
-                if(array_key_exists('movil_030', $dbRow) && array_key_exists('email_030', $dbRow) && $dbRow['movil_030'] == "" && $dbRow['email_030'] == "")
+                if(!array_key_exists('mobile_041', $dbRow) && !array_key_exists('email_041', $dbRow))
                 {
-                    $rules['movil_030'] = 'required|numeric|digits_between:6,15';
-                    $rules['email_030'] = 'required|email';
-                }
-
-                if(!array_key_exists('movil_030', $dbRow) && !array_key_exists('email_030', $dbRow))
-                {
-                    $rules['movil_030'] = 'required|numeric|digits_between:6,15';
-                    $rules['email_030'] = 'required|email';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
+                    $rules['email_041']     = 'required|email';
                 }
 
                 // Realizamos una primara validación de los datos
@@ -308,46 +310,48 @@ class ContactsController extends Controller {
                         }
                     }
 
-                    array_push($arrayDataFail, array(
+                    $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => $txtError
-                    ));
+                    ];
                 }
                 elseif($paisSelect == 'null' && !isset($dbRow['pais_030']))
                 {
-                    array_push($arrayDataFail, array(
+                    $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => 'No hay país asignado'
-                    ));
+                    ];
                 }
                 elseif($paisSelect == 'null' && $paises->find($dbRow['pais_030']) == null)
                 {
-                    array_push($arrayDataFail, array(
+                    $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => 'El país asignado no existe'
-                    ));
+                    ];
                 }
                 elseif($gruposSelect == null && $grupos->find($grupo) == null)
                 {
-                    array_push($arrayDataFail, array(
+                    $arrayDataFail[] = [
                         'row'       => $dbRow,
                         'message'   => 'El grupo asignado no existe'
-                    ));
+                    ];
                 }
                 else
                 {
+                    dd($dbRow);
+
                     //realizamos la insercción en la base de datos
                     try
                     {
-                        $contacto = Contacto::create($dbRow);
-                        $contacto->grupos()->attach($grupo);
+                        $contact = Contact::create($dbRow);
+                        $contact->groups()->attach($groups);
                     }
                     catch (\Exception $e)
                     {
-                        array_push($arrayDataFail, array(
+                        $arrayDataFail[] = [
                             'row'       => $dbRow,
                             'message'   => $e->getMessage()
-                        ));
+                        ];
                     }
                 }
             }
@@ -356,6 +360,10 @@ class ContactsController extends Controller {
         $data['arrayDataFail']  = $arrayDataFail;
         $data['fields']         = $fields;
 
-        return View::make('comunik::pulsar.comunik.contactos.error_import',$data);
+        return view('comunik::pulsar.comunik.contactos.error_import', $data);
+    }
+
+    private function readCSV($file){
+
     }
 }

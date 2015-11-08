@@ -47,18 +47,7 @@
                     ]
                 },
                 function(data) {
-                    /*
-                    $.lightbox("{{ URL::to(Config::get('pulsar::pulsar.rootUri')) }}/comunik/contactos/import/excel/preview/"+data.name, {
-                        'width'       : '90p',
-                        'height'      : '90p',
-                        'iframe'      : true,
-                        'onClose'     : function() {
-                            location.reload();
-                        }
-                    });*/
-
                     var url = '{{ route('importPreviewComunikContact', ['file' => 'file']) }}';
-console.log(url.replace('file', data.name));
                     $.magnificPopup.open({
                         type: 'iframe',
                         iframe: {
@@ -71,7 +60,6 @@ console.log(url.replace('file', data.name));
                             src: url.replace('file', data.name)
                         }
                     });
-
                     return false;
                 }
             );
@@ -83,7 +71,7 @@ console.log(url.replace('file', data.name));
 @section('headButtons')
     <div class="btn-group marginB10 marginL10">
         <button class="btn dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-download"></i> Importación
+            <i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">

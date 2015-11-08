@@ -12,8 +12,13 @@ return [
     | If you come up with something more exciting, let us know.
     |
     */
-    'package_name'                          => 'Comunik',
     'campaign'                              => 'Campaign|Campaigns',
+    'campaign_persistence_notice'           => 'Campaign end date, the campaign will be sent to all new contacts assigned to the groups in this campaign not fill if you do not wish to activate the persistence.',
+    'country_id'                            => 'Country ID',
+    'first_records'                         => 'first records',
+    'group_id'                              => 'Group ID',
+
+    'package_name'                          => 'Comunik',
     'international_prefix'                  => 'International prefix',
     'interval_shipping'                     => 'Shipping interval',
     'test_group'                            => 'Test group',
@@ -40,5 +45,4 @@ return [
     'mails_seen_unique'                     => 'Mails seen, unique',
     'campaign_effectiveness'                => 'Campaign Effectiveness',
     'shipping_date_notice'                  => 'If don\'t select any date, the shipment will be made immediately.',
-    'campaign_persistence_notice'           => 'Campaign end date, the campaign will be sent to all new contacts assigned to the groups in this campaign not fill if you do not wish to activate the persistence.'
 ];

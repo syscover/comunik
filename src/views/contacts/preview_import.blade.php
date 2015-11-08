@@ -1,81 +1,93 @@
 @extends('pulsar::layouts.modal')
 
 @section('css')
-    <link href="{{ URL::asset('packages/pulsar/pulsar/plugins/pnotify/jquery.pnotify.default.css') }}" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/jquery.select2/css/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/jquery.select2.custom/css/select2.css') }}">
 @stop
 
 @section('script')
-    @include('pulsar::pulsar.pulsar.common.block.block_script_header_form')
-    <script type="text/javascript" src="<?php echo URL::asset('packages/pulsar/pulsar/plugins/pnotify/jquery.pnotify.min.js'); ?>"></script>
-    <script type="text/javascript" src="<?php echo URL::asset('packages/pulsar/pulsar/plugins/select2/select2.min.js'); ?>"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/uniform/jquery.uniform.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/jquery.select2.custom/js/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/jquery.select2/js/i18n/' . config('app.locale') . '.js') }}"></script>
+    <script type="text/javascript">
+        var deleteRow = function(row)
+        {
+            var data = JSON.parse($('[name=data]').val());
+            data.deleteRows.push(row);
+            $('[name=data]').val(JSON.stringify(data));
+            $('#tr' + row).fadeOut();
+        }
+
+        var importData = function()
+        {
+            alert("ok");
+        }
+    </script>
 @stop
 
 @section('mainContent')
 <div class="row">
-    <form class="form-horizontal" method="post" action="{{ URL::to(Config::get('pulsar::pulsar.rootUri')) }}/comunik/contactos/import/excel/{{ $file }}">
-        {{ Form::token() }}
-        <!--=== Import Table ===-->
+    <form class="form-horizontal" method="post" action="{{ route('importComunikContact') }} ">
+        {!! csrf_field() !!}
         <div class="col-md-12">
-            <div class="widget box">
+            <a href="javascript:void(0)"  onclick="importData()" class="btn marginB10"><i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}</a>
+            <div class="widget box" style="display: inline-block">
                 <div class="widget-header">
-                    <h4><i class="icon-reorder"></i> Importación</h4> - {{ $nRows }} primeros registros
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-                            <button type="button" onclick="testImport()" class="btn btn-xs"><i class="icon-download-alt"></i> Importar</button>
-                            <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span>
-                        </div>
-                    </div>
+                    <h4><i class="fa fa-reorder"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}</h4> - ({{ $nRows }} {{ trans('comunik::pulsar.first_records') }})
                 </div>
                 <div class="widget-content">
-                    <table class="table table-hover table-bordered table-condensed">
+                    <table class="table table-striped table-bordered table-hover table-checkable table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <?php for($i=0; $i < $nColumns; $i++): ?>
+                                @for($i=0; $i < $nColumns; $i++)
                                 <th>
                                     <select name="column{{ $i }}" class="fields">
-                                        <option value="null">Campo</option>
+                                        <option value="">{{ trans_choice('pulsar::pulsar.field', 1) }}</option>
+                                        @foreach($fields as $field)
+                                            <option value="{{ $field->id }}">{{ $field->name }}</option>
+                                        @endforeach
                                     </select>
                                 </th>
-                                <?php endfor; ?>
+                                @endfor
                                 <th class="align-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for($j=0; $j< $nRows; $j++): ?>
+                            @for($j=0; $j< $nRows; $j++)
                             <tr id="tr{{ $j }}">
                                 <td>{{ $j +1 }}</td>
-                                <?php for($i=0; $i< $nColumns; $i++): ?>
+                                @for($i=0; $i < $nColumns; $i++)
                                 <td>{{ $data[$j][$i] }}</td>
-                                <?php endfor; ?>
+                                @endfor
                                 <td class="align-center">
                                     <span class="btn-group">
-                                        <a href="javascript:void(0);" onclick="deleteRow({{ $j }})" class="btn btn-xs bs-tooltip" title="Borrar fila"><i class="icon-trash"></i></a>
+                                        <a href="javascript:void(0)" onclick="deleteRow({{ $j }})" class="btn btn-xs bs-tooltip"><i class="fa fa-trash"></i></a>
                                     </span>
                                 </td>
                             </tr>
-                            <?php endfor; ?>
+                            @endfor
                         </tbody>
                     </table>
                     <div class="row">
                         <div class="table-footer">
                             <div class="col-md-4">
                                 <div class="table-actions">
-                                    <label>País:</label>
-                                    <select class="select2" name="pais">
-                                        <option value="null">Seleccione un país para todos los datos</option>
-                                        <?php foreach ($paises as $pais): ?>
-                                        <option value="{{ $pais->id_002 }}">{{ $pais->nombre_002 }}</option>
+                                    <label>{{ trans_choice("pulsar::pulsar.country", 1) }}:</label>
+                                    <select class="select2" name="country" style="width: 100%">
+                                        <option value="">Seleccione un país para todos los datos</option>
+                                        <?php foreach ($countries as $country): ?>
+                                        <option value="{{ $country->id_002 }}">{{ $country->name_002 }}</option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="table-actions">
-                                    <label>Grupos:</label>
-                                    <select class="select2" name="grupos[]" multiple style="width: 90%">
-                                        <?php foreach ($grupos as $grupo): ?>
-                                        <option value="{{ $grupo->id_029 }}">{{ $grupo->nombre_029 }}</option>
+                                    <label>{{ trans_choice("pulsar::pulsar.group", 1) }}:</label>
+                                    <select class="select2" name="groups[]" style="width: 100%" multiple>
+                                        <?php foreach ($groups as $group): ?>
+                                        <option value="{{ $group->id_040 }}">{{ $group->name_040 }}</option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -85,8 +97,7 @@
                 </div>
             </div>
         </div>
-        <input id="data" name="data" type="hidden" value="">
-        <!-- /Import Table -->
+        <input name="data" type="hidden" value='{"deleteRows":[]}'>
     </form>
 </div>
 @stop
