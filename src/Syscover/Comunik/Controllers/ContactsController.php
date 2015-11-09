@@ -109,19 +109,18 @@ class ContactsController extends Controller {
         $data['countries']  = Country::getTranslationsRecords($request->user()->lang_010);
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
-        $data['fields']     = [
-            (object)['id' => 'id_040',      'name' => trans('comunik::pulsar.group_id')],
-            (object)['id' => 'company_041', 'name' => trans_choice('pulsar::pulsar.company', 1)],
-            (object)['id' => 'name_041',    'name' => trans('pulsar::pulsar.name')],
-            (object)['id' => 'surname_041', 'name' => trans('pulsar::pulsar.surname')],
-            (object)['id' => 'country_041', 'name' => trans('comunik::pulsar.country_id')],
-            (object)['id' => 'prefix_041',  'name' => trans('pulsar::pulsar.prefix')],
-            (object)['id' => 'mobile_041',  'name' => trans('pulsar::pulsar.mobile')],
-            (object)['id' => 'email_041',   'name' => trans('pulsar::pulsar.email')]
+        $fields             = [
+            'id_040'        => trans('comunik::pulsar.group_id'),
+            'company_041'   => trans_choice('pulsar::pulsar.company', 1),
+            'name_041'      => trans('pulsar::pulsar.name'),
+            'surname_041'   => trans('pulsar::pulsar.surname'),
+            'country_041'   => trans('comunik::pulsar.country_id'),
+            'mobile_041'    => trans('pulsar::pulsar.mobile'),
+            'email_041'     => trans('pulsar::pulsar.email')
         ];
 
         $objReader =  \PHPExcel_IOFactory::createReader('CSV')
-            ->setDelimiter(";")                                         // configura el reader para tener en los ';' como elemento separador
+            ->setDelimiter(';')                                         // configura el reader para tener en los ';' como elemento separador
             ->setReadDataOnly(true);                                    // configura el reader para ignorar estilos, solo leerá los datos
 
         $objPHPExcel    = $objReader->load($inputFileName);             // cargamos el fichero y obtenemos el objeto PHPExcel
@@ -147,29 +146,35 @@ class ContactsController extends Controller {
         }
 
         $data['data']       = $arrayData;
+        $data['fields']     = $fields;
         $data['file']       = $parameters['file'];
         $data['nColumns']   = $highestColumnIndex;
         $data['nRows']      = $highestRow;
 
-        return view('comunik::contacts.preview_import', $data);
+        return view('comunik::contacts.import_preview', $data);
     }
 
     public function importRecords(Request $request){
         $data           = [];
         $jsonData       = json_decode($request->input('data'));
         $countries      = Country::getTranslationsRecords($request->user()->lang_010);
-        $groups         = Group::all();
-        $group          = $request->input('groups');
+        $groups         = $request->input('groups');
         $country        = $request->input('country');
+
         $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $request->input('file');
-        $fields         = [];
-
-        if(!empty($country))
-            $country = Country::getTranslationRecord($country, $request->user()->lang_010);
-
+        $fields     = [
+            'id_040'        => trans('comunik::pulsar.group_id'),
+            'company_041'   => trans_choice('pulsar::pulsar.company', 1),
+            'name_041'      => trans('pulsar::pulsar.name'),
+            'surname_041'   => trans('pulsar::pulsar.surname'),
+            'country_041'   => trans('comunik::pulsar.country_id'),
+            'mobile_041'    => trans('pulsar::pulsar.mobile'),
+            'email_041'     => trans('pulsar::pulsar.email')
+        ];
+        $columns         = [];
 
         $objReader =  \PHPExcel_IOFactory::createReader('CSV')
-            ->setDelimiter(";")                                     // configura el reader para tener en los ';' como elemento separador
+            ->setDelimiter(';')                                     // configura el reader para tener en los ';' como elemento separador
             ->setReadDataOnly(true);                                // configura el reader para ignorar estilos, solo leerá los datos
 
         $objPHPExcel    = $objReader->load($inputFileName);         // Cargamos el fichero y obtenemos el objeto PHPExcel
@@ -184,205 +189,146 @@ class ContactsController extends Controller {
 
         $arrayDataFail = [];
 
+        $firsRow = true;
         for ($row = 1; $row <= $highestRow; ++$row)
         {
             // comprobamos si esta fila no debe de ser insertada
-
             if(!in_array($row - 1, $jsonData->deleteRows))
             {
                 $dbRow = [];
 
+                // recorremos las columnas y según coincida el campo con una columna lo agregamos al array $dbRow
+                // para insertar la fila en la base de datos, tratando previamente el dato
+                $checkCommonField = false;
                 for ($col = 0; $col < $highestColumnIndex; ++$col)
                 {
-                    // validamos los datos comunes (group)
-                    if(!empty($group))
-                    {
-                        $dbRow['id_040'] = $group;
-                    }
-
-                    // validamos los datos comunes (country)
-                    if(!empty($selectCountry))
-                    {
-                        $dbRow['country_041']  = $country->id_002;
-                    }
+                    if($firsRow && isset($fields[$request->input('column' . $col)]))
+                        // get sorting columns
+                        $columns[$request->input('column' . $col)] = $fields[$request->input('column' . $col)];
 
                     // damos formato a los datos a insertar
-                    if ($request->input('column' . $col) == "name_041" || $request->input('column' . $col) == "surname_041")
+                    if ($request->input('column' . $col) == 'name_041' || $request->input('column' . $col) == 'surname_041' || $request->input('column' . $col) == 'company_041')
                     {
                         // nombre y apellidos en minúsculas con la primera en mayúscula
                         $dbRow[$request->input('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        // en la primera vuelta del bucle, obtenemos el campo que se graba para usarlo posteriormente para los datos erroneos
-                        if($row == 1)
-                        {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
-                        }
                     }
-                    elseif ($request->input('column' . $col) == "email_041")
+                    elseif ($request->input('column' . $col) == 'email_041')
                     {
                         // eliminamos espacios en blanco y ponemos el mail en minúsculas
-                        $dbRow[$request->input('column' . $col)] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
-
-                        if($row == 1)
-                        {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
-                        }
+                        $dbRow['email_041'] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
                     }
-                    elseif ($request->input('column' . $col) == "prefix_041" && $paisObj == null)
+                    elseif ($request->input('column' . $col) == 'mobile_041')
                     {
-                        // eliminamos espacios en blanco en el contenido
-                        // ponemos el mail en minúsculas
-                        $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
-
-                        if($row == 1)
-                        {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
-                        }
+                        // eliminamos espacios en blanco en el contenido y ponemos el email en minúsculas
+                        $dbRow['mobile_041'] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
                     }
-                    elseif ($request->input('column' . $col) == "mobile_041")
+                    elseif (empty($groups) && $request->input('column' . $col) == 'id_040')
                     {
-                        // eliminamos espacios en blanco en el contenido
-                        // ponemos el mail en minúsculas
-                        $dbRow[$request->input('column' . $col)] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
-
-                        if($row == 1)
-                        {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
-                        }
+                        // instanciamos $group para después insertarlo en la tabla 005_042_contacts_groups
+                        // siempre y cuando no se elia un grupo para todas las filas
+                        $dbRow['id_040'] = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
                     }
-                    elseif ($group == null && $request->input('column' . $col) == "id_040")
+                    elseif (empty($country) && $request->input('column' . $col) == 'country_041')
                     {
-                        $grupo = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        $dbRow[$request->input('column' . $col)] = $group;
-
-                        if($row == 1)
-                        {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
-                        }
+                        $dbRow['country_041']   = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $countryObj             = $countries->find($dbRow['country_041']);
+                        if($countryObj != null)
+                            $dbRow['prefix_041']    = $countryObj->prefix_002;
                     }
-                    elseif ($country == '' && $request->input('column' . $col) == "country_041")
-                    {
-                        $dbRow[$request->input('column' . $col)] = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
-                        if($row == 1)
+                    // comprobamos si debemos instanciar los datos comunes una vez en cada fila
+                    if(!$checkCommonField)
+                    {
+                        if(!empty($groups))
                         {
-                            //$field = $this->searchField($request->input('column' . $col), $jsonData['fields']);
-                            //$fields[] = $field;
+                            // instanciamos los datos comunes de groups
+                            $dbRow['id_040'] = $groups;
                         }
+                        if(!empty($country))
+                        {
+                            // instanciamos los datos comunes de country
+                            $country                = $countries->find($country);
+                            $dbRow['country_041']   = $country->id_002;
+                            $dbRow['prefix_041']    = $country->prefix_002;
+                        }
+                        $checkCommonField = true;
                     }
                 }
 
-                // asignación de prefijo si hay pais selecionado para todos los datos
-                if(!empty($country))
-                    $dbRow['prefix_041'] = $country->prefix_002;
-
+                // check data from server side
                 $rules = [
-                    'email_041'     => 'email|between:2,50',
+                    'email_041'     => 'email|between:2,50|unique:005_041_contact,email_041',
                     'prefix_041'    => 'numeric|digits_between:0,5',
-                    'mobile_041'    => 'numeric|digits_between:2,50'
+                    'mobile_041'    => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041',
+                    'country_041'   => 'required|exists:001_002_country,id_002',
+                    'id_040'        => 'required'
                 ];
 
+                // si no tenemos instaciado un grupo para todas las filas, añadimos la comprobación
+                // de lo contrari, $group contendría un array al ser selección múltiple,
+                // y en la validación siempre daría error
+                if(empty($groups))
+                    $rules['id_040']    = 'required|exists:005_040_group,id_040';
+
                 if(!array_key_exists('email_041', $dbRow) && array_key_exists('mobile_041', $dbRow))
-                {
-                    $rules['mobile_041']    = 'required|numeric|digits_between:2,50';
-                }
+                    $rules['mobile_041']    = 'required|numeric|digits_between:2,50|unique:005_041_contact,mobile_041';
 
                 if(!array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow))
+                    $rules['email_041']     = 'required|email|between:2,50|unique:005_041_contact,email_041';
+
+                //if(array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow) && empty($dbRow['mobile_041']) && empty($dbRow['email_041']))
+                if((array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow)) || (!array_key_exists('mobile_041', $dbRow) && !array_key_exists('email_041', $dbRow)))
                 {
-                    $rules['email_041']     = 'required|email|between:2,50';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15|unique:005_041_contact,mobile_041';
+                    $rules['email_041']     = 'required|email|between:2,50|unique:005_041_contact,email_041';
                 }
 
-                if(array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow) && $dbRow['mobile_041'] == "" && $dbRow['email_041'] == "")
-                {
-                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
-                    $rules['email_041']     = 'required|email|between:2,50';
-                }
-
-                if(!array_key_exists('mobile_041', $dbRow) && !array_key_exists('email_041', $dbRow))
-                {
-                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15';
-                    $rules['email_041']     = 'required|email|between:2,50';
-                }
-
-                // Realizamos una primara validación de los datos
+                // cargamos la validación de los datos para la fila a insertar
                 $validator = Validator::make($dbRow, $rules);
+                $validator->setAttributeNames($fields);
 
                 if($validator->fails())
                 {
                     $messages = $validator->messages();
 
-                    $txtError = null;
+                    // recojemos todos los errores de la fila y los añadimos
+                    $errors = [];
                     foreach($messages->all() as $message)
                     {
-                        if($txtError == null)
-                        {
-                            $txtError .= '* '.$message;
-                        }
-                        else
-                        {
-                            $txtError .= ' * '.$message;
-                        }
+                        $errors[] = $message;
                     }
 
                     $arrayDataFail[] = [
                         'row'       => $dbRow,
-                        'message'   => $txtError
-                    ];
-                }
-                elseif(empty($country) && !isset($dbRow['country_041']))
-                {
-                    $arrayDataFail[] = [
-                        'row'       => $dbRow,
-                        'message'   => 'No hay país asignado'
-                    ];
-                }
-                elseif(empty($country) && $countries->find($dbRow['country_041']) == null)
-                {
-                    $arrayDataFail[] = [
-                        'row'       => $dbRow,
-                        'message'   => 'El país asignado no existe'
-                    ];
-                }
-                elseif(empty($group) && $groups->find($group) == null)
-                {
-                    $arrayDataFail[] = [
-                        'row'       => $dbRow,
-                        'message'   => 'El grupo asignado no existe'
+                        'errors'    => $errors
                     ];
                 }
                 else
                 {
-                    dd($dbRow);
-
                     //realizamos la insercción en la base de datos
                     try
                     {
                         $contact = Contact::create($dbRow);
-                        $contact->groups()->attach($groups);
+                        $contact->groups()->attach($dbRow['id_040']);
                     }
                     catch (\Exception $e)
                     {
                         $arrayDataFail[] = [
                             'row'       => $dbRow,
-                            'message'   => $e->getMessage()
+                            'errors'    => [$e->getMessage()]
                         ];
                     }
                 }
+
+                // set firs row to false
+                $firsRow = false;
             }
         }
 
         $data['arrayDataFail']  = $arrayDataFail;
-        $data['fields']         = $fields;
+        $data['columns']        = $columns;
 
-        return view('comunik::pulsar.comunik.contactos.error_import', $data);
-    }
-
-    private function readCSV($file){
-
+        return view('comunik::contacts.import_error', $data);
     }
 }

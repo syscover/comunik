@@ -114,9 +114,7 @@
                 return false;
             }
 
-            parent.$.cssLoader.show({useLayer: false, layerOpacity: 100});
             $(".form-horizontal").submit();
-
         }
     </script>
 @stop
@@ -140,8 +138,8 @@
                                 <th>
                                     <select name="column{{ $i }}" class="fields">
                                         <option value="">{{ trans_choice('pulsar::pulsar.field', 1) }}</option>
-                                        @foreach($fields as $field)
-                                            <option value="{{ $field->id }}">{{ $field->name }}</option>
+                                        @foreach($fields as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
                                     </select>
                                 </th>
@@ -153,9 +151,9 @@
                             @for($j=0; $j< $nRows; $j++)
                             <tr id="tr{{ $j }}">
                                 <td>{{ $j +1 }}</td>
-                                @for($i=0; $i < $nColumns; $i++)
-                                <td>{{ $data[$j][$i] }}</td>
-                                @endfor
+                                    @for($i=0; $i < $nColumns; $i++)
+                                        <td>{{ $data[$j][$i] }}</td>
+                                    @endfor
                                 <td class="align-center">
                                     <span class="btn-group">
                                         <a href="javascript:void(0)" onclick="deleteRow({{ $j }})" class="btn btn-xs bs-tooltip"><i class="fa fa-trash"></i></a>
@@ -172,9 +170,9 @@
                                     <label>{{ trans_choice("pulsar::pulsar.country", 1) }}:</label>
                                     <select class="select2" name="country" style="width: 100%">
                                         <option value="">Seleccione un país para todos los datos</option>
-                                        <?php foreach ($countries as $country): ?>
-                                        <option value="{{ $country->id_002 }}">{{ $country->name_002 }}</option>
-                                        <?php endforeach; ?>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id_002 }}">{{ $country->name_002 }}</option>
+                                            @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -182,9 +180,9 @@
                                 <div class="table-actions">
                                     <label>{{ trans_choice("pulsar::pulsar.group", 1) }}:</label>
                                     <select class="select2" name="groups[]" style="width: 100%" multiple>
-                                        <?php foreach ($groups as $group): ?>
-                                        <option value="{{ $group->id_040 }}">{{ $group->name_040 }}</option>
-                                        <?php endforeach; ?>
+                                        @foreach ($groups as $group)
+                                            <option value="{{ $group->id_040 }}">{{ $group->name_040 }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

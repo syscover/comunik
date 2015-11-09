@@ -12,6 +12,7 @@ return [
     | If you come up with something more exciting, let us know.
     |
     */
+    'all_import_successful'                 => 'All data have been successfully imported',
     'campaign'                              => 'Campaign|Campaigns',
     'campaign_persistence_notice'           => 'Campaign end date, the campaign will be sent to all new contacts assigned to the groups in this campaign not fill if you do not wish to activate the persistence.',
     'country_id'                            => 'Country ID',
@@ -25,6 +26,7 @@ return [
     'group_id'                              => 'Group ID',
     'html_link_value'                       => 'If you can not see the email properly <a href=\'#link#\' target=\'_blank\'>click here</a>',
     'import_error'                          => 'Import error!',
+    'import_error_title'                    => 'Import error',
     'include_html_link'                     => 'Include HTML link',
     'include_track_pixel'                   => 'Include track pixel',
     'include_unsubscribe_link'              => 'Include unsubscribe link',

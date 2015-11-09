@@ -46,21 +46,30 @@
                         'application/csv'
                     ]
                 },
-                function(data) {
-                    var url = '{{ route('importPreviewComunikContact', ['file' => 'file']) }}';
-                    $.magnificPopup.open({
-                        type: 'iframe',
-                        iframe: {
-                            markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
-                            '<div class="mfp-close"></div>'+
-                            '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
-                            '</div>'
-                        },
-                        items: {
-                            src: url.replace('file', data.name)
-                        }
-                    });
-                    return false;
+                function(data)
+                {
+                    if(data.success == true && data.action == "upload")
+                    {
+                        var url = '{{ route('importPreviewComunikContact', ['file' => 'file']) }}';
+                        $.magnificPopup.open({
+                            type: 'iframe',
+                            iframe: {
+                                markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
+                                '<div class="mfp-close"></div>'+
+                                '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                                '</div>'
+                            },
+                            items: {
+                                src: url.replace('file', data.name)
+                            },
+                            callbacks: {
+                                close: function()
+                                {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
                 }
             );
         });
