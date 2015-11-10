@@ -220,6 +220,7 @@ class Cron
                     'send_queue_048'    => $mailing->id_047,
                     'campaign_048'      => $mailing->campaign_047,
                     'contact_048'       => $mailing->contact_047,
+                    'create_048'        => $mailing->create_047,
                     'sent_048'          => date('U'),
                     'viewed_048'        => 0
                 ]);
@@ -265,11 +266,9 @@ class Cron
                 }
             }
 
-            // actualizamos el estado de los envíos a enviado
-            EmailSendQueue::whereIn('id_047', $successfulIds)->update([
-                // status_047 = 2 sent
-                'status_047' => 2
-            ]);
+            // borramos los mensajes de la cola de envíos una vez enviados
+            // delete queue?
+            EmailSendQueue::whereIn('id_047', $successfulIds)->delete();
         }
         else
         {

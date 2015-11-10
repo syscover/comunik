@@ -25,7 +25,7 @@ class ComunikCreateTableContact extends Migration {
                 $table->boolean('unsubscribe_mobile_041')->default(false);
                 $table->boolean('unsubscribe_email_041')->default(false);
 
-                $table->foreign('country_041')->references('id_002')->on('001_002_country')
+                $table->foreign('country_041', 'fk01_005_041_contact')->references('id_002')->on('001_002_country')
                         ->onDelete('restrict')->onUpdate('cascade');
             });
 	}

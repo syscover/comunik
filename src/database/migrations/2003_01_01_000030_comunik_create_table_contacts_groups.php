@@ -18,9 +18,9 @@ class ComunikCreateTableContactsGroups extends Migration {
 
                 $table->primary(['contact_042', 'group_042']);
 
-                $table->foreign('group_042')->references('id_040')->on('005_040_group')
+                $table->foreign('group_042', 'fk01_005_042_contacts_groups')->references('id_040')->on('005_040_group')
                         ->onDelete('cascade')->onUpdate('cascade');
-                $table->foreign('contact_042')->references('id_041')->on('005_041_contact')
+                $table->foreign('contact_042', 'fk02_005_042_contacts_groups')->references('id_041')->on('005_041_contact')
                     ->onDelete('cascade')->onUpdate('cascade');
             });
 	}

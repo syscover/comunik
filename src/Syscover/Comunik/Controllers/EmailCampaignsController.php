@@ -73,7 +73,7 @@ class EmailCampaignsController extends Controller {
         $parameters['countries']            = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
 
         // statistics
-        $parameters['totalMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();
+        $parameters['queueMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();
         $parameters['sentMailings']         = EmailSendHistorical::where('campaign_048', $parameters['id'])->count();
         $parameters['noSentMailings']       = EmailSendQueue::where('campaign_047', $parameters['id'])->where('status_047', 0)->count();
         $parameters['uniqueViewMailings']   = EmailSendHistorical::where('campaign_048', $parameters['id'])->where('viewed_048', '>' ,0)->count();

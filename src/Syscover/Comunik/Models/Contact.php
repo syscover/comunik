@@ -74,21 +74,27 @@ class Contact extends Model {
     public static function getContactsEmailToInsert($campaign, $groups, $countries, $take, $skip)
     {
         return Contact::whereIn('id_041', function($query) use ($groups) {
-            // select contacts from this groups
-            $query->select('contact_042')
-                ->from('005_042_contacts_groups')
-                ->whereIn('group_042', $groups)
-                ->groupBy('contact_042')
-                ->get();
-        })
+                // select contacts from this groups
+                $query->select('contact_042')
+                    ->from('005_042_contacts_groups')
+                    ->whereIn('group_042', $groups)
+                    ->groupBy('contact_042')
+                    ->get();
+            })
             // and they are from this countries
             ->whereIn('country_041', $countries)
-            // the contact isn't in mail queue in the same campaign
+            // the contact isn't in queue queue in the same campaign
             ->whereNotIn('id_041', function($query) use ($campaign) {
                 $query->select('contact_047')
-                ->from('005_047_email_send_queue')
-                ->where('campaign_047', $campaign)->get();
-        })
+                    ->from('005_047_email_send_queue')
+                    ->where('campaign_047', $campaign)->get();
+            })
+            // the contact isn't in historical queue in the same campaign
+            ->whereNotIn('id_041', function($query) use ($campaign) {
+                $query->select('contact_048')
+                    ->from('005_048_email_send_historical')
+                    ->where('campaign_048', $campaign)->get();
+            })
             ->where('unsubscribe_email_041', false)
             ->whereNotNull('email_041')
             ->where('email_041', '<>', '')

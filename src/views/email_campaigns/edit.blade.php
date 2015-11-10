@@ -114,11 +114,11 @@
     @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->countries->where('lang_002', Auth::user()->lang_010), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
 
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('comunik::pulsar.statistic', 2), 'icon' => 'fa fa-area-chart'])
-    @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.total_mailings'), 'name' => '', 'value' => $totalMailings, 'readOnly' => true, 'inputs' => [
+    @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.queue_mailings'), 'name' => '', 'value' => $queueMailings, 'readOnly' => true, 'inputs' => [
         ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.view_mailings'), 'name' => '', 'value' => $object->viewed_044, 'readOnly' => true]
     ]])
     @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.sent_mailings'), 'name' => '', 'value' => $sentMailings, 'readOnly' => true, 'inputs' => [
-        ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.mails_seen_unique'), 'name' => '', 'value' => $uniqueViewMailings, 'readOnly' => true]
+        ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.seen_unique_emails'), 'name' => '', 'value' => $uniqueViewMailings, 'readOnly' => true]
     ]])
     @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.for_sending_emails'), 'name' => '', 'value' => $noSentMailings, 'readOnly' => true, 'inputs' => [
         ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.campaign_effectiveness'), 'name' => '', 'value' => $effectiveness, 'readOnly' => true]

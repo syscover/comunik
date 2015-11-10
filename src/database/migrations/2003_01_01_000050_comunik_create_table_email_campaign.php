@@ -35,9 +35,9 @@ class ComunikCreateTableEmailCampaign extends Migration {
 
             $table->integer('viewed_044')->unsigned()->default(0);
 
-            $table->foreign('email_account_044')->references('id_013')->on('001_013_email_account')
+            $table->foreign('email_account_044', 'fk01_005_044_email_campaign')->references('id_013')->on('001_013_email_account')
                     ->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('template_044')->references('id_043')->on('005_043_email_template')
+            $table->foreign('template_044', 'fk02_005_044_email_campaign')->references('id_043')->on('005_043_email_template')
                     ->onDelete('restrict')->onUpdate('cascade');
         });
 	}
