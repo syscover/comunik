@@ -32,7 +32,6 @@ composer update
 php artisan db:seed --class="ComunikTableSeeder"
 ```
 
-**4 - Activate package**
+**5 - Activate package**
 
 Access to Pulsar Panel, and go to Administration -> Permissions -> Profiles, and set all permissions to your profile by clicking on the open lock.
-Logout and loging again, to load new permissions and go to Administration -> Packages, edit the package installed and activate it

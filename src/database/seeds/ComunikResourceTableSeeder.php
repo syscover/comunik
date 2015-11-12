@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Syscover\Pulsar\Models\Resource;
 
-class ResourceComunikTableSeeder extends Seeder {
+class ComunikResourceTableSeeder extends Seeder {
 
     public function run()
     {

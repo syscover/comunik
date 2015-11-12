@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Syscover\Pulsar\Models\CronJob;
 
-class CronjobComunikTableSeeder extends Seeder {
+class ComunikCronjobTableSeeder extends Seeder {
 
     public function run()
     {   
@@ -16,5 +16,5 @@ class CronjobComunikTableSeeder extends Seeder {
 
 /*
  * Command to run:
- * php artisan db:seed --class="CronjobComunikTableSeeder"
+ * php artisan db:seed --class="ComunikCronjobTableSeeder"
  */

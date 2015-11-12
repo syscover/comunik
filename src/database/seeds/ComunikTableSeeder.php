@@ -9,8 +9,9 @@ class ComunikTableSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(ResourceComunikTableSeeder::class);
-        $this->call(CronjobComunikTableSeeder::class);
+        $this->call(ComunikPackageTableSeeder::class);
+        $this->call(ComunikResourceTableSeeder::class);
+        $this->call(ComunikCronjobTableSeeder::class);
     }
 }
 
