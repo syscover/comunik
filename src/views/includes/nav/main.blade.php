@@ -1,5 +1,5 @@
         <li{!! Miscellaneous::setCurrentOpenPage(['comunik-contact','comunik-group','comunik-email-campaign','comunik-email-template','comunik-email-preference']) !!}>
-            <a href="javascript:void(0)"><i class="icomoon-icon-feed"></i>Comunik</a>
+            <a href="javascript:void(0)"><i class="icomoon-icon-feed"></i>{{ trans('comunik::pulsar.package_name') }}</a>
             <ul class="sub-menu">
                 @if(session('userAcl')->isAllowed(Auth::user()->profile_010, 'comunik-contact', 'access'))
                     <li{!! Miscellaneous::setCurrentPage('comunik-contact') !!}><a href="{{ route('ComunikContact') }}"><i class="fa fa-user"></i>{{ trans_choice('pulsar::pulsar.contact', 2) }}</a></li>
