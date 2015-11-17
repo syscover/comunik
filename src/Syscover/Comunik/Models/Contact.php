@@ -20,7 +20,7 @@ class Contact extends Model {
         'name'          => 'required|between:2,50',
         'surname'       => 'between:0,50',
         'country'       => 'required',
-        'email'         => 'between:2,50|email|unique:005_041_contact,email_041',
+        'email'         => 'required|between:2,50|email|unique:005_041_contact,email_041',
         'prefix'        => 'numeric|digits_between:0,5',
         'mobile'        => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041'
     ];
@@ -29,7 +29,7 @@ class Contact extends Model {
     {
         // instance birthDate to set value pattern from config
         static::$rules['birthDate'] = 'date_format:' . config('pulsar.datePattern');
-        if(isset($specialRules['emailRule']) && $specialRules['emailRule'])     static::$rules['email']     = 'between:2,50|email';
+        if(isset($specialRules['emailRule']) && $specialRules['emailRule'])     static::$rules['email']     = 'required|between:2,50|email';
         if(isset($specialRules['mobileRule']) && $specialRules['mobileRule'])   static::$rules['mobile']    = 'between:0,50';
 
         return Validator::make($data, static::$rules);
