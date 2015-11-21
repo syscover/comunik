@@ -9,7 +9,7 @@ class EmailTemplatesController extends Controller {
 
     use TraitController;
 
-    protected $routeSuffix  = 'ComunikEmailTemplate';
+    protected $routeSuffix  = 'comunikEmailTemplate';
     protected $folder       = 'email_templates';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_043', 'name_043'];

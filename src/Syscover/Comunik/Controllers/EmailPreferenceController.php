@@ -16,11 +16,11 @@ use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Models\Preference;
 use Syscover\Pulsar\Traits\TraitController;
 
-class PreferenceController extends Controller {
+class EmailPreferenceController extends Controller {
 
     use TraitController;
 
-    protected $routeSuffix  = 'EmailServicesPreference';
+    protected $routeSuffix  = 'emailPreference';
     protected $folder       = 'preference';
     protected $package      = 'comunik';
     protected $aColumns     = [];

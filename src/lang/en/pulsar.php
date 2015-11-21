@@ -38,6 +38,7 @@ return [
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Persistence date',
     'queue_mailings'                        => 'Queue emails',
+    'send_email_test'                       => 'Send email test',
     'seen_unique_emails'                    => 'Seen unique emails',
     'sent_mailings'                         => 'Sent mailings',
     'sent_queue'                            => 'Sent to queue',

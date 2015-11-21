@@ -38,6 +38,7 @@ return [
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Fecha de persistencia',
     'queue_mailings'                        => 'Emails en cola',
+    'send_email_test'                       => 'Enviar emial de pruebas',
     'seen_unique_emails'                    => 'Emails vistos únicos',
     'sent_mailings'                         => 'Emails enviados',
     'sent_queue'                            => 'Enviada a cola',

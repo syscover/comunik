@@ -18,7 +18,7 @@ class EmailCampaignsController extends Controller {
 
     use TraitController;
 
-    protected $routeSuffix  = 'ComunikEmailCampaign';
+    protected $routeSuffix  = 'comunikEmailCampaign';
     protected $folder       = 'email_campaigns';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
@@ -26,6 +26,11 @@ class EmailCampaignsController extends Controller {
     protected $model        = '\Syscover\Comunik\Models\EmailCampaign';
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'campaign';
+
+    public function jsonCustomDataBeforeActions($request, $aObject)
+    {
+        return session('userAcl')->isAllowed($request->user()->profile_010, $this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_email_test') . '"><i class="fa fa-share"></i></a>' : null;
+    }
 
     public function createCustomRecord($request, $parameters)
     {
