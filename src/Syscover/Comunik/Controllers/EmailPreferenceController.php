@@ -10,7 +10,6 @@
  * @filesource
  */
 
-use Illuminate\Support\Facades\Request;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Models\Preference;
@@ -32,7 +31,7 @@ class EmailPreferenceController extends Controller {
     public function indexCustom($parameters)
     {
         $parameters['intervalsShipping']    = [];
-        for($i=0; $i<121; $i++)
+        for($i=0; $i < 121; $i++)
             $parameters['intervalsShipping'][] = (object)['id' => $i, 'name' => str_pad($i, 2, '0', STR_PAD_LEFT)];
         $parameters['intervalShipping']     = Preference::getValue('emailServiceIntervalShipping', 3);
 
@@ -55,10 +54,10 @@ class EmailPreferenceController extends Controller {
         return $parameters;
     }
     
-    public function updateCustomRecord()
+    public function updateCustomRecord($request, $parameters)
     {
-        Preference::setValue('emailServiceIntervalShipping', 3, Request::input('intervalShipping'));
-        Preference::setValue('emailServiceTestGroup', 3, Request::input('testGroup'));
-        Preference::setValue('emailServiceIntervalProcess', 3, Request::input('intervalProcess'));
+        Preference::setValue('emailServiceIntervalShipping', 3, $request->input('intervalShipping'));
+        Preference::setValue('emailServiceTestGroup', 3, $request->input('testGroup'));
+        Preference::setValue('emailServiceIntervalProcess', 3, $request->input('intervalProcess'));
     }
 }

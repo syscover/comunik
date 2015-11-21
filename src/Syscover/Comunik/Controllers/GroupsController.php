@@ -1,6 +1,5 @@
 <?php namespace Syscover\Comunik\Controllers;
 
-use Illuminate\Support\Facades\Request;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Group;
@@ -21,14 +20,14 @@ class GroupsController extends Controller {
     public function storeCustomRecord($request, $parameters)
     {
         Group::create([
-            'name_040'  => Request::input('name')
+            'name_040'  => $request->input('name')
         ]);
     }
     
     public function updateCustomRecord($request, $parameters)
     {
         Group::where('id_040', $parameters['id'])->update([
-            'name_040'  => Request::input('name')
+            'name_040'  => $request->input('name')
         ]);
     }
 }

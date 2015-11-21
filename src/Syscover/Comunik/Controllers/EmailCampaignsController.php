@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Syscover\Comunik\Libraries\Cron;
 use Syscover\Comunik\Models\EmailSendHistorical;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Libraries\EmailServices;
@@ -29,7 +30,7 @@ class EmailCampaignsController extends Controller {
 
     public function jsonCustomDataBeforeActions($request, $aObject)
     {
-        return session('userAcl')->isAllowed($request->user()->profile_010, $this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_email_test') . '"><i class="fa fa-share"></i></a>' : null;
+        return session('userAcl')->isAllowed($request->user()->profile_010, $this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_test_email') . '"><i class="fa fa-share"></i></a>' : null;
     }
 
     public function createCustomRecord($request, $parameters)
@@ -118,23 +119,28 @@ class EmailCampaignsController extends Controller {
         EmailSendQueue::deleteMailingWithoutGroupSendQueue($request->input('groups'), $emailCampaign->id_044);
     }
 
-    public function showCampaign($emailCampaignId, $historicalId)
+    public function showCampaign(Request $request)
     {
-        // function to view online the campaign
-        $emailCampaign          = EmailCampaign::find(Crypt::decrypt($emailCampaignId));
-        $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($historicalId)])->first();
+        // get parameters from url route
+        $parameters     = $request->route()->parameters();
 
+        // function to view online the campaign
+        $emailCampaign          = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
+        if(isset($parameters['historicalId']))
+            $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
+
+        // if is a test mailing, set contactKey and historicalId to 0
         $data           = [
-            'email'         => $emailSendHistorical->email_041,
+            'email'         => isset($emailSendHistorical->email_041)? $emailSendHistorical->email_041 : null,
             'html'          => $emailCampaign->header_044 . $emailCampaign->body_044 . $emailCampaign->footer_044,
             'subject'       => $emailCampaign->subject_044,
             'campaign'      => Crypt::encrypt($emailCampaign->id_044),
-            'contactKey'    => Crypt::encrypt($emailSendHistorical->id_041),
+            'contactKey'    => isset($emailSendHistorical->id_041)? Crypt::encrypt($emailSendHistorical->id_041) : 0,
             'company'       => isset($emailSendHistorical->company_041)? $emailSendHistorical->company_041 : null,
             'name'          => isset($emailSendHistorical->name_041)? $emailSendHistorical->name_041 : null,
             'surname'       => isset($emailSendHistorical->surname_041)? $emailSendHistorical->surname_041 : null,
             'birthDay'      => isset($emailSendHistorical->birth_date_041)?  date(config('pulsar.datePattern'), $emailSendHistorical->birth_date_041) : null,
-            'historicalId'  => $historicalId,
+            'historicalId'  => isset($parameters['historicalId'])? $parameters['historicalId'] : 0,
         ];
 
         $data = EmailServices::setTemplate($data);
@@ -147,6 +153,9 @@ class EmailCampaignsController extends Controller {
         // get parameters from url route
         $parameters     = $request->route()->parameters();
 
+        // if it's a test email, we brake execution
+        if($parameters['historicalId'] === "0") exit;
+
         $campaign       = Crypt::decrypt($parameters['campaign']);
         $historicalId   = Crypt::decrypt($parameters['historicalId']);
 
@@ -155,5 +164,18 @@ class EmailCampaignsController extends Controller {
 
         // add a viewed to the historical
         EmailSendHistorical::where('id_048', $historicalId)->increment('viewed_048');
+    }
+
+    public function sendTest(Request $request)
+    {
+        // get parameters from url route
+        $parameters     = $request->route()->parameters();
+
+        Cron::sendEmailsTest($parameters);
+
+        return redirect()->route('comunikEmailCampaign', ['offset' => $parameters['offset']])->with([
+            'msg'        => 1,
+            'txtMsg'     => trans('comunik::pulsar.send_test_email_msg_ok')
+        ]);
     }
 }

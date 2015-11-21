@@ -54,7 +54,22 @@ class Contact extends Model {
     public static function getCustomReturnRecordsLimit($query)
     {
         return $query->groupBy('id_041')
-            ->get(array('*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')));
+            ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
+    }
+
+    // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
+    public static function getRecords($parameters)
+    {
+        $query = Contact::join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
+            ->where('lang_002', config('app.locale'))
+            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
+            ->newQuery();
+
+        if(isset($parameters['group_042'])) $query->where('group_042', $parameters['group_042']);
+        if(isset($args['groupBy']))         $query->groupBy($args['groupBy']);
+
+        return $query->get();
     }
 
     public static function getCountriesContacts($args)

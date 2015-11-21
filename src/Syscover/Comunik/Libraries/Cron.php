@@ -277,6 +277,56 @@ class Cron
         }
     }
 
+    /**
+     *  Function which directly sends a test campaign group
+     *
+     * @access	public
+     * @param   array $paramenters
+     * @return	void
+     */
+    public static function sendEmailsTest($paramenters)
+    {
+        $campaign       = EmailCampaign::getRecords(['id_044' => $paramenters['id']])->first();
+        $testGroup      = Preference::getValue('emailServiceTestGroup', 3);
+        $contacts       = Contact::getRecords(['group_042' => (int)$testGroup->value_018, 'groupBy' => 'id_041']);
+
+        if(count($contacts) > 0)
+        {
+            foreach ($contacts as $contact)
+            {
+                if($contact->email_041 != null)
+                {
+                    $dataEmail = [
+                        'replyTo'       => empty($campaign->reply_to_013)? null : $campaign->reply_to_013,
+                        'email'         => $contact->email_041,
+                        'html'          => $campaign->header_044 . $campaign->body_044 . $campaign->footer_044,
+                        'text'          => $campaign->text_044,
+                        'subject'       => $campaign->subject_044,
+                        'contactKey'    => Crypt::encrypt($contact->id_041),
+                        'company'       => isset($contact->company_041)? $contact->company_041 : '',
+                        'name'          => isset($contact->name_041)? $contact->name_041 : '',
+                        'surname'       => isset($contact->surname_041)? $contact->surname_041 : '',
+                        'birthDate'     => isset($contact->birth_date_041)?  date(config('pulsar.datePattern'), $contact->birth_date_041) : '',
+                        'campaign'      => Crypt::encrypt($campaign->id_044),
+                    ];
+
+                    // config SMTP account
+                    config(['mail.host'         => $campaign->outgoing_server_013]);
+                    config(['mail.port'         => $campaign->outgoing_port_013]);
+                    config(['mail.from'         => ['address' => $campaign->email_013, 'name' => $campaign->name_013]]);
+                    config(['mail.encryption'   => $campaign->outgoing_secure_013 == 'null'? null : $campaign->outgoing_secure_013]);
+                    config(['mail.username'     => $campaign->outgoing_user_013]);
+                    config(['mail.password'     => Crypt::decrypt($campaign->outgoing_pass_013)]);
+
+                    EmailServices::sendEmail($dataEmail);
+                }
+            }
+        }
+    }
+
+
+
+
 
 
 
@@ -465,62 +515,4 @@ class Cron
             $job->delete();
         }
     }
-
-
-
-
-
-
-
-
-
-    /**
-     *  Función que envía directamente una plantilla a los usuarios de test
-     *
-     * @access	public
-     * @return	void
-     */
-    public static function sendEmailsTest($job, $data)
-    {
-        $campanaEmail   = CampanaEmail::find($data['id']);
-        $grupo          = ConfigPulsar::find('emailGrupoTest')->value_018;
-        $cuenta         = Cuenta::find($campanaEmail->cuenta_048);
-
-        $contactos = Contacto::getContactoFromGrupo($grupo);
-
-        if(count($contactos)>0)
-        {
-            foreach ($contactos as $contacto)
-            {
-                if($contacto->email_030 != null)
-                {
-                    $dataEmail = array(
-                        'replyTo'   => $cuenta->reply_to_047 == null || $cuenta->reply_to_047 == "" ? null : $cuenta->reply_to_047,
-                        'email'     => $contacto->email_030,
-                        'html'      => $campanaEmail->header_048 . $campanaEmail->body_048 . $campanaEmail->footer_048,
-                        'text'      => $campanaEmail->text_048,
-                        'asunto'    => $campanaEmail->asunto_048,
-                        'message'   => Crypt::encrypt($campanaEmail->id_048),   //encriptamos el id de la campaña para verlo online
-                        'contact'   => Crypt::encrypt($contacto->id_030),       //encriptamos el id del contacto para hacer el unsubscribe
-                        'company'   => isset($contacto->empresa_030)? $contacto->empresa_030 : '',
-                        'name'      => isset($contacto->nombre_030)? $contacto->nombre_030 : '',
-                        'surname'   => isset($contacto->apellidos_030)? $contacto->apellidos_030 : '',
-                        'birthday'  => isset($contacto->nacimiento_030)?  date('d-m-Y', $contacto->nacimiento_030) : '',
-                    );
-
-                    //configuración servidor SMTP
-                    Config::set('mail.host',        $cuenta->host_smtp_047);
-                    Config::set('mail.port',        $cuenta->port_smtp_047);
-                    Config::set('mail.from',        array('address' => $cuenta->email_047, 'name' => $cuenta->nombre_047));
-                    Config::set('mail.encryption',  $cuenta->secure_smtp_047 == 'null'? null : $cuenta->secure_smtp_047);
-                    Config::set('mail.username',    $cuenta->user_smtp_047);
-                    Config::set('mail.password',    Crypt::decrypt($cuenta->pass_smtp_047));
-
-                    EmailServices::SendEmail($dataEmail);
-                }
-            }
-        }
-        $job->delete();
-    }
-
 }

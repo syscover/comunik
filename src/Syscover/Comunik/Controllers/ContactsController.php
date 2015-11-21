@@ -86,6 +86,9 @@ class ContactsController extends Controller {
         // get parameters from url route
         $parameters = $request->route()->parameters();
 
+        // if it's a test email, we brake execution
+        if($parameters['key'] === "0") exit;
+
         $contact = Contact::find(Crypt::decrypt($parameters['key']));
 
         return view('comunik::contacts.unsubscribe', ['key' => $parameters['key'], 'contact' => $contact]);

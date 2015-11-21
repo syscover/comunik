@@ -23,14 +23,6 @@ class EmailCampaign extends Model {
         return Validator::make($data, static::$rules);
 	}
 
-    public static function getCustomRecordsLimit()
-    {
-        $query =  EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
-            ->newQuery();
-
-        return $query;
-    }
-
     public function countries()
     {
         return EmailCampaign::belongsToMany('Syscover\Pulsar\Models\Country', '005_045_email_campaigns_countries', 'campaign_045', 'country_045');
@@ -39,6 +31,25 @@ class EmailCampaign extends Model {
     public function groups()
     {
         return EmailCampaign::belongsToMany('Syscover\Comunik\Models\Group', '005_046_email_campaigns_groups', 'campaign_046','group_046');
+    }
+
+    public static function getCustomRecordsLimit()
+    {
+        $query =  EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
+            ->newQuery();
+
+        return $query;
+    }
+
+    // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
+    public static function getRecords($parameters)
+    {
+        $query = EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
+            ->newQuery();
+
+        if(isset($parameters['id_044'])) $query->where('id_044', $parameters['id_044']);
+
+        return $query->get();
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron
