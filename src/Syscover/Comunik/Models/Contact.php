@@ -40,7 +40,7 @@ class Contact extends Model {
         return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
     }
 
-    public static function getCustomRecordsLimit()
+    public static function addToGetRecordsLimit()
     {
         $query =  Contact::join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
             ->where('lang_002', config('app.locale'))

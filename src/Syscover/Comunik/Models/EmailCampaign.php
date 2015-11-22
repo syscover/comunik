@@ -33,7 +33,7 @@ class EmailCampaign extends Model {
         return EmailCampaign::belongsToMany('Syscover\Comunik\Models\Group', '005_046_email_campaigns_groups', 'campaign_046','group_046');
     }
 
-    public static function getCustomRecordsLimit()
+    public static function addToGetRecordsLimit()
     {
         $query =  EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
             ->newQuery();
