@@ -78,7 +78,7 @@
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
         </div>
     </div>
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => Input::old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'form-control select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
+    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => Input::old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
             <div><a id="btContent" class="btn btn-info mfp-iframe">Insertar theme</a></div>
