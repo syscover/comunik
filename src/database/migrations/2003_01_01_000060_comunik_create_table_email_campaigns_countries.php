@@ -21,8 +21,8 @@ class ComunikCreateTableEmailCampaignsCountries extends Migration {
 
             $table->foreign('campaign_045', 'fk01_005_045_email_campaigns_countries')->references('id_044')->on('005_044_email_campaign')
                     ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('country_045', '')->references('id_002')->on('001_002_country')
-                    ->onDelete('cascade', 'fk02_005_045_email_campaigns_countries')->onUpdate('cascade');
+            $table->foreign('country_045', 'fk02_005_045_email_campaigns_countries')->references('id_002')->on('001_002_country')
+                    ->onDelete('cascade')->onUpdate('cascade');
         });
 	}
 
