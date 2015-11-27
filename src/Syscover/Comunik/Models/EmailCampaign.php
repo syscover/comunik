@@ -36,6 +36,7 @@ class EmailCampaign extends Model {
     public static function addToGetRecordsLimit()
     {
         $query =  EmailCampaign::join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
+            ->orderBy('id_044', 'desc')
             ->newQuery();
 
         return $query;
