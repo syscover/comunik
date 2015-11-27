@@ -200,7 +200,8 @@
                 $('[name=footer]').val(data.footer);
                 $('[name=data]').val(JSON.stringify(settings));
 
-                $('.wysiwyg').froalaEditor('html.set', html);
+                $("[name=wysiwyg]").val(html);
+                //$('.wysiwyg').froalaEditor('html.set', html);
             },
             error:function(objXMLHttpRequest)
             {
