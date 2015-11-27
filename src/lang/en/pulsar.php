@@ -37,6 +37,7 @@ return [
     'interval_shipping'                     => 'Shipping interval',
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Persistence date',
+    'preview_campaign'                      => 'Preview campaign',
     'queue_mailings'                        => 'Queue emails',
     'send_test_email'                       => 'Send test email',
     'send_test_email_msg_ok'                => 'Test campaign launched successfully',

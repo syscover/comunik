@@ -76,10 +76,6 @@ Route::group(['middleware' => ['auth.pulsar','permission.pulsar','locale.pulsar'
     Route::delete(config('pulsar.appName') . '/comunik/email/services/campaigns/delete/select/elements',    ['as'=>'deleteSelectComunikEmailCampaign',      'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@deleteRecordsSelect',    'resource' => 'comunik-email-campaign',     'action' => 'delete']);
     Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/send/test/{id}/{offset?}',     ['as'=>'sendTestComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@sendTest',               'resource' => 'comunik-email-campaign',     'action' => 'create']);
 
-    //Route::get(config('pulsar.appName').'/comunik/email/services/campaigns/preview/{id}',                       ['as'=>'previewComunikEmailCampaign',           'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@preview']);
-
-
-
     /*
     |--------------------------------------------------------------------------
     | MOD. EMAIL SERVICES PREFERENCES
