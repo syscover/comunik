@@ -85,6 +85,7 @@
             }
         });
 
+        /*
         $('.wysiwyg').froalaEditor({
             language: '{{ config('app.locale') }}',
             placeholderText: '{{ trans('pulsar::pulsar.type_something') }}',
@@ -97,14 +98,18 @@
             enter: $.FroalaEditor.ENTER_BR,
             key: '{{ config('pulsar.froalaEditorKey') }}'
         });
+        */
 
         // on submit, get content from wysiwyg
         $("#recordForm").on('submit', function(event) {
-            $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+            //$("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+            $("[name=body]").val($('[name=wysiwyg]').val());
         });
 
+        // update content from wysiwyg to load in content builder
         $('#btContent').on('click', function(){
-            $("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+            //$("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'));
+            $("[name=body]").val($('[name=wysiwyg]').val());
         });
 
         /*
