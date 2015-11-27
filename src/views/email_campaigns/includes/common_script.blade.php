@@ -55,6 +55,7 @@
         });
 
         /*TODO: revisar funcionalidades froala */
+        /*
         $.FroalaEditor.DefineIcon('wildcard', {NAME: 'fa fa-star'});
         $.FroalaEditor.RegisterCommand('wildcard', {
             title: '{{ trans_choice('pulsar::pulsar.wildcard', 2) }}',
@@ -79,7 +80,8 @@
                 if(val == 'date') this.html.insert('#date#')
             }
         });
-
+        */
+        /*
         $.FroalaEditor.DefineIcon('preview', {NAME: 'fa fa-eye'});
         $.FroalaEditor.RegisterCommand('preview', {
             title: '{{ trans('pulsar::pulsar.preview') }}',
@@ -111,6 +113,7 @@
                 });
             }
         });
+        */
 
         /*
         $('.wysiwyg').froalaEditor({
@@ -186,17 +189,6 @@
             }
         });
 
-        // set magnific popup
-        $('#btContent').magnificPopup({
-            type: 'iframe',
-            iframe: {
-                markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
-                '<div class="mfp-close"></div>'+
-                '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
-                '</div>'
-            }
-        });
-
         // when change template
         $("[name='template']").on('change', function() {
             if($(this).val() != "")
@@ -244,6 +236,21 @@
                 });
             }
         });
+
+        // set magnific popup
+        $('#btContent').magnificPopup({
+            type: 'iframe',
+            iframe: {
+                markup: '<div class="mfp-iframe-scaler your-special-css-class">'+
+                '<div class="mfp-close"></div>'+
+                '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>'+
+                '</div>'
+            }
+        });
+
+        @if($action == 'update')
+            $('[name="theme"]').trigger('change');
+        @endif
     });
 
     // function called from pulsar::contentbuilder.index
