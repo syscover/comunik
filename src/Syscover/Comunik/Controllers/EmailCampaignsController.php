@@ -132,8 +132,8 @@ class EmailCampaignsController extends Controller {
         // function to view online the campaign
         $emailCampaign          = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
 
-        // comprobamos que el historicoId existe y es diferente a 0,
-        // es 0 cuando la petición viene de un preview de campaña
+        // We check that the historicoId exists and is equal to 0,
+        // It is 0 when the request comes from a campaign preview
         if(isset($parameters['historicalId']) && $parameters['historicalId'] != 0)
             $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
 
