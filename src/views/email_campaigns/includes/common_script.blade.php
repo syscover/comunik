@@ -216,7 +216,8 @@
                         $("[name='data']").val(data.data_043);
                         $("[name='theme']").val(data.theme_043).select2();
 
-                        $('.wysiwyg').froalaEditor('html.set', data.body_043);
+                        //$('.wysiwyg').froalaEditor('html.set', data.body_043);
+                        $('.wysiwyg').val(data.body_043);
 
                         if($('[name="theme"]').val() == '') {
                             $('#btContent').fadeOut();
@@ -265,7 +266,8 @@
                 $('[name=footer]').val(data.footer);
                 $('[name=data]').val(JSON.stringify(settings));
 
-                $('.wysiwyg').froalaEditor('html.set', html);
+                $("[name=wysiwyg]").val(html);
+                //$('.wysiwyg').froalaEditor('html.set', html);
             },
             error:function(objXMLHttpRequest)
             {
