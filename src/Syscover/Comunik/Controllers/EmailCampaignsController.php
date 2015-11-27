@@ -131,7 +131,7 @@ class EmailCampaignsController extends Controller {
 
         // function to view online the campaign
         $emailCampaign          = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
-        if(isset($parameters['historicalId']))
+        if(isset($parameters['historicalId']) && $parameters['historicalId'] != 0)
             $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
 
         // if is a test mailing, set contactKey and historicalId to 0
