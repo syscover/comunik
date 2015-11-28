@@ -25,7 +25,8 @@ class EmailCampaign extends Model {
 
     public function countries()
     {
-        return EmailCampaign::belongsToMany('Syscover\Pulsar\Models\Country', '005_045_email_campaigns_countries', 'campaign_045', 'country_045');
+        return EmailCampaign::belongsToMany('Syscover\Pulsar\Models\Country', '005_045_email_campaigns_countries', 'campaign_045', 'country_045')
+            ->where('001_002_country.lang_002', session('baseLang')->id_001);
     }
 
     public function groups()
