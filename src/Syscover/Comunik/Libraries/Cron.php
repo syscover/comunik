@@ -113,7 +113,7 @@ class Cron
         $countryIds = $countries->pluck('id_002')->toArray();
 
         // obtenemos los contactos a insertar
-        $contacts = Contact::getContactsEmailToInsert($campaign->id_044, $groupIds, $countryIds, (int)Preference::find('emailServiceIntervalProcess')->value_018, 0);
+        $contacts = Contact::getContactsEmailToInsert($campaign->id_044, $groupIds, $countryIds, (int)Preference::getValue('emailServiceIntervalProcess', 5)->value_018, 0);
 
         // insert emailing into email queue
         if(count($contacts) > 0)
