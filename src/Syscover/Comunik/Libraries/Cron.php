@@ -196,7 +196,7 @@ class Cron
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
         // solo de aquellos envíos que estén en estado: 0 = waiting to be sent
-        $mailings   = EmailSendQueue::getMailings((int)Preference::find('emailServiceIntervalProcess')->value_018, 0);
+        $mailings   = EmailSendQueue::getMailings((int)Preference::getValue('emailServiceIntervalProcess', 5)->value_018, 0);
 
         $mailingIds = $mailings->pluck('id_047')->toArray();
 

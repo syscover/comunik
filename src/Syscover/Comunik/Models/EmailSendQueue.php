@@ -24,10 +24,9 @@ class EmailSendQueue extends Model {
     // Attention! function called from \Syscover\Comunik\Libraries\Cron
     public static function getNMailings()
     {
-        $emailServiceIntervalShipping   = Preference::find('emailServiceIntervalShipping');
-        $now                            = date('U');
+        $now        = date('U');
         // fecha que hasta pasada la misma no se podría enviar emails
-        $limitDate                      = $now - ((int)$emailServiceIntervalShipping->value_018 * 24 * 60 * 60);
+        $limitDate  = $now - ((int)Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 
         // se podría quitar de la consulta ->where('created_044', true) para mandar mails,
         // sin terminar de crear la campaña campaña para agilizar el proceso de envío
@@ -48,10 +47,9 @@ class EmailSendQueue extends Model {
     // Attention! function called from \Syscover\Comunik\Libraries\Cron
     public static function getMailings($take, $skip)
     {
-        $emailServiceIntervalShipping   = Preference::find('emailServiceIntervalShipping');
-        $now                            = date('U');
+        $now        = date('U');
         // fecha que hasta pasada la misma no se podría enviar emails
-        $limitDate                      = $now - ($emailServiceIntervalShipping->value_018 * 24 * 60 * 60);
+        $limitDate  = $now - (Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 /*
         return collect(DB::select('select * from (select * from 005_047_email_send_queue order by sorting_047) as tmp_email_send_queue
             inner join 005_041_contact on tmp_email_send_queue.contact_047 = 005_041_contact.id_041
