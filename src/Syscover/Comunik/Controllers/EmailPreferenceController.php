@@ -33,10 +33,10 @@ class EmailPreferenceController extends Controller {
         $parameters['intervalsShipping']    = [];
         for($i=0; $i < 121; $i++)
             $parameters['intervalsShipping'][] = (object)['id' => $i, 'name' => str_pad($i, 2, '0', STR_PAD_LEFT)];
-        $parameters['intervalShipping']     = Preference::getValue('emailServiceIntervalShipping', 3);
+        $parameters['intervalShipping']     = Preference::getValue('emailServiceIntervalShipping', 5);
 
         $parameters['groups']               = Group::all();
-        $parameters['testGroup']            = Preference::getValue('emailServiceTestGroup', 3);
+        $parameters['testGroup']            = Preference::getValue('emailServiceTestGroup', 5);
 
         $parameters['intervalsProcess']     = [
             (object)['id' => 100, 'name' => 100],
@@ -49,15 +49,15 @@ class EmailPreferenceController extends Controller {
             (object)['id' => 40000, 'name' => 40000],
             (object)['id' => 50000, 'name' => 50000]];
 
-        $parameters['intervalProcess']      = Preference::getValue('emailServiceIntervalProcess', 3);
+        $parameters['intervalProcess']      = Preference::getValue('emailServiceIntervalProcess', 5);
 
         return $parameters;
     }
     
     public function updateCustomRecord($request, $parameters)
     {
-        Preference::setValue('emailServiceIntervalShipping', 3, $request->input('intervalShipping'));
-        Preference::setValue('emailServiceTestGroup', 3, $request->input('testGroup'));
-        Preference::setValue('emailServiceIntervalProcess', 3, $request->input('intervalProcess'));
+        Preference::setValue('emailServiceIntervalShipping', 5, $request->input('intervalShipping'));
+        Preference::setValue('emailServiceTestGroup', 5, $request->input('testGroup'));
+        Preference::setValue('emailServiceIntervalProcess', 5, $request->input('intervalProcess'));
     }
 }

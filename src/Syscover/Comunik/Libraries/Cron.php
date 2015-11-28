@@ -78,13 +78,13 @@ class Cron
      */
     private static function checkEmailsToQueue($data)
     {
-        $emailServiceSendingEmailsToQueue = Preference::getValue('emailServiceSendingEmailsToQueue', 3, '0');
+        $emailServiceSendingEmailsToQueue = Preference::getValue('emailServiceSendingEmailsToQueue', 5, '0');
 
         // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo el envío de emails a la cola de proceso
         // si en 5 minutos no se ha liberado la variable, damos por hecho que se ha bloqueado y la liberamos
         $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailServiceSendingEmailsToQueue->updated_at);
         if($emailServiceSendingEmailsToQueue->value_018 == '1' && date('U') - $update->getTimestamp() > 300)
-            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
+            Preference::setValue('emailServiceSendingEmailsToQueue', 5, '0');
 
 
         // en el caso que el estado de envio esté activo, eso siginifica que hay una petición trabajando y enviando
@@ -97,7 +97,7 @@ class Cron
         }
         else
         {
-            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '1');
+            Preference::setValue('emailServiceSendingEmailsToQueue', 5, '1');
         }
 
         // START INCLUDES EMAILS IN SEND QUEUE TABLE
@@ -132,7 +132,7 @@ class Cron
 
             EmailSendQueue::insert($emailSendQueue);
 
-            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
+            Preference::setValue('emailServiceSendingEmailsToQueue', 5, '0');
         }
         else
         {
@@ -142,7 +142,7 @@ class Cron
                 'created_044' => true
             ]);
 
-            Preference::setValue('emailServiceSendingEmailsToQueue', 3, '0');
+            Preference::setValue('emailServiceSendingEmailsToQueue', 5, '0');
         }
     }
 
@@ -172,13 +172,13 @@ class Cron
      */
     private static function sendEmails()
     {
-        $emailServiceSendingEmails = Preference::getValue('emailServiceSendingEmails', 3, '0');
+        $emailServiceSendingEmails = Preference::getValue('emailServiceSendingEmails', 5, '0');
 
         // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo el envío de emails
         // si en 5 minutos no se ha liberado la variable, damos por hecho que se ha bloqueado y la liberamos
         $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailServiceSendingEmails->updated_at);
         if($emailServiceSendingEmails->value_018 == '1' && date('U') - $update->getTimestamp() > 300)
-            Preference::setValue('emailServiceSendingEmails', 3, '0');
+            Preference::setValue('emailServiceSendingEmails', 5, '0');
 
 
         //en el caso que el estado de envio esté activo, eso siginifica que hay una petición en curso y está haciendo la petición
@@ -191,7 +191,7 @@ class Cron
         }
         else
         {
-            Preference::setValue('emailServiceSendingEmails', 3, '1');
+            Preference::setValue('emailServiceSendingEmails', 5, '1');
         }
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
@@ -209,7 +209,7 @@ class Cron
             ]);
 
             // desbloqueo de proceso de obtención de emails para ser enviados y se puedan hacer peticiones
-            Preference::setValue('emailServiceSendingEmails', 3, '0');
+            Preference::setValue('emailServiceSendingEmails', 5, '0');
 
             $successfulIds =[];
 
@@ -273,7 +273,7 @@ class Cron
         else
         {
             // desbloqueo de proceso de obtención de emails para ser enviados y se puedan hacer peticiones
-            Preference::setValue('emailServiceSendingEmails', 3, '0');
+            Preference::setValue('emailServiceSendingEmails', 5, '0');
         }
     }
 
@@ -287,7 +287,7 @@ class Cron
     public static function sendEmailsTest($paramenters)
     {
         $campaign       = EmailCampaign::getRecords(['id_044' => $paramenters['id']])->first();
-        $testGroup      = Preference::getValue('emailServiceTestGroup', 3);
+        $testGroup      = Preference::getValue('emailServiceTestGroup', 5);
         $contacts       = Contact::getRecords(['group_042' => (int)$testGroup->value_018, 'groupBy' => 'id_041']);
 
         if(count($contacts) > 0)
