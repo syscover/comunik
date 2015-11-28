@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
+use Syscover\Pulsar\Models\Lang;
 use Syscover\Pulsar\Traits\TraitModel;
 
 class EmailCampaign extends Model {
@@ -25,8 +26,10 @@ class EmailCampaign extends Model {
 
     public function countries()
     {
+        // get base lang from database because this function is call from cron, without create session variable baseLang
+        $baseLang = Lang::getBaseLang()->id_001;
         return EmailCampaign::belongsToMany('Syscover\Pulsar\Models\Country', '005_045_email_campaigns_countries', 'campaign_045', 'country_045')
-            ->where('001_002_country.lang_002', session('baseLang')->id_001);
+            ->where('001_002_country.lang_002', $baseLang);
     }
 
     public function groups()
