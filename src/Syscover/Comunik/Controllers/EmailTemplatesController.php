@@ -5,6 +5,11 @@ use Syscover\Comunik\Models\EmailTemplate;
 use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 
+/**
+ * Class EmailTemplatesController
+ * @package Syscover\Comunik\Controllers
+ */
+
 class EmailTemplatesController extends Controller {
 
     use TraitController;
@@ -14,7 +19,7 @@ class EmailTemplatesController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_043', 'name_043'];
     protected $nameM        = 'name_043';
-    protected $model        = '\Syscover\Comunik\Models\EmailTemplate';
+    protected $model        = \Syscover\Comunik\Models\EmailTemplate::class;
     protected $icon         = 'fa fa-pencil-square-o';
     protected $objectTrans  = 'template';
 

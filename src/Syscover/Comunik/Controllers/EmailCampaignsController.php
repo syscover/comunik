@@ -15,6 +15,11 @@ use Syscover\Comunik\Models\Group;
 use Syscover\Comunik\Models\Contact;
 use Syscover\Comunik\Models\EmailTemplate;
 
+/**
+ * Class EmailCampaignsController
+ * @package Syscover\Comunik\Controllers
+ */
+
 class EmailCampaignsController extends Controller {
 
     use TraitController;
@@ -24,7 +29,7 @@ class EmailCampaignsController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';
-    protected $model        = '\Syscover\Comunik\Models\EmailCampaign';
+    protected $model        = \Syscover\Comunik\Models\EmailCampaign::class;
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'campaign';
 
@@ -70,8 +75,8 @@ class EmailCampaignsController extends Controller {
             'sorting_044'           => $request->input('sorting')
         ]);
 
-        $emailCampaign->countries()->attach($request->input('countries'));
-        $emailCampaign->groups()->attach($request->input('groups'));
+        $emailCampaign->getCountries()->attach($request->input('countries'));
+        $emailCampaign->getGroups()->attach($request->input('groups'));
     }
 
     public function editCustomRecord($request, $parameters)
@@ -115,8 +120,8 @@ class EmailCampaignsController extends Controller {
 
         $emailCampaign = EmailCampaign::find($parameters['id']);
 
-        $emailCampaign->countries()->sync($request->input('countries'));
-        $emailCampaign->groups()->sync($request->input('groups'));
+        $emailCampaign->getCountries()->sync($request->input('countries'));
+        $emailCampaign->getGroups()->sync($request->input('groups'));
 
         // borramos los envíos de cola, de aquellos correos en estado, status_047 = 0 waiting
         // que no correspondan con los nuevos grupos, caso muy dificil de ocurrir,

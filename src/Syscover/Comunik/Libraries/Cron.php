@@ -107,8 +107,8 @@ class Cron
         // entre que se mando la petición a cola y se ejecute la petición
         if($campaign == null)   exit;
 
-        $groups     = $campaign->groups;
-        $countries  = $campaign->countries;
+        $groups     = $campaign->getGroups;
+        $countries  = $campaign->getCountries;
         $groupIds   = $groups->pluck('id_040')->toArray();
         $countryIds = $countries->pluck('id_002')->toArray();
 

@@ -1,19 +1,34 @@
 <?php namespace Syscover\Comunik\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Syscover\Pulsar\Models\Model;
 use Illuminate\Support\Facades\Validator;
-use Syscover\Pulsar\Models\Country;
 use Syscover\Pulsar\Traits\TraitModel;
+use Sofa\Eloquence\Eloquence;
+use Sofa\Eloquence\Mappable;
 use Illuminate\Support\Facades\DB;
+
+/**
+ * Class Contact
+ *
+ * Model with properties
+ * <br><b>[id, company, name, surname, birth_date, country, prefix, mobile, email, unsubscribe_mobile, unsubscribe_email]</b>
+ *
+ * @package     Syscover\Comunik\Models
+ */
 
 class Contact extends Model {
 
     use TraitModel;
+    use Eloquence, Mappable;
 
 	protected $table        = '005_041_contact';
     protected $primaryKey   = 'id_041';
     public $timestamps      = false;
     protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','country_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
+    protected $maps         = [];
+    protected $relationMaps = [
+        'country'      => \Syscover\Pulsar\Models\Country::class,
+    ];
     private static $rules   = [
         'groups'        => 'required',
         'company'       => 'between:2,100',
@@ -35,18 +50,22 @@ class Contact extends Model {
         return Validator::make($data, static::$rules);
 	}
 
-    public function groups()
+    public function scopeBuilder($query)
+    {
+        return $query->join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
+            ->where('lang_002', config('app.locale'))
+            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040');
+    }
+
+    public function getGroups()
     {
         return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
     }
 
     public static function addToGetRecordsLimit()
     {
-        $query =  Contact::join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
-            ->where('lang_002', config('app.locale'))
-            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
-            ->newQuery();
+        $query =  Contact::builder();
 
         return $query;
     }
@@ -60,11 +79,7 @@ class Contact extends Model {
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
     public static function getRecords($parameters)
     {
-        $query = Contact::join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
-            ->where('lang_002', config('app.locale'))
-            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
-            ->newQuery();
+        $query = Contact::builder();
 
         if(isset($parameters['group_042'])) $query->where('group_042', $parameters['group_042']);
         if(isset($args['groupBy']))         $query->groupBy($args['groupBy']);

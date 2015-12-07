@@ -4,6 +4,11 @@ use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Group;
 
+/**
+ * Class GroupsController
+ * @package Syscover\Comunik\Controllers
+ */
+
 class GroupsController extends Controller {
 
     use TraitController;
@@ -13,7 +18,7 @@ class GroupsController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_040', 'name_040'];
     protected $nameM        = 'name_040';
-    protected $model        = '\Syscover\Comunik\Models\Group';
+    protected $model        = \Syscover\Comunik\Models\Group::class;
     protected $icon         = 'fa fa-users';
     protected $objectTrans  = 'group';
 

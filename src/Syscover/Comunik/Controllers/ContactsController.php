@@ -9,6 +9,11 @@ use Syscover\Pulsar\Models\Country;
 use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Contact;
 
+/**
+ * Class ContactsController
+ * @package Syscover\Comunik\Controllers
+ */
+
 class ContactsController extends Controller {
 
     use TraitController;
@@ -18,7 +23,7 @@ class ContactsController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
     protected $nameM        = 'name_041';
-    protected $model        = '\Syscover\Comunik\Models\Contact';
+    protected $model        = \Syscover\Comunik\Models\Contact::class;
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'contact';
 
@@ -44,7 +49,7 @@ class ContactsController extends Controller {
             'unsubscribe_email_041'     => $request->has('unsubscribeEmail'),
         ]);
 
-        $contact->groups()->attach($request->input('groups'));
+        $contact->getGroups()->attach($request->input('groups'));
     }
 
     public function editCustomRecord($request, $parameters)
@@ -76,9 +81,12 @@ class ContactsController extends Controller {
             'mobile_041'                => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
             'email_041'                 => strtolower($request->input('email')),
             'unsubscribe_mobile_041'    => $request->has('unsubscribeMobile'),
-            'unsubscribe_email_041'     => $request->has('unsubscribeEmail'),
-
+            'unsubscribe_email_041'     => $request->has('unsubscribeEmail')
         ]);
+
+        $contact = Contact::find($parameters['id']);
+
+        $contact->getGroups()->sync($request->input('groups'));
     }
 
     public function getEmailToUnsubscribe(Request $request)
@@ -313,7 +321,7 @@ class ContactsController extends Controller {
                     try
                     {
                         $contact = Contact::create($dbRow);
-                        $contact->groups()->attach($dbRow['id_040']);
+                        $contact->getGroups()->attach($dbRow['id_040']);
                     }
                     catch (\Exception $e)
                     {
