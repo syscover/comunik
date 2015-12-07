@@ -77,6 +77,11 @@ class Contact extends Model {
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
+    /**
+     * @deprecated
+     * @param $parameters
+     * @return mixed
+     */
     public static function getRecords($parameters)
     {
         $query = Contact::builder();

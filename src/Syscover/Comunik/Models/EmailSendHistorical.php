@@ -40,6 +40,11 @@ class EmailSendHistorical extends Model {
         return $query->join('005_041_contact', '005_048_email_send_historical.contact_048', '=', '005_041_contact.id_041');
     }
 
+    /**
+     * @deprecated
+     * @param $parameters
+     * @return mixed
+     */
     public static function getRecords($parameters)
     {
         $query = EmailSendHistorical::builder();
