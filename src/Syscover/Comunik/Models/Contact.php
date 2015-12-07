@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Validator;
 use Syscover\Pulsar\Traits\TraitModel;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Syscover\Pulsar\Models\Country;
 use Illuminate\Support\Facades\DB;
 
 /**
