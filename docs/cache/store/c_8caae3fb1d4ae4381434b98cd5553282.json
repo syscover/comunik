@@ -1,0 +1,208 @@
+{
+    "name": "Syscover\\Comunik\\Models\\EmailCampaign",
+    "line": 19,
+    "short_desc": "Class EmailCampaign",
+    "long_desc": "Model with properties\n<br><b>[id, name, email_account, template, subject, theme, header, body, footer, text, data, shipping_date, persistence_date, sorting, processing, created, viewed]<\/b>",
+    "hint": null,
+    "tags": {
+        "package": [
+            [
+                "Syscover\\Comunik\\Models"
+            ]
+        ]
+    },
+    "namespace": "Syscover\\Comunik\\Models",
+    "file": "src\/Syscover\/Comunik\/Models\/EmailCampaign.php",
+    "relative_file": "\/Syscover\/Comunik\/Models\/EmailCampaign.php",
+    "hash": "a8d1bf80c9a29ca959a39739f27f032b1318a434",
+    "parent": "Syscover\\Pulsar\\Models\\Model",
+    "modifiers": "Stmt_Class",
+    "is_trait": false,
+    "is_interface": false,
+    "aliases": {
+        "Model": "Syscover\\Pulsar\\Models\\Model",
+        "Validator": "Illuminate\\Support\\Facades\\Validator",
+        "TraitModel": "Syscover\\Pulsar\\Traits\\TraitModel",
+        "Eloquence": "Sofa\\Eloquence\\Eloquence",
+        "Mappable": "Sofa\\Eloquence\\Mappable",
+        "Lang": "Syscover\\Pulsar\\Models\\Lang"
+    },
+    "errors": [],
+    "interfaces": [],
+    "traits": {
+        "Syscover\\Pulsar\\Traits\\TraitModel": "Syscover\\Pulsar\\Traits\\TraitModel",
+        "Sofa\\Eloquence\\Eloquence": "Sofa\\Eloquence\\Eloquence",
+        "Sofa\\Eloquence\\Mappable": "Sofa\\Eloquence\\Mappable"
+    },
+    "properties": {
+        "timestamps": {
+            "name": "timestamps",
+            "line": 26,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": 1,
+            "default": {
+                "name": {
+                    "parts": [
+                        "false"
+                    ]
+                }
+            },
+            "errors": []
+        }
+    },
+    "methods": {
+        "validate": {
+            "name": "validate",
+            "line": 38,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": {
+                "data": {
+                    "name": "data",
+                    "line": 38,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": null,
+                    "tags": [],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "scopeBuilder": {
+            "name": "scopeBuilder",
+            "line": 43,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": {
+                "query": {
+                    "name": "query",
+                    "line": 43,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": null,
+                    "tags": [],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getCountries": {
+            "name": "getCountries",
+            "line": 48,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": []
+        },
+        "getGroups": {
+            "name": "getGroups",
+            "line": 56,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "1",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": []
+        },
+        "addToGetRecordsLimit": {
+            "name": "addToGetRecordsLimit",
+            "line": 61,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": []
+        },
+        "getRecords": {
+            "name": "getRecords",
+            "line": 70,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": {
+                "parameters": {
+                    "name": "parameters",
+                    "line": 70,
+                    "short_desc": null,
+                    "long_desc": null,
+                    "hint": null,
+                    "tags": [],
+                    "modifiers": "",
+                    "default": null,
+                    "is_by_ref": false
+                }
+            }
+        },
+        "getCampaignsWithPersistence": {
+            "name": "getCampaignsWithPersistence",
+            "line": 80,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": []
+        },
+        "getCampaignsNotCreated": {
+            "name": "getCampaignsNotCreated",
+            "line": 90,
+            "short_desc": "",
+            "long_desc": "",
+            "hint": null,
+            "hint_desc": null,
+            "tags": [],
+            "modifiers": "9",
+            "is_by_ref": "",
+            "exceptions": [],
+            "errors": [],
+            "parameters": []
+        }
+    },
+    "constants": []
+}
