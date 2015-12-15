@@ -54,9 +54,7 @@ class Contact extends Model {
     public function scopeBuilder($query)
     {
         return $query->join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
-            ->where('lang_002', config('app.locale'))
-            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040');
+            ->where('lang_002', config('app.locale'));
     }
 
     public function getGroups()
@@ -73,7 +71,9 @@ class Contact extends Model {
 
     public static function getCustomReturnRecordsLimit($query)
     {
-        return $query->groupBy('id_041')
+        return $query->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
+            ->groupBy('id_041')
             ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
     }
 
