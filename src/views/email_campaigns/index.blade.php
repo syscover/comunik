@@ -9,6 +9,7 @@
             {
                 $('.datatable-pulsar').dataTable({
                     'iDisplayStart' : {{ $offset }},
+                    'aaSorting': [[ 0, "desc" ]],
                     'aoColumnDefs': [
                         { 'bSortable': false, 'aTargets': [7,8]},
                         { 'sClass': 'checkbox-column', 'aTargets': [7]},

@@ -60,8 +60,7 @@ class EmailCampaign extends Model {
 
     public static function addToGetRecordsLimit()
     {
-        $query =  EmailCampaign::builder()
-            ->orderBy('id_044', 'desc');
+        $query =  EmailCampaign::builder();
 
         return $query;
     }
