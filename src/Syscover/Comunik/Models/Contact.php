@@ -62,19 +62,28 @@ class Contact extends Model {
         return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
     }
 
-    public static function addToGetRecordsLimit()
+    public static function addToGetIndexRecords($parameters)
     {
         $query =  Contact::builder();
 
         return $query;
     }
 
-    public static function getCustomReturnRecordsLimit($query)
+    public static function getCustomReturnIndexRecords($query, $parameters)
     {
         return $query->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
             ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
             ->groupBy('id_041')
             ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
+    }
+
+    public static function countCustomIndexRecords($query, $parameters)
+    {
+        return $query->select(DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
+            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
+            ->groupBy('id_041')
+            ->count();
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
