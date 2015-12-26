@@ -1,6 +1,6 @@
 workbench/
 WORK/
-docs/cache
+docs/cache/
 sami.phar
 .env
 
