@@ -37,7 +37,7 @@ class ContactsController extends Controller {
     public function storeCustomRecord($request)
     {
         $contact = Contact::create([
-            'company_041'               => $request->input('company'),
+            'company_041'               => empty($request->input('company'))? null : $request->input('company'),
             'name_041'                  => $request->input('name'),
             'surname_041'               => $request->input('surname'),
             'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
@@ -72,7 +72,7 @@ class ContactsController extends Controller {
     public function updateCustomRecord($request, $parameters)
     {
         Contact::where('id_041', $parameters['id'])->update([
-            'company_041'               => $request->input('company'),
+            'company_041'               => empty($request->input('company'))? null : $request->input('company'),
             'name_041'                  => $request->input('name'),
             'surname_041'               => $request->input('surname'),
             'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
