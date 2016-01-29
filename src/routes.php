@@ -146,21 +146,30 @@ Route::group(['middleware' => ['web', 'pulsar']], function() {
     
 });
 
-/*
-|--------------------------------------------------------------------------
-| MOD. EMAIL SERVICES CAMPAIGNS (show campaign and set statistic)
-|--------------------------------------------------------------------------
-*/
-Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{historicalId?}',      ['as'=>'showComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@showCampaign']);
-Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/statistics/{campaign}/{historicalId}', ['as'=>'statisticsComunikEmailCampaign',    'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@recordStatistic']);
+Route::group(['middleware' => ['web']], function() {
 
-/*
-|--------------------------------------------------------------------------
-| MOD. CONTACTS (UNSUBSCRIBE)
-|--------------------------------------------------------------------------
-*/
-Route::get(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email/{key}',                             ['as'=>'getUnsubscribeComunikContact',       'uses'=>'Syscover\Comunik\Controllers\ContactsController@getEmailToUnsubscribe']);
-Route::post(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email',           ['before' => 'csrf',    'as'=>'unsubscribeComunikContact',          'uses'=>'Syscover\Comunik\Controllers\ContactsController@unsubscribeEmail']);
+    Route::post(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email',                                       ['as'=>'unsubscribeComunikContact',         'uses'=>'Syscover\Comunik\Controllers\ContactsController@unsubscribeEmail']);
+
+});
+
+Route::group(['middleware' => ['noCsrWeb', 'pulsar']], function() {
+
+    /*
+    |--------------------------------------------------------------------------
+    | MOD. EMAIL SERVICES CAMPAIGNS (show campaign and set statistic)
+    |--------------------------------------------------------------------------
+    */
+    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/show/{campaign}/{historicalId?}',          ['as'=>'showComunikEmailCampaign',          'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@showCampaign']);
+    Route::get(config('pulsar.appName') . '/comunik/email/services/campaigns/statistics/{campaign}/{historicalId}',     ['as'=>'statisticsComunikEmailCampaign',    'uses'=>'Syscover\Comunik\Controllers\EmailCampaignsController@recordStatistic']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | MOD. CONTACTS (UNSUBSCRIBE)
+    |--------------------------------------------------------------------------
+    */
+    Route::get(config('pulsar.appName') . '/comunik/contacts/unsubscribe/email/{key}',                                  ['as'=>'getUnsubscribeComunikContact',      'uses'=>'Syscover\Comunik\Controllers\ContactsController@getEmailToUnsubscribe']);
+
+});
 
 
 
