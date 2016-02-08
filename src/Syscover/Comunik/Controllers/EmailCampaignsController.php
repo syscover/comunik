@@ -50,7 +50,7 @@ class EmailCampaignsController extends Controller {
         $parameters['themes']           = MiscellaneousComunik::getThemes();
         $parameters['emlHeaders']       = MiscellaneousComunik::getEmlHeaders();
         $parameters['groups']           = Group::all();
-        $parameters['countries']        = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
+        $parameters['countries']        = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_010]);
 
         return $parameters;
     }
@@ -86,7 +86,7 @@ class EmailCampaignsController extends Controller {
         $parameters['themes']               = MiscellaneousComunik::getThemes();
         $parameters['emlHeaders']           = MiscellaneousComunik::getEmlHeaders();
         $parameters['groups']               = Group::all();
-        $parameters['countries']            = Contact::getCountriesContacts(['lang' => $request->user()->lang_010]);
+        $parameters['countries']            = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_010]);
 
         // statistics
         $parameters['queueMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();

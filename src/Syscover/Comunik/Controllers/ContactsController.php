@@ -117,7 +117,7 @@ class ContactsController extends Controller {
         // get parameters from url route
         $parameters = $request->route()->parameters();
 
-        $data['countries']  = Country::getTranslationsRecords($request->user()->lang_010);
+        $data['countries']  = Country::getTranslationsRecords(auth('pulsar')->user()->lang_010);
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
         $fields             = [
@@ -168,7 +168,7 @@ class ContactsController extends Controller {
     public function importRecords(Request $request){
         $data           = [];
         $jsonData       = json_decode($request->input('data'));
-        $countries      = Country::getTranslationsRecords($request->user()->lang_010);
+        $countries      = Country::getTranslationsRecords(auth('pulsar')->user()->lang_010);
         $groups         = $request->input('groups');
         $country        = $request->input('country');
 

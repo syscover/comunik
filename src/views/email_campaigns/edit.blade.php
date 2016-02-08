@@ -111,7 +111,7 @@
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
     @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'objectsSelect' => $object->getGroups, 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2, 'required' => true])
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->getCountries->where('lang_002', Auth::user()->lang_010), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
+    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->getCountries->where('lang_002', auth('pulsar')->user()->lang_010), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
 
     @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('comunik::pulsar.statistic', 2), 'icon' => 'fa fa-area-chart'])
     @include('pulsar::includes.html.form_text_group', ['labelSize' => 2, 'fieldSize' => 3, 'label' => trans('comunik::pulsar.queue_mailings'), 'name' => '', 'value' => $queueMailings, 'readOnly' => true, 'inputs' => [
