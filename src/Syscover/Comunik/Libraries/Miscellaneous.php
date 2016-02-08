@@ -279,6 +279,10 @@ class Miscellaneous
 
         $doc = new \DOMDocument();
 
+        // TODO: comprobar validez de este apaño
+        // process entity
+        libxml_use_internal_errors(true);
+
         if (!$doc->loadHTML($html))
             throw new \Exception("Could not load HTML - badly formed?", $html);
 
