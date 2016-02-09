@@ -134,10 +134,10 @@
             else
             {
                 $('#btContent').fadeIn();
-                var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => 'theme', 'input' => 'body']) }}';
+                var url = '{{ route('contentbuilder', ['package' => 'comunik', 'theme' => '%theme%', 'input' => 'body']) }}';
 
                 // set link on btContent who has magnific popup loaded
-                $('#btContent').attr('href', url.replace('theme', $('[name="theme"]').val()));
+                $('#btContent').attr('href', url.replace('%theme%', $('[name="theme"]').val()));
 
                 $.ajax({
                     type:       "POST",
@@ -183,10 +183,10 @@
     // function called from pulsar::contentbuilder.index
     var getValueContentBuilder = function(html, settings)
     {
-        var url = '{{ route('contentbuilderBlocks', ['theme' => 'theme']) }}';
+        var url = '{{ route('contentbuilderBlocks', ['theme' => '%theme%']) }}';
         $.ajax({
             type:       "POST",
-            url:        url.replace('theme', $('[name="theme"]').val()),
+            url:        url.replace('%theme%', $('[name="theme"]').val()),
             dataType:   "json",
             headers:    { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             data:       {

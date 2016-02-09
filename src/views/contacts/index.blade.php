@@ -50,7 +50,7 @@
                 {
                     if(data.success == true && data.action == "upload")
                     {
-                        var url = '{{ route('importPreviewComunikContact', ['file' => 'file']) }}';
+                        var url = '{{ route('importPreviewComunikContact', ['file' => '%file%']) }}';
                         $.magnificPopup.open({
                             type: 'iframe',
                             iframe: {
@@ -60,7 +60,7 @@
                                 '</div>'
                             },
                             items: {
-                                src: url.replace('file', data.name)
+                                src: url.replace('%file%', data.name)
                             },
                             callbacks: {
                                 close: function()
