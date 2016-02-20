@@ -19,7 +19,7 @@ class EmailTemplatesController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_043', 'name_043'];
     protected $nameM        = 'name_043';
-    protected $model        = \Syscover\Comunik\Models\EmailTemplate::class;
+    protected $model        = EmailTemplate::class;
     protected $icon         = 'fa fa-pencil-square-o';
     protected $objectTrans  = 'template';
 

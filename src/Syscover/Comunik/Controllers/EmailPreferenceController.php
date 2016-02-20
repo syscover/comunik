@@ -19,7 +19,7 @@ class EmailPreferenceController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = [];
     protected $nameM        = null;
-    protected $model        = \Syscover\Pulsar\Models\Preference::class;
+    protected $model        = Preference::class;
     protected $icon         = 'fa fa-cog';
     protected $objectTrans  = 'preference';
 

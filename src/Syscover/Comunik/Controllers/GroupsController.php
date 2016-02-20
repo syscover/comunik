@@ -18,7 +18,7 @@ class GroupsController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_040', 'name_040'];
     protected $nameM        = 'name_040';
-    protected $model        = \Syscover\Comunik\Models\Group::class;
+    protected $model        = Group::class;
     protected $icon         = 'fa fa-users';
     protected $objectTrans  = 'group';
 

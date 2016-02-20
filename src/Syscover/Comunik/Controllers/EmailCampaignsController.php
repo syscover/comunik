@@ -29,7 +29,7 @@ class EmailCampaignsController extends Controller {
     protected $package      = 'comunik';
     protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';
-    protected $model        = \Syscover\Comunik\Models\EmailCampaign::class;
+    protected $model        = EmailCampaign::class;
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'campaign';
 
