@@ -1,6 +1,6 @@
 @extends('pulsar::layouts.form', ['action' => 'update'])
 
-@section('script')
+@section('head')
     @parent
     <!-- comunik::email_campaigns.edit -->
     <!-- Froala -->

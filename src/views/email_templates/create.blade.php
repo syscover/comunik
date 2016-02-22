@@ -1,6 +1,6 @@
 @extends('pulsar::layouts.form', ['action' => 'store'])
 
-@section('script')
+@section('head')
     @parent
     <!-- comunik::email_templates.create -->
     <!-- Froala -->

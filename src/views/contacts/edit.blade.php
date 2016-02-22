@@ -1,6 +1,6 @@
 @extends('pulsar::layouts.form', ['action' => 'update'])
 
-@section('script')
+@section('head')
     @parent
     <!-- comunik::contacts.create -->
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/bootstrap-inputmask/jquery.inputmask.min.js') }}"></script>

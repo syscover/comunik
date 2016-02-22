@@ -1,6 +1,6 @@
 @extends('pulsar::layouts.index', ['newTrans' => 'new2'])
 
-@section('script')
+@section('head')
     @parent
     <!-- comunik::email_templates.index -->
     <script type="text/javascript">

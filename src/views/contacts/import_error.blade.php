@@ -1,6 +1,6 @@
 @extends('pulsar::layouts.modal')
 
-@section('script')
+@section('head')
     @include('pulsar::includes.js.header_list')
     <script type="text/javascript">
         $(document).ready(function() {
