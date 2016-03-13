@@ -12,6 +12,8 @@ class ComunikTableSeeder extends Seeder
         $this->call(ComunikPackageTableSeeder::class);
         $this->call(ComunikResourceTableSeeder::class);
         $this->call(ComunikCronjobTableSeeder::class);
+
+        Model::reguard();
     }
 }
 
