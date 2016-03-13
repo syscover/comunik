@@ -42,7 +42,7 @@
                 'email': '{{ trans('pulsar::pulsar.email') }}',
                 'birthDate': '{{ trans('pulsar::pulsar.birth_date') }}',
                 'unsubscribe': '{{ trans('comunik::pulsar.unsubscribe') }}',
-                'date': '{{ trans('pulsar::pulsar.date') }}',
+                'date': '{{ trans_choice('pulsar::pulsar.date', 1) }}',
             },
             callback: function (cmd, val) {
                 if(val == 'name') this.html.insert('#name#')
