@@ -58,13 +58,6 @@ class EmailCampaign extends Model {
         return EmailCampaign::belongsToMany('Syscover\Comunik\Models\Group', '005_046_email_campaigns_groups', 'campaign_046','group_046');
     }
 
-    public static function addToGetIndexRecords($parameters)
-    {
-        $query =  EmailCampaign::builder();
-
-        return $query;
-    }
-
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
     /**
      * @deprecated

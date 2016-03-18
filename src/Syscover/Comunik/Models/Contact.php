@@ -62,13 +62,6 @@ class Contact extends Model {
         return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
     }
 
-    public static function addToGetIndexRecords($parameters)
-    {
-        $query =  Contact::builder();
-
-        return $query;
-    }
-
     public static function getCustomReturnIndexRecords($query, $parameters)
     {
         return $query->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
