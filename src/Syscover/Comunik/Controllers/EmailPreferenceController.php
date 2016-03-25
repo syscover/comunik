@@ -49,10 +49,10 @@ class EmailPreferenceController extends Controller {
         return $parameters;
     }
     
-    public function updateCustomRecord($request, $parameters)
+    public function updateCustomRecord($parameters)
     {
-        Preference::setValue('emailServiceIntervalShipping', 5, $request->input('intervalShipping'));
-        Preference::setValue('emailServiceTestGroup', 5, $request->input('testGroup'));
-        Preference::setValue('emailServiceIntervalProcess', 5, $request->input('intervalProcess'));
+        Preference::setValue('emailServiceIntervalShipping', 5, $this->request->input('intervalShipping'));
+        Preference::setValue('emailServiceTestGroup', 5, $this->request->input('testGroup'));
+        Preference::setValue('emailServiceIntervalProcess', 5, $this->request->input('intervalProcess'));
     }
 }

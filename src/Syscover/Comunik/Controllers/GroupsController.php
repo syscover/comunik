@@ -22,17 +22,17 @@ class GroupsController extends Controller {
     protected $icon         = 'fa fa-users';
     protected $objectTrans  = 'group';
 
-    public function storeCustomRecord($request, $parameters)
+    public function storeCustomRecord($parameters)
     {
         Group::create([
-            'name_040'  => $request->input('name')
+            'name_040'  => $this->request->input('name')
         ]);
     }
     
-    public function updateCustomRecord($request, $parameters)
+    public function updateCustomRecord($parameters)
     {
         Group::where('id_040', $parameters['id'])->update([
-            'name_040'  => $request->input('name')
+            'name_040'  => $this->request->input('name')
         ]);
     }
 }

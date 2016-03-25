@@ -1,6 +1,5 @@
 <?php namespace Syscover\Comunik\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Syscover\Comunik\Models\Group;
@@ -27,72 +26,72 @@ class ContactsController extends Controller {
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'contact';
 
-    public function createCustomRecord($request, $parameters)
+    public function createCustomRecord($parameters)
     {
         $parameters['groups'] = Group::all();
 
         return $parameters;
     }
 
-    public function storeCustomRecord($request)
+    public function storeCustomRecord($parameters)
     {
         $contact = Contact::create([
-            'company_041'               => empty($request->input('company'))? null : $request->input('company'),
-            'name_041'                  => $request->input('name'),
-            'surname_041'               => $request->input('surname'),
-            'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
-            'country_041'               => $request->input('country'),
-            'prefix_041'                => $request->input('prefix'),
-            'mobile_041'                => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
-            'email_041'                 => strtolower($request->input('email')),
-            'unsubscribe_mobile_041'    => $request->has('unsubscribeMobile'),
-            'unsubscribe_email_041'     => $request->has('unsubscribeEmail'),
+            'company_041'               => empty($this->request->input('company'))? null : $this->request->input('company'),
+            'name_041'                  => $this->request->input('name'),
+            'surname_041'               => $this->request->input('surname'),
+            'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
+            'country_041'               => $this->request->input('country'),
+            'prefix_041'                => $this->request->input('prefix'),
+            'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
+            'email_041'                 => strtolower($this->request->input('email')),
+            'unsubscribe_mobile_041'    => $this->request->has('unsubscribeMobile'),
+            'unsubscribe_email_041'     => $this->request->has('unsubscribeEmail'),
         ]);
 
-        $contact->getGroups()->attach($request->input('groups'));
+        $contact->getGroups()->attach($this->request->input('groups'));
     }
 
-    public function editCustomRecord($request, $parameters)
+    public function editCustomRecord($parameters)
     {
         $parameters['groups'] = Group::all();
 
         return $parameters;
     }
 
-    public function checkSpecialRulesToUpdate($request, $parameters)
+    public function checkSpecialRulesToUpdate($parameters)
     {
         $contact = Contact::find($parameters['id']);
 
-        $parameters['specialRules']['emailRule']    = $request->input('email') == $contact->email_041? true : false;
-        $parameters['specialRules']['mobileRule']   = $request->input('mobile') == $contact->mobile_041? true : false;
+        $parameters['specialRules']['emailRule']    = $this->request->input('email') == $contact->email_041? true : false;
+        $parameters['specialRules']['mobileRule']   = $this->request->input('mobile') == $contact->mobile_041? true : false;
 
         return $parameters;
     }
     
-    public function updateCustomRecord($request, $parameters)
+    public function updateCustomRecord($parameters)
     {
         Contact::where('id_041', $parameters['id'])->update([
-            'company_041'               => empty($request->input('company'))? null : $request->input('company'),
-            'name_041'                  => $request->input('name'),
-            'surname_041'               => $request->input('surname'),
-            'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
-            'country_041'               => $request->input('country'),
-            'prefix_041'                => $request->input('prefix'),
-            'mobile_041'                => $request->has('mobile')? str_replace('-', '', $request->input('mobile')) : null,
-            'email_041'                 => strtolower($request->input('email')),
-            'unsubscribe_mobile_041'    => $request->has('unsubscribeMobile'),
-            'unsubscribe_email_041'     => $request->has('unsubscribeEmail')
+            'company_041'               => empty($this->request->input('company'))? null : $this->request->input('company'),
+            'name_041'                  => $this->request->input('name'),
+            'surname_041'               => $this->request->input('surname'),
+            'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
+            'country_041'               => $this->request->input('country'),
+            'prefix_041'                => $this->request->input('prefix'),
+            'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
+            'email_041'                 => strtolower($this->request->input('email')),
+            'unsubscribe_mobile_041'    => $this->request->has('unsubscribeMobile'),
+            'unsubscribe_email_041'     => $this->request->has('unsubscribeEmail')
         ]);
 
         $contact = Contact::find($parameters['id']);
 
-        $contact->getGroups()->sync($request->input('groups'));
+        $contact->getGroups()->sync($this->request->input('groups'));
     }
 
-    public function getEmailToUnsubscribe(Request $request)
+    public function getEmailToUnsubscribe()
     {
         // get parameters from url route
-        $parameters = $request->route()->parameters();
+        $parameters = $this->request->route()->parameters();
 
         // if it's a test email, we brake execution
         if($parameters['key'] === "0") exit;
@@ -102,9 +101,9 @@ class ContactsController extends Controller {
         return view('comunik::contacts.unsubscribe', ['key' => $parameters['key'], 'contact' => $contact]);
     }
 
-    public function unsubscribeEmail(Request $request)
+    public function unsubscribeEmail()
     {
-        $contact = Contact::find(Crypt::decrypt($request->input('key')));
+        $contact = Contact::find(Crypt::decrypt($this->request->input('key')));
         Contact::where('id_041', $contact->id_041)->update([
             'unsubscribe_email_041' => true
         ]);
@@ -112,10 +111,10 @@ class ContactsController extends Controller {
         return view('comunik::contacts.unsubscribe', ['contact' => $contact, 'unsubscribe' => true]);
     }
 
-    public function importRecordsPreview(Request $request)
+    public function importRecordsPreview()
     {
         // get parameters from url route
-        $parameters = $request->route()->parameters();
+        $parameters = $this->request->route()->parameters();
 
         $data['countries']  = Country::getTranslationsRecords(auth('pulsar')->user()->lang_010);
         $data['groups']     = Group::all();
@@ -165,14 +164,14 @@ class ContactsController extends Controller {
         return view('comunik::contacts.import_preview', $data);
     }
 
-    public function importRecords(Request $request){
+    public function importRecords(){
         $data           = [];
-        $jsonData       = json_decode($request->input('data'));
+        $jsonData       = json_decode($this->request->input('data'));
         $countries      = Country::getTranslationsRecords(auth('pulsar')->user()->lang_010);
-        $groups         = $request->input('groups');
-        $country        = $request->input('country');
+        $groups         = $this->request->input('groups');
+        $country        = $this->request->input('country');
 
-        $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $request->input('file');
+        $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $this->request->input('file');
         $fields     = [
             'id_040'        => trans('comunik::pulsar.group_id'),
             'company_041'   => trans_choice('pulsar::pulsar.company', 1),
@@ -213,34 +212,34 @@ class ContactsController extends Controller {
                 $checkCommonField = false;
                 for ($col = 0; $col < $highestColumnIndex; ++$col)
                 {
-                    if($firsRow && isset($fields[$request->input('column' . $col)]))
+                    if($firsRow && isset($fields[$this->request->input('column' . $col)]))
                         // get sorting columns
-                        $columns[$request->input('column' . $col)] = $fields[$request->input('column' . $col)];
+                        $columns[$this->request->input('column' . $col)] = $fields[$this->request->input('column' . $col)];
 
                     // damos formato a los datos a insertar
-                    if ($request->input('column' . $col) == 'name_041' || $request->input('column' . $col) == 'surname_041' || $request->input('column' . $col) == 'company_041')
+                    if ($this->request->input('column' . $col) == 'name_041' || $this->request->input('column' . $col) == 'surname_041' || $this->request->input('column' . $col) == 'company_041')
                     {
                         // nombre y apellidos en minúsculas con la primera en mayúscula
-                        $dbRow[$request->input('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $dbRow[$this->request->input('column' . $col)] = ucwords(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
 
                     }
-                    elseif ($request->input('column' . $col) == 'email_041')
+                    elseif ($this->request->input('column' . $col) == 'email_041')
                     {
                         // eliminamos espacios en blanco y ponemos el mail en minúsculas
                         $dbRow['email_041'] = trim(strtolower($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
                     }
-                    elseif ($request->input('column' . $col) == 'mobile_041')
+                    elseif ($this->request->input('column' . $col) == 'mobile_041')
                     {
                         // eliminamos espacios en blanco en el contenido y ponemos el email en minúsculas
                         $dbRow['mobile_041'] = str_replace(' ', '', str_replace('-', '', $objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
                     }
-                    elseif (empty($groups) && $request->input('column' . $col) == 'id_040')
+                    elseif (empty($groups) && $this->request->input('column' . $col) == 'id_040')
                     {
                         // instanciamos $group para después insertarlo en la tabla 005_042_contacts_groups
                         // siempre y cuando no se elia un grupo para todas las filas
                         $dbRow['id_040'] = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
                     }
-                    elseif (empty($country) && $request->input('column' . $col) == 'country_041')
+                    elseif (empty($country) && $this->request->input('column' . $col) == 'country_041')
                     {
                         $dbRow['country_041']   = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
                         $countryObj             = $countries->find($dbRow['country_041']);

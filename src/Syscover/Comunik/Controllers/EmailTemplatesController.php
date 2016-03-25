@@ -23,49 +23,49 @@ class EmailTemplatesController extends Controller {
     protected $icon         = 'fa fa-pencil-square-o';
     protected $objectTrans  = 'template';
 
-    public function createCustomRecord($request, $parameters)
+    public function createCustomRecord($parameters)
     {
         $parameters['themes']       = MiscellaneousComunik::getThemes();
 
         return $parameters;
     }
 
-    public function storeCustomRecord($request, $parameters)
+    public function storeCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($request, $parameters);
+        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
 
         EmailTemplate::create([
-            'name_043'      => $request->input('name'),
-            'subject_043'   => $request->input('subject'),
-            'theme_043'     => $request->input('theme'),
+            'name_043'      => $this->request->input('name'),
+            'subject_043'   => $this->request->input('subject'),
+            'theme_043'     => $this->request->input('theme'),
             'header_043'    => $htmlLinks['header'],
             'body_043'      => $htmlLinks['body'],
             'footer_043'    => $htmlLinks['footer'],
             'text_043'      => $htmlLinks['text'],
-            'data_043'      => $request->input('data')
+            'data_043'      => $this->request->input('data')
         ]);
     }
 
-    public function editCustomRecord($request, $parameters)
+    public function editCustomRecord($parameters)
     {
         $parameters['themes']       = MiscellaneousComunik::getThemes();
 
         return $parameters;
     }
     
-    public function updateCustomRecord($request, $parameters)
+    public function updateCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($request, $parameters);
+        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
 
         EmailTemplate::where('id_043', $parameters['id'])->update([
-            'name_043'      => $request->input('name'),
-            'subject_043'   => $request->input('subject'),
-            'theme_043'     => $request->input('theme'),
+            'name_043'      => $this->request->input('name'),
+            'subject_043'   => $this->request->input('subject'),
+            'theme_043'     => $this->request->input('theme'),
             'header_043'    => $htmlLinks['header'],
             'body_043'      => $htmlLinks['body'],
             'footer_043'    => $htmlLinks['footer'],
             'text_043'      => $htmlLinks['text'],
-            'data_043'      => $request->input('data')
+            'data_043'      => $this->request->input('data')
         ]);
     }
 }
