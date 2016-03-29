@@ -23,7 +23,7 @@ class EmailPreferenceController extends Controller {
     protected $icon         = 'fa fa-cog';
     protected $objectTrans  = 'preference';
 
-    public function indexCustom($parameters)
+    public function customIndex($parameters)
     {
         $parameters['intervalsShipping']    = [];
         for($i=0; $i < 121; $i++)
