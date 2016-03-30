@@ -78,7 +78,7 @@
 @stop
 
 @section('headButtons')
-    <div class="btn-group marginB10 marginL10">
+    <div class="btn-group margin-b10 margin-l10">
         <button class="btn dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}
             <span class="caret"></span>

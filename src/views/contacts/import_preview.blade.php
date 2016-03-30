@@ -123,7 +123,7 @@
     <form class="form-horizontal" method="post" action="{{ route('importComunikContact') }} ">
         {!! csrf_field() !!}
         <div class="col-md-12">
-            <a href="javascript:void(0)"  onclick="importData()" class="btn marginB10"><i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}</a>
+            <a href="javascript:void(0)"  onclick="importData()" class="btn margin-b10"><i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}</a>
             <div class="widget box">
                 <div class="widget-header">
                     <h4><i class="fa fa-reorder"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}</h4> - ({{ $nRows }} {{ trans('comunik::pulsar.first_records') }})
