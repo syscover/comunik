@@ -14,11 +14,11 @@ class ComunikCreateTableEmailCampaign extends Migration {
         Schema::create('005_044_email_campaign', function($table){
             $table->engine = 'InnoDB';
             $table->increments('id_044')->unsigned();
-            $table->string('name_044',100);
+            $table->string('name_044');
             $table->integer('email_account_044')->unsigned();
             $table->integer('template_044')->nullable()->unsigned();
-            $table->string('subject_044',255);
-            $table->string('theme_044',255);
+            $table->string('subject_044');
+            $table->string('theme_044');
             $table->text('header_044');
             $table->text('body_044');
             $table->text('footer_044');

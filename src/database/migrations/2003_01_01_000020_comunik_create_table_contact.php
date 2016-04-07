@@ -14,14 +14,14 @@ class ComunikCreateTableContact extends Migration {
             Schema::create('005_041_contact', function($table){
                 $table->engine = 'InnoDB';
                 $table->increments('id_041')->unsigned();
-                $table->string('company_041', 100)->nullable();
-                $table->string('name_041', 50)->nullable();
-                $table->string('surname_041', 50)->nullable();
+                $table->string('company_041')->nullable();
+                $table->string('name_041')->nullable();
+                $table->string('surname_041')->nullable();
                 $table->integer('birth_date_041')->nullable()->unsigned();
                 $table->string('country_041', 2);
                 $table->string('prefix_041', 5)->nullable();
-                $table->string('mobile_041', 50)->nullable()->unique();
-                $table->string('email_041', 50)->nullable()->unique();
+                $table->string('mobile_041')->nullable()->unique();
+                $table->string('email_041')->nullable()->unique();
                 $table->boolean('unsubscribe_mobile_041')->default(false);
                 $table->boolean('unsubscribe_email_041')->default(false);
 

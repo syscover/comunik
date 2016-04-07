@@ -15,7 +15,7 @@ class ComunikCreateTableEmailCampaignsCountries extends Migration {
         Schema::create('005_045_email_campaigns_countries', function(Blueprint $table){
             $table->engine = 'InnoDB';
             $table->integer('campaign_045')->unsigned();
-            $table->string('country_045',2);
+            $table->string('country_045', 2);
 
             $table->primary(['campaign_045', 'country_045'], 'pk01_005_045_email_campaigns_countries');
 
