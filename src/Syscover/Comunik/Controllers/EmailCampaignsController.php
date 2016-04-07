@@ -24,7 +24,7 @@ class EmailCampaignsController extends Controller {
     use TraitController;
 
     protected $routeSuffix  = 'comunikEmailCampaign';
-    protected $folder       = 'email_campaigns';
+    protected $folder       = 'email_campaign';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';

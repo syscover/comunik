@@ -14,7 +14,7 @@ class GroupsController extends Controller {
     use TraitController;
 
     protected $routeSuffix  = 'comunikGroup';
-    protected $folder       = 'groups';
+    protected $folder       = 'group';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_040', 'name_040'];
     protected $nameM        = 'name_040';

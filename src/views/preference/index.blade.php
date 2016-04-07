@@ -5,7 +5,7 @@
     <!-- comunik::preferences.index -->
     @include('pulsar::includes.js.success_message')
 
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $(".custom-select2").select2({
                 templateResult: formatState,
@@ -23,7 +23,7 @@
             return $option;
         };
     </script>
-    <!-- ./comunik::preferences.index -->
+    <!-- /.comunik::preferences.index -->
 @stop
 
 @section('rows')
@@ -58,5 +58,5 @@
         'fieldSize' => 5,
         'required' => true
     ])
-    <!-- ./comunik::preferences.index -->
+    <!-- /.comunik::preferences.index -->
 @stop
