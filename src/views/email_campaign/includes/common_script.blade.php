@@ -1,5 +1,5 @@
 <!-- comunik::email_campaigns.includes.common_script -->
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
 
         // custom Dual multi select

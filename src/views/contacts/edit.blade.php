@@ -5,7 +5,7 @@
     <!-- comunik::contacts.create -->
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/plugins/bootstrap-inputmask/jquery.inputmask.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('packages/syscover/pulsar/vendor/getaddress/js/jquery.getaddress.js') }}"></script>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
 
             $('[name="country"]').data('language', '{{ config('app.locale') }}')

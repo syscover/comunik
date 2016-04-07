@@ -3,7 +3,7 @@
 @section('head')
     @parent
     <!-- comunik::email_campaigns.index -->
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             if ($.fn.dataTable)
             {
@@ -22,7 +22,7 @@
             }
         });
     </script>
-    <!-- comunik::email_campaigns.index -->
+    <!-- /.comunik::email_campaigns.index -->
 @stop
 
 @section('tHead')
@@ -38,5 +38,5 @@
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /comunik::email_campaigns.index -->
+    <!-- /.comunik::email_campaigns.index -->
 @stop

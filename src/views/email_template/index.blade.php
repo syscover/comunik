@@ -2,8 +2,8 @@
 
 @section('head')
     @parent
-    <!-- comunik::email_templates.index -->
-    <script type="text/javascript">
+    <!-- comunik::email_template.index -->
+    <script>
         $(document).ready(function() {
             if ($.fn.dataTable)
             {
@@ -21,16 +21,16 @@
             }
         });
     </script>
-    <!-- comunik::email_templates.index -->
+    <!-- /.comunik::email_template.index -->
 @stop
 
 @section('tHead')
-    <!-- comunik::email_templates.index -->
+    <!-- comunik::email_template.index -->
     <tr>
         <th data-hide="phone,tablet">ID.</th>
         <th>{{ trans('pulsar::pulsar.name') }}</th>
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /comunik::email_templates.index -->
+    <!-- /.comunik::email_template.index -->
 @stop

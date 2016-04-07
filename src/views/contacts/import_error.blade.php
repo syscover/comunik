@@ -2,7 +2,7 @@
 
 @section('head')
     @include('pulsar::includes.js.header_list')
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             parent.$.cssLoader.hide()
         })

@@ -15,7 +15,7 @@ class EmailTemplatesController extends Controller {
     use TraitController;
 
     protected $routeSuffix  = 'comunikEmailTemplate';
-    protected $folder       = 'email_templates';
+    protected $folder       = 'email_template';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_043', 'name_043'];
     protected $nameM        = 'name_043';

@@ -35,6 +35,7 @@ return [
     'international_prefix'                  => 'Prefijo internacional',
     'interval_process'                      => 'Proceso de intervalo',
     'interval_shipping'                     => 'Intervalo de envío',
+    'open_theme'                            => 'Abrir plantilla',
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Fecha de persistencia',
     'preview_campaign'                      => 'Vista previa',

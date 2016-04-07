@@ -35,6 +35,7 @@ return [
     'international_prefix'                  => 'International prefix',
     'interval_process'                      => 'Interval process',
     'interval_shipping'                     => 'Shipping interval',
+    'open_theme'                            => 'Open theme',
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Persistence date',
     'preview_campaign'                      => 'Preview campaign',
