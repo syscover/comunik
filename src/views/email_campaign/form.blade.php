@@ -101,17 +101,18 @@
     @include('pulsar::includes.html.form_text_group', [
         'label' => trans('pulsar::pulsar.subject'),
         'name' => 'subject',
-        'value' => old('subject'),
+        'value' => old('subject', isset($object->subject_044)? $object->subject_044 : null),
         'maxLength' => '255',
         'rangeLength' => '2,255',
         'required' => true
     ])
+
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
         <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::includes.html.required')</label>
         <div class="col-md-10">
             <input type="hidden" id="emlHeaders" name="emlHeaders" value="{{ $emlHeaders }}">
-            <input type="hidden" id="header" name="header" value="{{ htmlspecialchars(old('header')) }}">
+            <input type="hidden" id="header" name="header" value="{{ htmlspecialchars(old('header', isset($object->header_044)? $object->header_044 : null)) }}">
             <input type="hidden" id="body" name="body" value="{{ htmlspecialchars(old('body')) }}">
             <input type="hidden" id="footer" name="footer" value="{{ htmlspecialchars(old('footer')) }}">
             <input type="hidden" id="text" name="text" value="{{ htmlspecialchars(old('text')) }}">
@@ -121,6 +122,7 @@
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
         </div>
     </div>
+
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.theme', 1),
         'name' => 'theme',
