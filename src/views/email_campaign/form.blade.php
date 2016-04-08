@@ -126,7 +126,7 @@
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.theme', 1),
         'name' => 'theme',
-        'value' => old('theme'),
+        'value' => old('theme', isset($object->theme_044)? $object->theme_044 : null),
         'objects' => $themes,
         'idSelect' => 'folder',
         'nameSelect' => 'name',

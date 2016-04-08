@@ -81,17 +81,24 @@ class Contact extends Model {
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
-    /**
-     * @deprecated
-     * @param $parameters
-     * @return mixed
-     */
     public static function getRecords($parameters)
     {
         $query = Contact::builder();
 
-        if(isset($parameters['group_042'])) $query->where('group_042', $parameters['group_042']);
-        if(isset($args['groupBy']))         $query->groupBy($args['groupBy']);
+        if(isset($parameters['group_042']))
+        {
+            $query->whereIn('id_041', function($query) use ($parameters) {
+                // select contacts from this groups
+                $query->select('contact_042')
+                    ->from('005_042_contacts_groups')
+                    ->whereIn('group_042', [$parameters['group_042']])
+                    ->groupBy('contact_042')
+                    ->get();
+            });
+        }
+
+        if(isset($args['groupBy']))
+            $query->groupBy($args['groupBy']);
 
         return $query->get();
     }
