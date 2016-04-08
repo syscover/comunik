@@ -98,7 +98,7 @@ class ContactsController extends Controller {
 
         $contact = Contact::find(Crypt::decrypt($parameters['key']));
 
-        return view('comunik::contacts.unsubscribe', ['key' => $parameters['key'], 'contact' => $contact]);
+        return view('comunik::contact.unsubscribe', ['key' => $parameters['key'], 'contact' => $contact]);
     }
 
     public function unsubscribeEmail()
@@ -108,7 +108,7 @@ class ContactsController extends Controller {
             'unsubscribe_email_041' => true
         ]);
 
-        return view('comunik::contacts.unsubscribe', ['contact' => $contact, 'unsubscribe' => true]);
+        return view('comunik::contact.unsubscribe', ['contact' => $contact, 'unsubscribe' => true]);
     }
 
     public function importRecordsPreview()
@@ -161,7 +161,7 @@ class ContactsController extends Controller {
         $data['nColumns']   = $highestColumnIndex;
         $data['nRows']      = $highestRow;
 
-        return view('comunik::contacts.import_preview', $data);
+        return view('comunik::contact.import_preview', $data);
     }
 
     public function importRecords(){
@@ -339,6 +339,6 @@ class ContactsController extends Controller {
         $data['arrayDataFail']  = $arrayDataFail;
         $data['columns']        = $columns;
 
-        return view('comunik::contacts.import_error', $data);
+        return view('comunik::contact.import_error', $data);
     }
 }

@@ -17,7 +17,7 @@
     <script src="{{ asset('packages/syscover/pulsar/vendor/getfile/js/jquery.getfile.js') }}"></script>
     <script src="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 
-    <!-- comunik::contacts.index -->
+    <!-- comunik::contact.index -->
     <script>
         $(document).ready(function() {
             if ($.fn.dataTable)
@@ -74,7 +74,7 @@
             );
         });
     </script>
-    <!-- /.comunik::contacts.index -->
+    <!-- /.comunik::contact.index -->
 @stop
 
 @section('headButtons')
@@ -90,7 +90,7 @@
 @stop
 
 @section('tHead')
-    <!-- comunik::contacts.index -->
+    <!-- comunik::contact.index -->
     <tr>
         <th data-hide="phone,tablet">ID.</th>
         <th data-class="expand">{{ trans('pulsar::pulsar.name') }}</th>
@@ -103,5 +103,5 @@
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /.comunik::contacts.index -->
+    <!-- /.comunik::contact.index -->
 @stop

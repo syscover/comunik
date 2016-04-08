@@ -2,7 +2,7 @@
 
 @section('head')
     @parent
-    <!-- comunik::contacts.create -->
+    <!-- comunik::contact.create -->
     <script src="{{ asset('packages/syscover/pulsar/plugins/bootstrap-inputmask/jquery.inputmask.min.js') }}"></script>
     <script src="{{ asset('packages/syscover/pulsar/vendor/getaddress/js/jquery.getaddress.js') }}"></script>
     <script>
@@ -25,11 +25,11 @@
             });
         });
     </script>
-    <!-- comunik::contacts.create -->
+    <!-- comunik::contact.create -->
 @stop
 
 @section('rows')
-    <!-- comunik::contacts.create -->
+    <!-- comunik::contact.create -->
     @include('pulsar::includes.html.form_text_group', [
         'label' => 'ID',
         'name' => 'id',
@@ -66,5 +66,5 @@
     @include('pulsar::includes.html.form_checkbox_group', ['label' => trans('comunik::pulsar.unsubscribe') . ' ' . trans('pulsar::pulsar.email'), 'fieldSize' => 3, 'name' => 'unsubscribeEmail', 'value' => 1, 'checked' => old('unsubscribeEmail'), 'inputs' => [
         ['label' => trans('comunik::pulsar.unsubscribe') . ' ' .trans('pulsar::pulsar.mobile'), 'fieldSize' => 3, 'name' => 'unsubscribeMobile', 'value' => 1, 'checked' => old('unsubscribeMobile')]
     ]])
-    <!-- /comunik::contacts.create -->
+    <!-- /comunik::contact.create -->
 @stop

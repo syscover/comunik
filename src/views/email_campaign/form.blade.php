@@ -13,22 +13,23 @@
 
     @include('pulsar::includes.html.froala_references')
 
-    @include('comunik::email_campaigns.includes.common_script')
-    <!-- /.comunik::email_campaigns.create -->
+    @include('comunik::email_campaign.includes.common_script')
+    <!-- /.comunik::email_campaign.create -->
 @stop
 
 @section('rows')
-    <!-- comunik::email_campaigns.create -->
+    <!-- comunik::email_campaign.create -->
     @include('pulsar::includes.html.form_text_group', [
         'label' => 'ID',
         'name' => 'id',
+        'value' => isset($object->id_044)? $object->id_044 : null,
         'readOnly' => true,
         'fieldSize' => 2
     ])
     @include('pulsar::includes.html.form_text_group', [
         'label' => trans('pulsar::pulsar.name'),
         'name' => 'name',
-        'value' => old('name'),
+        'value' => old('name', isset($object->name_044)? $object->name_044 : null),
         'maxLength' => '255',
         'rangeLength' => '2,255',
         'required' => true
@@ -36,7 +37,7 @@
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.account', 1),
         'name' => 'emailAccount',
-        'value' => old('emailAccount'),
+        'value' => old('emailAccount', isset($object->email_account_044)? $object->email_account_044 : null),
         'objects' => $emailAccounts,
         'idSelect' => 'id_013',
         'nameSelect' => 'email_013',
@@ -48,6 +49,7 @@
             'error-placement' => 'select2-section-outer-container'
         ]
     ])
+
     @include('pulsar::includes.html.form_section_header', [
         'label' => trans_choice('pulsar::pulsar.content', 2),
         'icon' => 'fa fa-newspaper-o'
@@ -55,7 +57,7 @@
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.template', 1),
         'name' => 'template',
-        'value' => old('template'),
+        'value' => old('template', isset($object->template_044)? $object->template_044 : null),
         'objects' => $templates,
         'idSelect' => 'id_043',
         'nameSelect' => 'name_043',
@@ -210,5 +212,5 @@
         'idList2' => 4,
         'required' => true
     ])
-    <!-- /comunik::email_campaigns.create -->
+    <!-- /.comunik::email_campaign.create -->
 @stop
