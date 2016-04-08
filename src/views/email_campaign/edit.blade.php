@@ -12,7 +12,7 @@
     <script src="{{ asset('packages/syscover/pulsar/vendor/duallistbox/jquery.duallistbox.1.3.1.min.js') }}"></script>
 
     @include('pulsar::includes.html.froala_references')
-    @include('comunik::email_campaigns.includes.common_script', ['action' => 'update'])
+    @include('comunik::email_campaign.includes.common_script', ['action' => 'update'])
     <!-- /comunik::email_campaigns.edit -->
 @stop
 @section('rows')
@@ -66,7 +66,14 @@
         </div>
     </div>
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'objectsSelect' => $object->getGroups, 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2, 'required' => true])
+    @include('pulsar::includes.html.form_dual_list_group', [
+        'name' => 'groups',
+        'objectsSelect' => $object->getGroups,
+        'objects' => $groups,
+        'idSelect' => 'id_040',
+        'nameSelect' => 'name_040',
+        'idList1' => 1,
+        'idList2' => 2, 'required' => true])
     @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
     @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'objectsSelect' => $object->getCountries, 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
 

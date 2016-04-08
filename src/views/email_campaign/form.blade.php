@@ -196,6 +196,7 @@
         'objects' => $groups,
         'idSelect' => 'id_040',
         'nameSelect' => 'name_040',
+        'objectsSelect' => old('groups', isset($object)? $object->getGroups : null),
         'idList1' => 1,
         'idList2' => 2,
         'required' => true
@@ -210,6 +211,7 @@
         'objects' => $countries,
         'idSelect' => 'id_002',
         'nameSelect' => 'name_002',
+        'objectsSelect' => old('groups', isset($object)? $object->getCountries : null),
         'idList1' => 3,
         'idList2' => 4,
         'required' => true
