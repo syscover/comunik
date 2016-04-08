@@ -163,13 +163,14 @@ class EmailCampaignsController extends Controller {
     public function recordStatistic()
     {
         // get parameters from url route
-        $parameters     = $this->request->route()->parameters();
+        $parameters = $this->request->route()->parameters();
 
         // if it's a test email, we brake execution
         if($parameters['historicalId'] === "0") exit;
 
         $campaign       = Crypt::decrypt($parameters['campaign']);
         $historicalId   = Crypt::decrypt($parameters['historicalId']);
+
 
         // add a viewed to the campaign
         EmailCampaign::where('id_044', $campaign)->increment('viewed_044');

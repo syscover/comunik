@@ -22,10 +22,10 @@
                 textSeparatorHighlight:     '------------------',
 
                 countryValue:               '{{ old('country') }}'
-            });
-        });
+            })
+        })
     </script>
-    <!-- comunik::contact.create -->
+    <!-- /.comunik::contact.create -->
 @stop
 
 @section('rows')
@@ -57,14 +57,83 @@
         'maxLength' => '100',
         'rangeLength' => '2,100'
     ])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.name'), 'name' => 'name', 'value' => old('name'), 'maxLength' => '50', 'rangeLength' => '2,50', 'required' => true])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.surname'), 'name' => 'surname', 'value' => old('surname'), 'maxLength' => '50', 'rangeLength' => '2,50'])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.birth_date'), 'name' => 'birthDate', 'value' => old('birthDate'), 'fieldSize' => 2, 'data' => ['mask' => '99-99-9999']])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.country', 1), 'name' => 'country', 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'class' => 'select2', 'fieldSize' => 4, 'required' => true, 'data' => ['width' => '100%']])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.email'), 'name' => 'email', 'value' => old('email'), 'maxLength' => '50', 'rangeLength' => '2,50', 'type' => 'email', 'required' => true])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.mobile'), 'name' => 'prefix', 'value' => old('prefix'), 'maxLength' => '5', 'rangeLength' => '0,5', 'fieldSize' => 2, 'placeholder' => trans('comunik::pulsar.international_prefix'), 'inputs' => [['name' => 'mobile', 'value' => old('mobile'), 'maxLength' => '50', 'rangeLength' => '2,50', 'fieldSize' => 8]]])
-    @include('pulsar::includes.html.form_checkbox_group', ['label' => trans('comunik::pulsar.unsubscribe') . ' ' . trans('pulsar::pulsar.email'), 'fieldSize' => 3, 'name' => 'unsubscribeEmail', 'value' => 1, 'checked' => old('unsubscribeEmail'), 'inputs' => [
-        ['label' => trans('comunik::pulsar.unsubscribe') . ' ' .trans('pulsar::pulsar.mobile'), 'fieldSize' => 3, 'name' => 'unsubscribeMobile', 'value' => 1, 'checked' => old('unsubscribeMobile')]
-    ]])
-    <!-- /comunik::contact.create -->
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.name'),
+        'name' => 'name',
+        'value' => old('name'),
+        'maxLength' => '50',
+        'rangeLength' => '2,50',
+        'required' => true
+    ])
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.surname'),
+        'name' => 'surname',
+        'value' => old('surname'),
+        'maxLength' => '50',
+        'rangeLength' => '2,50'
+    ])
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.birth_date'),
+        'name' => 'birthDate',
+        'value' => old('birthDate'),
+        'fieldSize' => 2,
+        'data' => [
+            'mask' => '99-99-9999'
+        ]
+    ])
+    @include('pulsar::includes.html.form_select_group', [
+        'label' => trans_choice('pulsar::pulsar.country', 1),
+        'name' => 'country',
+        'idSelect' => 'id_002',
+        'nameSelect' => 'name_002',
+        'class' => 'select2',
+        'fieldSize' => 4,
+        'required' => true,
+        'data' => [
+            'width' => '100%'
+        ]
+    ])
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.email'),
+        'name' => 'email',
+        'value' => old('email'),
+        'maxLength' => '255',
+        'rangeLength' => '2,255',
+        'type' => 'email',
+        'required' => true
+    ])
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.mobile'),
+        'name' => 'prefix',
+        'value' => old('prefix'),
+        'maxLength' => '5',
+        'rangeLength' => '0,5',
+        'fieldSize' => 2,
+        'placeholder' => trans('comunik::pulsar.international_prefix'),
+        'inputs' => [
+            [
+                'name' => 'mobile',
+                'value' => old('mobile'),
+                'maxLength' => '50',
+                'rangeLength' => '2,50',
+                'fieldSize' => 8
+            ]
+        ]
+    ])
+    @include('pulsar::includes.html.form_checkbox_group', [
+        'label' => trans('comunik::pulsar.unsubscribe') . ' ' . trans('pulsar::pulsar.email'),
+        'fieldSize' => 3, 'name' => 'unsubscribeEmail',
+        'value' => 1,
+        'checked' => old('unsubscribeEmail'),
+        'inputs' => [
+            [
+                'label' => trans('comunik::pulsar.unsubscribe') . ' ' .trans('pulsar::pulsar.mobile'),
+                'fieldSize' => 3,
+                'name' => 'unsubscribeMobile',
+                'value' => 1,
+                'checked' => old('unsubscribeMobile')
+            ]
+        ]
+    ])
+    <!-- /.comunik::contact.create -->
 @stop
