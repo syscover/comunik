@@ -19,6 +19,7 @@ use Syscover\Comunik\Models\EmailTemplate;
  * @package Syscover\Comunik\Controllers
  */
 
+// todo implementar shipping_date_text_044 y persistence_date_text_044
 class EmailCampaignsController extends Controller {
 
     use TraitController;
