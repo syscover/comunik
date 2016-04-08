@@ -33,14 +33,77 @@
         'rangeLength' => '2,255',
         'required' => true
     ])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.account', 1), 'name' => 'emailAccount', 'value' => old('emailAccount'), 'objects' => $emailAccounts, 'idSelect' => 'id_013', 'nameSelect' => 'email_013', 'class' => 'select2', 'required' => true, 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
-    @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.content', 2), 'icon' => 'fa fa-newspaper-o'])
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.template', 1), 'name' => 'template', 'value' => old('template'), 'objects' => $templates, 'idSelect' => 'id_043', 'nameSelect' => 'name_043', 'class' => 'select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
-
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_html_link'), 'name' => 'setHtmlLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'htmlLink', 'value' => trans('comunik::pulsar.html_link_value')]])
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_unsubscribe_link'), 'name' => 'setUnsubscribeLink', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'unsubscribeLink', 'value' => trans('comunik::pulsar.unsubscribe_link_value')]])
-    @include('pulsar::includes.html.form_checkbox_text_group', ['label' => trans('comunik::pulsar.include_track_pixel'), 'name' => 'setTrackPixel', 'value' => 1, 'checked' => true, 'inputText' => ['name' => 'trackPixel', 'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "'>"]])
-    @include('pulsar::includes.html.form_text_group', ['label' => trans('pulsar::pulsar.subject'), 'name' => 'subject', 'value' => old('subject'), 'maxLength' => '255', 'rangeLength' => '2,255', 'required' => true])
+    @include('pulsar::includes.html.form_select_group', [
+        'label' => trans_choice('pulsar::pulsar.account', 1),
+        'name' => 'emailAccount',
+        'value' => old('emailAccount'),
+        'objects' => $emailAccounts,
+        'idSelect' => 'id_013',
+        'nameSelect' => 'email_013',
+        'class' => 'select2',
+        'required' => true,
+        'data' => [
+            'language' => config('app.locale'),
+            'width' => '50%',
+            'error-placement' => 'select2-section-outer-container'
+        ]
+    ])
+    @include('pulsar::includes.html.form_section_header', [
+        'label' => trans_choice('pulsar::pulsar.content', 2),
+        'icon' => 'fa fa-newspaper-o'
+    ])
+    @include('pulsar::includes.html.form_select_group', [
+        'label' => trans_choice('pulsar::pulsar.template', 1),
+        'name' => 'template',
+        'value' => old('template'),
+        'objects' => $templates,
+        'idSelect' => 'id_043',
+        'nameSelect' => 'name_043',
+        'class' => 'select2',
+        'data' => [
+            'language' => config('app.locale'),
+            'width' => '50%',
+            'error-placement' => 'select2-section-outer-container'
+        ]
+    ])
+    @include('pulsar::includes.html.form_checkbox_text_group', [
+        'label' => trans('comunik::pulsar.include_html_link'),
+        'name' => 'setHtmlLink',
+        'value' => 1,
+        'checked' => true,
+        'inputText' => [
+            'name' => 'htmlLink',
+            'value' => trans('comunik::pulsar.html_link_value')
+        ]
+    ])
+    @include('pulsar::includes.html.form_checkbox_text_group', [
+        'label' => trans('comunik::pulsar.include_unsubscribe_link'),
+        'name' => 'setUnsubscribeLink',
+        'value' => 1,
+        'checked' => true,
+        'inputText' => [
+            'name' => 'unsubscribeLink',
+            'value' => trans('comunik::pulsar.unsubscribe_link_value')
+        ]
+    ])
+    @include('pulsar::includes.html.form_checkbox_text_group', [
+        'label' => trans('comunik::pulsar.include_track_pixel'),
+        'name' => 'setTrackPixel',
+        'value' => 1,
+        'checked' => true,
+        'inputText' => [
+            'name' => 'trackPixel',
+            'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "'>"
+        ]
+    ])
+    @include('pulsar::includes.html.form_text_group', [
+        'label' => trans('pulsar::pulsar.subject'),
+        'name' => 'subject',
+        'value' => old('subject'),
+        'maxLength' => '255',
+        'rangeLength' => '2,255',
+        'required' => true
+    ])
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
         <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::includes.html.required')</label>
@@ -56,32 +119,96 @@
             {{ $errors->first('footer', config('pulsar::pulsar.errorDelimiters')) }}
         </div>
     </div>
-    @include('pulsar::includes.html.form_select_group', ['label' => trans_choice('pulsar::pulsar.theme', 1), 'name' => 'theme', 'value' => old('theme'), 'objects' => $themes, 'idSelect' => 'folder', 'nameSelect' => 'name', 'class' => 'select2', 'data' => ['language' => config('app.locale'), 'width' => '50%', 'error-placement' => 'select2-section-outer-container']])
+    @include('pulsar::includes.html.form_select_group', [
+        'label' => trans_choice('pulsar::pulsar.theme', 1),
+        'name' => 'theme',
+        'value' => old('theme'),
+        'objects' => $themes,
+        'idSelect' => 'folder',
+        'nameSelect' => 'name',
+        'class' => 'select2',
+        'data' => [
+            'language' => config('app.locale'),
+            'width' => '50%',
+            'error-placement' => 'select2-section-outer-container'
+        ]
+    ])
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
             <div><a id="btContent" class="btn btn-info mfp-iframe">Insertar theme</a></div>
         </div>
     </div>
-    @include('pulsar::includes.html.form_section_header', ['label' => trans_choice('pulsar::pulsar.preference', 2), 'icon' => 'fa fa-cog'])
-    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.shipping_date'), 'name' => 'shippingDate', 'value' => old('shippingDate'), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')]])
+    @include('pulsar::includes.html.form_section_header', [
+        'label' => trans_choice('pulsar::pulsar.preference', 2),
+        'icon' => 'fa fa-cog'
+    ])
+    @include('pulsar::includes.html.form_datetimepicker_group', [
+        'label' => trans('comunik::pulsar.shipping_date'),
+        'name' => 'shippingDate',
+        'value' => old('shippingDate'),
+        'fieldSize' => 5,
+        'data' => [
+            'format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm',
+            'locale' => config('app.locale')
+        ]
+    ])
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <small>En caso de no seleccionar ninguna fecha, el envío se realizará de forma inmediata.</small>
         </div>
     </div>
-    @include('pulsar::includes.html.form_datetimepicker_group', ['label' => trans('comunik::pulsar.persistence_date'), 'name' => 'persistenceDate', 'value' => old('persistenceDate'), 'fieldSize' => 5, 'data' => ['format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm', 'locale' => config('app.locale')], 'inputs' => [
-        ['label' => trans('pulsar::pulsar.sorting'), 'name' => 'sorting', 'labelSize' => 2, 'fieldSize' => 2]
-    ]])
+    @include('pulsar::includes.html.form_datetimepicker_group', [
+        'label' => trans('comunik::pulsar.persistence_date'),
+        'name' => 'persistenceDate',
+        'value' => old('persistenceDate'),
+        'fieldSize' => 5,
+        'data' => [
+            'format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')) . ' HH:mm',
+            'locale' => config('app.locale')
+        ],
+        'inputs' => [
+            [
+                'label' => trans('pulsar::pulsar.sorting'),
+                'name' => 'sorting',
+                'labelSize' => 2,
+                'fieldSize' => 2
+            ]
+        ]
+    ])
     <div class="form-group">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <small>Fecha de finalización de campaña, se enviará esta campaña a todos los nuevos concactos asignados a los grupos de esta campaña, no rellenar en caso de no desear activar la persistencia.</small>
         </div>
     </div>
-    @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_groups'), 'icon' => 'fa fa-users'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'groups', 'value' => old('groups'), 'objects' => $groups, 'idSelect' => 'id_040', 'nameSelect' => 'name_040', 'idList1' => 1, 'idList2' => 2, 'required' => true])
-    @include('pulsar::includes.html.form_section_header', ['label' => trans('comunik::pulsar.shipping_countries'), 'icon' => 'fa fa-globe'])
-    @include('pulsar::includes.html.form_dual_list_group', ['name' => 'countries', 'value' => old('countries'), 'objects' => $countries, 'idSelect' => 'id_002', 'nameSelect' => 'name_002', 'idList1' => 3, 'idList2' => 4, 'required' => true])
+    @include('pulsar::includes.html.form_section_header', [
+        'label' => trans('comunik::pulsar.shipping_groups'),
+        'icon' => 'fa fa-users'
+    ])
+    @include('pulsar::includes.html.form_dual_list_group', [
+        'name' => 'groups',
+        'value' => old('groups'),
+        'objects' => $groups,
+        'idSelect' => 'id_040',
+        'nameSelect' => 'name_040',
+        'idList1' => 1,
+        'idList2' => 2,
+        'required' => true
+    ])
+    @include('pulsar::includes.html.form_section_header', [
+        'label' => trans('comunik::pulsar.shipping_countries'),
+        'icon' => 'fa fa-globe'
+    ])
+    @include('pulsar::includes.html.form_dual_list_group', [
+        'name' => 'countries',
+        'value' => old('countries'),
+        'objects' => $countries,
+        'idSelect' => 'id_002',
+        'nameSelect' => 'name_002',
+        'idList1' => 3,
+        'idList2' => 4,
+        'required' => true
+    ])
     <!-- /comunik::email_campaigns.create -->
 @stop

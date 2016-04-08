@@ -18,7 +18,7 @@ class ContactsController extends Controller {
     use TraitController;
 
     protected $routeSuffix  = 'comunikContact';
-    protected $folder       = 'contacts';
+    protected $folder       = 'contact';
     protected $package      = 'comunik';
     protected $aColumns     = ['id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', ['data' => 'email_041', 'type' => 'email'], ['data' => 'unsubscribe_email_041', 'type' => 'invertActive'], 'name_040'];
     protected $nameM        = 'name_041';
