@@ -3,6 +3,10 @@
 @section('head')
     @parent
     <!-- comunik::contact.create -->
+    <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css') }}">
+
+    <script src="{{ asset('packages/syscover/pulsar/vendor/datetimepicker/js/moment.min.js') }}"></script>
+    <script src="{{ asset('packages/syscover/pulsar/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('packages/syscover/pulsar/plugins/bootstrap-inputmask/jquery.inputmask.min.js') }}"></script>
     <script src="{{ asset('packages/syscover/pulsar/vendor/getaddress/js/jquery.getaddress.js') }}"></script>
     <script>
@@ -73,13 +77,14 @@
         'maxLength' => '50',
         'rangeLength' => '2,50'
     ])
-    @include('pulsar::includes.html.form_text_group', [
+    @include('pulsar::includes.html.form_datetimepicker_group', [
+        'fieldSize' => 4,
         'label' => trans('pulsar::pulsar.birth_date'),
         'name' => 'birthDate',
-        'value' => old('birthDate', isset($object->birth_date_041)? date('d-m-Y', $object->birth_date_041) : null),
-        'fieldSize' => 2,
         'data' => [
-            'mask' => '99-99-9999'
+            'format' => Miscellaneous::convertFormatDate(config('pulsar.datePattern')),
+            'locale' => config('app.locale'),
+            'default-date' => old('birthDate', isset($object->birth_date_041)? date('Y-m-d', $object->birth_date_041) : null)
         ]
     ])
     @include('pulsar::includes.html.form_select_group', [

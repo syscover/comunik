@@ -41,6 +41,7 @@ class ContactsController extends Controller {
             'name_041'                  => $this->request->input('name'),
             'surname_041'               => $this->request->input('surname'),
             'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
+            'birth_date_text_041'       => $this->request->has('birthDate')? $this->request->input('birthDate') : null,
             'country_041'               => $this->request->input('country'),
             'prefix_041'                => $this->request->input('prefix'),
             'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
@@ -76,6 +77,7 @@ class ContactsController extends Controller {
             'name_041'                  => $this->request->input('name'),
             'surname_041'               => $this->request->input('surname'),
             'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
+            'birth_date_text_041'       => $this->request->has('birthDate')? $this->request->input('birthDate') : null,
             'country_041'               => $this->request->input('country'),
             'prefix_041'                => $this->request->input('prefix'),
             'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
@@ -117,7 +119,7 @@ class ContactsController extends Controller {
         // get parameters from url route
         $parameters = $this->request->route()->parameters();
 
-        $data['countries']  = Country::getTranslationsRecords(auth('pulsar')->user()->lang_010);
+        $data['countries']  = Country::builder()->where('lang_002', auth('pulsar')->user()->lang_010)->get();
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
         $fields             = [
@@ -136,8 +138,8 @@ class ContactsController extends Controller {
 
         $objPHPExcel    = $objReader->load($inputFileName);             // cargamos el fichero y obtenemos el objeto PHPExcel
 
-        //$totalSheets = $objPHPExcel->getSheetCount();       // función para obtener el número de libros de la hoja de cálculo
-        //$allSheetName = $objPHPExcel->getSheetNames();      // función para obtener los nombres de los libros de las hojas de cálculo
+        //$totalSheets = $objPHPExcel->getSheetCount();                 // función para obtener el número de libros de la hoja de cálculo
+        //$allSheetName = $objPHPExcel->getSheetNames();                // función para obtener los nombres de los libros de las hojas de cálculo
 
         $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);     // Por defecto recuperamos el primer libro de la hoja de excel
         $highestRow         = $objWorksheet->getHighestRow();           // Recuperamos el número de fila más alto (dato numérico, empezando por 1)
@@ -145,7 +147,7 @@ class ContactsController extends Controller {
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn); // Pasamos del dato string de columna a un dato numérico
 
         // limitamos las filas para ralizar un preview
-        if($highestRow > 51) $highestRow = 51;  // obtenemos las 50 primeras filas
+        if($highestRow > 20) $highestRow = 20;  // obtenemos las 20 primeras filas
 
         for ($row = 1; $row <= $highestRow; ++$row)
         {

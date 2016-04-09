@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
  * Class Contact
  *
  * Model with properties
- * <br><b>[id, company, name, surname, birth_date, country, prefix, mobile, email, unsubscribe_mobile, unsubscribe_email]</b>
+ * <br><b>[id, company, name, surname, birth_date, birth_date_text, country, prefix, mobile, email, unsubscribe_mobile, unsubscribe_email]</b>
  *
  * @package     Syscover\Comunik\Models
  */
@@ -25,28 +25,28 @@ class Contact extends Model {
 	protected $table        = '005_041_contact';
     protected $primaryKey   = 'id_041';
     public $timestamps      = false;
-    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','country_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
+    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','birth_date_text_041','country_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
     protected $maps         = [];
     protected $relationMaps = [
         'country'      => \Syscover\Pulsar\Models\Country::class,
     ];
     private static $rules   = [
         'groups'        => 'required',
-        'company'       => 'between:2,100',
-        'name'          => 'required|between:2,50',
-        'surname'       => 'between:0,50',
+        'company'       => 'between:2,255',
+        'name'          => 'required|between:2,255',
+        'surname'       => 'between:0,255',
         'country'       => 'required',
-        'email'         => 'required|between:2,50|email|unique:005_041_contact,email_041',
+        'email'         => 'required|between:2,255|email|unique:005_041_contact,email_041',
         'prefix'        => 'numeric|digits_between:0,5',
-        'mobile'        => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041'
+        'mobile'        => 'numeric|digits_between:2,255|unique:005_041_contact,mobile_041'
     ];
 
     public static function validate($data, $specialRules = [])
     {
         // instance birthDate to set value pattern from config
         static::$rules['birthDate'] = 'date_format:' . config('pulsar.datePattern');
-        if(isset($specialRules['emailRule']) && $specialRules['emailRule'])     static::$rules['email']     = 'required|between:2,50|email';
-        if(isset($specialRules['mobileRule']) && $specialRules['mobileRule'])   static::$rules['mobile']    = 'between:0,50';
+        if(isset($specialRules['emailRule']) && $specialRules['emailRule'])     static::$rules['email']     = 'required|between:2,255|email';
+        if(isset($specialRules['mobileRule']) && $specialRules['mobileRule'])   static::$rules['mobile']    = 'between:0,255';
 
         return Validator::make($data, static::$rules);
 	}

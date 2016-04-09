@@ -17,6 +17,7 @@ return [
     'campaign_effectiveness'                => 'Efectividad de campaña',
     'campaign_persistence_notice'           => 'Fecha de finalización de campaña, se enviará esta campaña a todos los nuevos contactos asignados a los grupos de esta campaña, no rellenar en caso de no desear activar la persistencia.',
     'country_id'                            => 'Country ID',
+    'data_import'                           => 'Importación de datos',
     'error_01'                              => 'Debe de relacionar al menos, un campo con una de las columnas',
     'error_02'                              => 'Se debe seleccionar al menos, una columna como email o móvil',
     'error_03'                              => 'Solo se pude seleccionar una columna como email',
