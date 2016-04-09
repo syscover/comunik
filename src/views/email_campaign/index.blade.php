@@ -11,9 +11,12 @@
                     'iDisplayStart' : {{ $offset }},
                     'aaSorting': [[ 0, "desc" ]],
                     'aoColumnDefs': [
-                        { 'bSortable': false, 'aTargets': [7,8]},
-                        { 'sClass': 'checkbox-column', 'aTargets': [7]},
-                        { 'sClass': 'align-center', 'aTargets': [6,8]}
+                        { 'visible': false, "bSearchable": false, 'aTargets': [3,5]}, // hidden column 1 and prevents search on column 1
+                        { 'iDataSort': 3, 'aTargets': [4] }, // sort column 2 according hidden column 1 data
+                        { 'iDataSort': 5, 'aTargets': [6] }, // sort column 2 according hidden column 1 data
+                        { 'bSortable': false, 'aTargets': [9,10]},
+                        { 'sClass': 'checkbox-column', 'aTargets': [9]},
+                        { 'sClass': 'align-center', 'aTargets': [8,10]}
                     ],
                     "bProcessing": true,
                     "bServerSide": true,
@@ -31,7 +34,9 @@
         <th data-hide="phone,tablet">ID.</th>
         <th data-class="expand">{{ trans('pulsar::pulsar.name') }}</th>
         <th data-hide="phone,tablet">{{ trans_choice('pulsar::pulsar.account', 1) }}</th>
+        <th>{{ trans('comunik::pulsar.shipping_date') }}</th>
         <th data-hide="phone,tablet">{{ trans('comunik::pulsar.shipping_date') }}</th>
+        <th>{{ trans('comunik::pulsar.persistence_date') }}</th>
         <th data-hide="phone,tablet">{{ trans('comunik::pulsar.persistence_date') }}</th>
         <th data-hide="phone,tablet">{{ trans('pulsar::pulsar.sorting') }}</th>
         <th data-hide="phone,tablet">{{ trans('comunik::pulsar.sent_queue') }}</th>

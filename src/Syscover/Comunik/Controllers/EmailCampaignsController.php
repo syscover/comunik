@@ -19,7 +19,6 @@ use Syscover\Comunik\Models\EmailTemplate;
  * @package Syscover\Comunik\Controllers
  */
 
-// todo implementar shipping_date_text_044 y persistence_date_text_044
 class EmailCampaignsController extends Controller {
 
     use TraitController;
@@ -27,7 +26,7 @@ class EmailCampaignsController extends Controller {
     protected $routeSuffix  = 'comunikEmailCampaign';
     protected $folder       = 'email_campaign';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'persistence_date_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
+    protected $aColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'shipping_date_text_044', 'persistence_date_044', 'persistence_date_text_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';
     protected $model        = EmailCampaign::class;
     protected $icon         = 'fa fa-user';
@@ -60,19 +59,21 @@ class EmailCampaignsController extends Controller {
         $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
 
         $emailCampaign = EmailCampaign::create([
-            'name_044'              => $this->request->input('name'),
-            'email_account_044'     => $this->request->input('emailAccount'),
-            'template_044'          => empty($this->request->input('template'))? null : $this->request->input('template'),
-            'subject_044'           => $this->request->input('subject'),
-            'theme_044'             => $this->request->input('theme'),
-            'header_044'            => $htmlLinks['header'],
-            'body_044'              => $htmlLinks['body'],
-            'footer_044'            => $htmlLinks['footer'],
-            'text_044'              => $htmlLinks['text'],
-            'data_044'              => $this->request->input('data', 'NULL'),
-            'shipping_date_044'     => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
-            'persistence_date_044'  => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
-            'sorting_044'           => $this->request->input('sorting')
+            'name_044'                  => $this->request->input('name'),
+            'email_account_044'         => $this->request->input('emailAccount'),
+            'template_044'              => empty($this->request->input('template'))? null : $this->request->input('template'),
+            'subject_044'               => $this->request->input('subject'),
+            'theme_044'                 => $this->request->input('theme'),
+            'header_044'                => $htmlLinks['header'],
+            'body_044'                  => $htmlLinks['body'],
+            'footer_044'                => $htmlLinks['footer'],
+            'text_044'                  => $htmlLinks['text'],
+            'data_044'                  => $this->request->input('data', 'NULL'),
+            'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
+            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
+            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : date(config('pulsar.datePattern') . ' H:i'),
+            'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
+            'sorting_044'               => $this->request->input('sorting')
         ]);
 
         $emailCampaign->getCountries()->attach($this->request->input('countries'));
@@ -103,19 +104,21 @@ class EmailCampaignsController extends Controller {
         $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
 
         EmailCampaign::where('id_044', $parameters['id'])->update([
-            'name_044'              => $this->request->input('name'),
-            'email_account_044'     => $this->request->input('emailAccount'),
-            'template_044'          => empty($this->request->input('template'))? null : $this->request->input('template'),
-            'subject_044'           => $this->request->input('subject'),
-            'theme_044'             => $this->request->input('theme'),
-            'header_044'            => $htmlLinks['header'],
-            'body_044'              => $htmlLinks['body'],
-            'footer_044'            => $htmlLinks['footer'],
-            'text_044'              => $htmlLinks['text'],
-            'data_044'              => $this->request->input('data', 'NULL'),
-            'shipping_date_044'     => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
-            'persistence_date_044'  => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
-            'sorting_044'           => $this->request->input('sorting')
+            'name_044'                  => $this->request->input('name'),
+            'email_account_044'         => $this->request->input('emailAccount'),
+            'template_044'              => empty($this->request->input('template'))? null : $this->request->input('template'),
+            'subject_044'               => $this->request->input('subject'),
+            'theme_044'                 => $this->request->input('theme'),
+            'header_044'                => $htmlLinks['header'],
+            'body_044'                  => $htmlLinks['body'],
+            'footer_044'                => $htmlLinks['footer'],
+            'text_044'                  => $htmlLinks['text'],
+            'data_044'                  => $this->request->input('data', 'NULL'),
+            'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
+            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
+            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : date(config('pulsar.datePattern') . ' H:i'),
+            'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
+            'sorting_044'               => $this->request->input('sorting')
         ]);
 
         $emailCampaign = EmailCampaign::find($parameters['id']);

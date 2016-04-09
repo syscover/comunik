@@ -13,7 +13,6 @@ use Syscover\Comunik\Models\Contact;
  * @package Syscover\Comunik\Controllers
  */
 
-// todo implementar birth_date_text_041
 class ContactsController extends Controller {
 
     use TraitController;
