@@ -119,7 +119,6 @@ class ContactsController extends Controller {
         // get parameters from url route
         $parameters = $this->request->route()->parameters();
 
-        $data['countries']  = Country::builder()->where('lang_002', auth('pulsar')->user()->lang_010)->get();
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
         $fields             = [
