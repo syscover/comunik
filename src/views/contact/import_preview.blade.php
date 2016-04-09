@@ -150,11 +150,13 @@
                     {!! csrf_field() !!}
                     @include('pulsar::includes.html.form_hidden', [
                         'name' => 'file',
-                        'value' => $file
+                        'value' => $file,
+                        'data'  => null
                     ])
                     @include('pulsar::includes.html.form_hidden', [
                         'name' => 'data',
-                        'value' => '{"deleteRows":[]}'
+                        'value' => '{"deleteRows":[]}',
+                        'data'  => null
                     ])
                     @include('pulsar::includes.html.form_select_group', [
                         'label' => trans_choice('pulsar::pulsar.group', 2),
