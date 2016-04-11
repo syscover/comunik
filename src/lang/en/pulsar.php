@@ -18,6 +18,7 @@ return [
     'campaign_persistence_notice'           => 'Campaign end date, the campaign will be sent to all new contacts assigned to the groups in this campaign not fill if you do not wish to activate the persistence.',
     'country_id'                            => 'Country ID',
     'data_import'                           => 'Data import',
+    'duplicate_campaign'                    => 'Duplicate campaign',
     'error_01'                              => 'You must connect at least, one field with a column',
     'error_02'                              => 'You must select at least one column as email or mobile',
     'error_03'                              => 'You can only select a column as email',

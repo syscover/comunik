@@ -36,6 +36,7 @@ class EmailCampaignsController extends Controller {
     {
         $actions = '';
 
+        $actions .= session('userAcl')->allows($this->resource, 'create')? '<a class="btn btn-xs bs-tooltip" href="' . route('create' . ucfirst($this->routeSuffix), ['offset' => $this->request->input('iDisplayStart'), 'id' => $aObject['id_044']]) . '" data-original-title="' . trans('comunik::pulsar.duplicate_campaign') . '"><i class="fa fa-files-o"></i></a>' : null;
         $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('show' . ucfirst($this->routeSuffix), [Crypt::encrypt($aObject['id_044'])]) . '" data-original-title="' . trans('comunik::pulsar.preview_campaign') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
         $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $this->request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_test_email') . '"><i class="fa fa-share"></i></a>' : null;
 
@@ -44,6 +45,30 @@ class EmailCampaignsController extends Controller {
 
     public function createCustomRecord($parameters)
     {
+        if(isset($parameters['id']))
+        {
+            $campaign = EmailCampaign::builder()->find($parameters['id']);
+            $object = [
+                'name_044'                  => $campaign->name_044,
+                'email_account_044'         => $campaign->email_account_044,
+                'template_044'              => $campaign->template_044,
+                'subject_044'               => $campaign->subject_044,
+                'theme_044'                 => $campaign->theme_044,
+                'header_044'                => $campaign->header_044,
+                'body_044'                  => $campaign->body_044,
+                'footer_044'                => $campaign->footer_044,
+                'text_044'                  => $campaign->text_044,
+                'data_044'                  => $campaign->data_044,
+                'shipping_date_044'         => $campaign->shipping_date_044,
+                'persistence_date_044'      => $campaign->persistence_date_044,
+                'sorting_044'               => $campaign->sorting_044
+            ];
+
+            $parameters['object']           = (object)$object;
+            $parameters['selectGroups']     = $campaign->getGroups;
+            $parameters['selectCountries']  = $campaign->getCountries;
+        }
+
         $parameters['emailAccounts']    = EmailAccount::all();
         $parameters['templates']        = EmailTemplate::all();
         $parameters['themes']           = MiscellaneousComunik::getThemes();
@@ -71,7 +96,7 @@ class EmailCampaignsController extends Controller {
             'data_044'                  => $this->request->input('data', 'NULL'),
             'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
             'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
-            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : date(config('pulsar.datePattern') . ' H:i'),
+            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
             'sorting_044'               => $this->request->input('sorting')
         ]);
@@ -87,7 +112,9 @@ class EmailCampaignsController extends Controller {
         $parameters['themes']               = MiscellaneousComunik::getThemes();
         $parameters['emlHeaders']           = MiscellaneousComunik::getEmlHeaders();
         $parameters['groups']               = Group::all();
+        $parameters['selectGroups']         = $parameters['object']->getGroups;
         $parameters['countries']            = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_010]);
+        $parameters['selectCountries']      = $parameters['object']->getCountries;
 
         // statistics
         $parameters['queueMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();
@@ -116,7 +143,7 @@ class EmailCampaignsController extends Controller {
             'data_044'                  => $this->request->input('data', 'NULL'),
             'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
             'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
-            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : date(config('pulsar.datePattern') . ' H:i'),
+            'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
             'sorting_044'               => $this->request->input('sorting')
         ]);
