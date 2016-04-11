@@ -41,6 +41,7 @@ return [
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Fecha de persistencia',
     'preview_campaign'                      => 'Vista previa',
+    'preview_template'                      => 'Vista previa',
     'queue_mailings'                        => 'Emails en cola',
     'send_test_email'                       => 'Enviar emial de pruebas',
     'send_test_email_msg_ok'                => 'Prueba de campaña lanzada correctamente',

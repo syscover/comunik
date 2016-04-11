@@ -37,7 +37,7 @@ class EmailCampaignsController extends Controller {
         $actions = '';
 
         $actions .= session('userAcl')->allows($this->resource, 'create')? '<a class="btn btn-xs bs-tooltip" href="' . route('create' . ucfirst($this->routeSuffix), ['offset' => $this->request->input('iDisplayStart'), 'id' => $aObject['id_044']]) . '" data-original-title="' . trans('comunik::pulsar.duplicate_campaign') . '"><i class="fa fa-files-o"></i></a>' : null;
-        $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('show' . ucfirst($this->routeSuffix), [Crypt::encrypt($aObject['id_044'])]) . '" data-original-title="' . trans('comunik::pulsar.preview_campaign') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
+        $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('preview' . ucfirst($this->routeSuffix), [Crypt::encrypt($aObject['id_044'])]) . '" data-original-title="' . trans('comunik::pulsar.preview_campaign') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
         $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $this->request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_test_email') . '"><i class="fa fa-share"></i></a>' : null;
 
         return $actions;
@@ -159,18 +159,18 @@ class EmailCampaignsController extends Controller {
         EmailSendQueue::deleteMailingWithoutGroupSendQueue($this->request->input('groups'), $emailCampaign->id_044);
     }
 
-    public function showCampaign()
+    public function previewCampaign()
     {
         // get parameters from url route
-        $parameters     = $this->request->route()->parameters();
+        $parameters = $this->request->route()->parameters();
 
         // function to view online the campaign
-        $emailCampaign          = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
+        $emailCampaign = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
 
         // We check that the historicoId exists and is equal to 0,
         // It is 0 when the request comes from a campaign preview
         if(isset($parameters['historicalId']) && $parameters['historicalId'] != 0)
-            $emailSendHistorical    = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
+            $emailSendHistorical = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
 
         // if is a test mailing, set contactKey and historicalId to 0
         $data           = [

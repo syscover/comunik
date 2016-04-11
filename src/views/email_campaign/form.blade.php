@@ -68,6 +68,12 @@
                     $('[name="trackPixel"]').attr('readonly',true)
             })
 
+            @if(isset($object))
+                $('[name="htmlLink"]').attr('readonly', true)
+                $('[name="unsubscribeLink"]').attr('readonly',true)
+                $('[name="trackPixel"]').attr('readonly',true)
+            @endif
+
             // on submit, get content from wysiwyg
             $("#recordForm").on('submit', function(event) {
                 //$("[name=body]").val($('[name=wysiwyg]').froalaEditor('html.get'))
@@ -279,7 +285,7 @@
         'label' => trans('comunik::pulsar.include_html_link'),
         'name' => 'setHtmlLink',
         'value' => 1,
-        'checked' => true,
+        'checked' => !isset($object),
         'inputText' => [
             'name' => 'htmlLink',
             'value' => trans('comunik::pulsar.html_link_value')
@@ -289,7 +295,7 @@
         'label' => trans('comunik::pulsar.include_unsubscribe_link'),
         'name' => 'setUnsubscribeLink',
         'value' => 1,
-        'checked' => true,
+        'checked' => !isset($object),
         'inputText' => [
             'name' => 'unsubscribeLink',
             'value' => trans('comunik::pulsar.unsubscribe_link_value')
@@ -299,7 +305,7 @@
         'label' => trans('comunik::pulsar.include_track_pixel'),
         'name' => 'setTrackPixel',
         'value' => 1,
-        'checked' => true,
+        'checked' => !isset($object),
         'inputText' => [
             'name' => 'trackPixel',
             'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "'>"

@@ -23,6 +23,15 @@ class EmailTemplatesController extends Controller {
     protected $icon         = 'fa fa-pencil-square-o';
     protected $objectTrans  = 'template';
 
+    public function jsonCustomDataBeforeActions($aObject, $actionUrlParameters, $parameters)
+    {
+        $actions = '';
+
+        $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('preview' . ucfirst($this->routeSuffix), ['id' => $aObject['id_043']]) . '" data-original-title="' . trans('comunik::pulsar.preview_template') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
+
+        return $actions;
+    }
+
     public function createCustomRecord($parameters)
     {
         $parameters['themes']       = MiscellaneousComunik::getThemes();
@@ -67,5 +76,17 @@ class EmailTemplatesController extends Controller {
             'text_043'      => $htmlLinks['text'],
             'data_043'      => $this->request->input('data')
         ]);
+    }
+
+    public function previewTemplate()
+    {
+        // get parameters from url route
+        $parameters = $this->request->route()->parameters();
+
+        $emailTemplate = EmailTemplate::builder()->find($parameters['template']);
+
+        $response['html'] = $emailTemplate->header_043 . $emailTemplate->body_043 . $emailTemplate->footer_043;
+
+        return view('pulsar::common.views.html_display', $response);
     }
 }

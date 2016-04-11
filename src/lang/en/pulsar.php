@@ -41,6 +41,7 @@ return [
     'package_name'                          => 'Comunik',
     'persistence_date'                      => 'Persistence date',
     'preview_campaign'                      => 'Preview campaign',
+    'preview_template'                      => 'Preview template',
     'queue_mailings'                        => 'Queue emails',
     'send_test_email'                       => 'Send test email',
     'send_test_email_msg_ok'                => 'Test campaign launched successfully',
