@@ -87,16 +87,6 @@ Route::group(['middleware' => ['web', 'pulsar']], function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
     //Route::any(config('pulsar.appName') . '/comunik/email/services/preferences/json/{json}',            ['as'=>'EmailServicesPreferenceJson',      'uses'=>'Syscover\Comunik\Controllers\PreferenceController@index',       'resource' => 'comunik-email-preference',        'action' => 'access']);
 
 
@@ -152,7 +142,7 @@ Route::group(['middleware' => ['web']], function() {
 
 });
 
-Route::group(['middleware' => ['noCsrWeb', 'pulsar']], function() {
+Route::group(['middleware' => ['noCsrWeb']], function() {
 
     /*
     |--------------------------------------------------------------------------
