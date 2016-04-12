@@ -268,7 +268,7 @@ class Cron
      */
     public static function sendEmailsTest($paramenters)
     {
-        $campaign       = EmailCampaign::getRecords(['id_044' => $paramenters['id']])->first();
+        $campaign       = EmailCampaign::builder()->where('id_044', $paramenters['id'])->first();
         $testGroup      = Preference::getValue('emailServiceTestGroup', 5);
         $contacts       = Contact::getRecords(['group_042' => (int)$testGroup->value_018, 'groupBy' => 'id_041']);
 
@@ -336,7 +336,6 @@ class Cron
             // Get the last UID from email account
             if($nEmails > 0)
             {
-
                 $lastUidMessage = $imapServices->getUidByPositon($nEmails);
 
                 // If the UID is grater than last UID manage, has to check account queue
@@ -390,6 +389,7 @@ class Cron
             'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
         ]);
 
+        // solo se mantiene un proceso en ejecución, el proceso evalua de diez en diez correos
         Cron::checkBouncedMessagesFromAccount($imapServices, $account, $patterns);
     }
 

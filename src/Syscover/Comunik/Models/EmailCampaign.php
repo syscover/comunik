@@ -58,21 +58,6 @@ class EmailCampaign extends Model {
         return EmailCampaign::belongsToMany('Syscover\Comunik\Models\Group', '005_046_email_campaigns_groups', 'campaign_046','group_046');
     }
 
-    // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
-    /**
-     * @deprecated
-     * @param $parameters
-     * @return mixed
-     */
-    public static function getRecords($parameters)
-    {
-        $query = EmailCampaign::builder();
-
-        if(isset($parameters['id_044'])) $query->where('id_044', $parameters['id_044']);
-
-        return $query->get();
-    }
-
     // Attention! function called from \Syscover\Comunik\Libraries\Cron
     public static function getCampaignsWithPersistence()
     {
