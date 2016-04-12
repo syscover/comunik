@@ -1,8 +1,7 @@
 <?php namespace Syscover\Comunik\Libraries;
 
 use Syscover\Pulsar\Libraries\Miscellaneous as MiscellaneousPulsar;
-use Syscover\Comunik\Models\PatternEmail;
-use Syscover\Comunik\Models\Contacto;
+use Syscover\Comunik\Models\Contact;
 
 class Miscellaneous
 {
@@ -10,7 +9,7 @@ class Miscellaneous
      * Function to get default email header
      *
      * @access  public
-     * @param   \lluminate\Http\Request     $request
+     * @param   \Illuminate\Http\Request    $request
      * @param   array                       $parameters
      * @return  array
      */
@@ -499,72 +498,65 @@ class Miscellaneous
         return $output;
     }
 
-
-
-
-
-
-
-
-
-    /*
-     *  Función busca una coincidencia con los patrones de emails para detectar correos rebotados
-     *
-     * @access	public
-     * @return	array
+    /**
+     * Function to search pattern inside message
+     * @param $message
+     * @param $patterns
+     * @return array
      */
     public static function checkEmailPattern($message, $patterns)
     {
-        $response = array();
-
-        $matchPattern   = false;
+        $response       = [];
+        $patternFound   = false;
         $objPattern     = null;
         $subject        = $message->getSubject();
         $body           = $message->getMessageBody();
 
-        // Proceso de comprobación de patrones
+
         foreach($patterns as $pattern)
         {
-            $matchSubject = false;
-            $matchMessage = false;
+            $subjectFound = false;
+            $messageFound = false;
 
-            if(empty($pattern->subject_079) == false && strpos($subject, $pattern->subject_079) !== false)
-            {
-                $matchSubject = true;
-            }
+            if(empty($pattern->subject_049) == false && strpos($subject, $pattern->subject_049) !== false)
+                $subjectFound = true;
 
-            if(empty($pattern->message_079) === false && strpos($body, $pattern->message_079) !== false)
-            {
-                $matchMessage = true;
-            }
+            if(empty($pattern->message_049) === false && strpos($body, $pattern->message_049) !== false)
+                $messageFound = true;
 
-            if($pattern->summation_079 == 'AND' && $matchSubject && $matchMessage)
+            if($pattern->operator_049 == 'and' && $subjectFound && $messageFound)
             {
-                $matchPattern   = true;
+                $patternFound   = true;
                 $objPattern     = $pattern;
                 break;
             }
-            elseif(($pattern->summation_079 == 'OR' || $pattern->summation_079 == null) && ($matchSubject || $matchMessage))
+            elseif(($pattern->operator_049 == 'or' || $pattern->operator_049 == null) && ($subjectFound || $messageFound))
             {
-                $matchPattern   = true;
+                $patternFound   = true;
                 $objPattern     = $pattern;
                 break;
             }
         }
 
-        if($matchPattern)
+        if($patternFound)
         {
             $response['success']    = true;
             $response['pattern']    = $objPattern;
             $emails                 = MiscellaneousPulsar::extractEmail($body);
-            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
+            $response['contacts']   = Contact::builder()
+                ->whereIn('email_041', $emails)
+                ->where('unsubscribe_email_041', false)
+                ->get();
         }
         else
         {
             $response['success']    = false;
             $response['pattern']    = false;
             $emails                 = MiscellaneousPulsar::extractEmail($body);
-            $response['contactos']  = Contacto::getContactosFromEmailsNotUnsuscribe($emails);
+            $response['contacts']   = Contact::builder()
+                ->whereIn('email_041', $emails)
+                ->where('unsubscribe_email_041', false)
+                ->get();
         }
 
         return $response;

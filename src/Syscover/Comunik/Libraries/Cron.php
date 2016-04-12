@@ -1,28 +1,13 @@
 <?php namespace Syscover\Comunik\Libraries;
 
-/**
- *
- * An open source application development framework for PHP 5.5 or newer
- *
- * @package		Pulsar
- * @author		Jose Carlos Rodríguez Palacín
- * @copyright   Copyright (c) 2014, SYSCOVER, SL.
- * @license
- * @link		http://www.syscover.com
- * @since		Version 1.0
- * @filesource  Librería para la ejecución de funciones cron
- *
- *  1.1 - Tenemos una tarea cron que comprueba si hay envíos ha realizar de Emails (checkCallQueueSendEmails)
- *  1.2 - Tenemos una tarea cron que comprueba si hay envíos ha realziar de SMS (checkCallQueueSendSms)
- *  2 - Encaso de cumplirse alguna condición manda una tarea queue para uqe enví todo lo que tiene en cola sin enviar
- *
- */
-// ------------------------------------------------------------------------
-
 use Illuminate\Support\Facades\Crypt;
+use Syscover\Comunik\Models\EmailPattern;
 use Syscover\Comunik\Models\EmailSendHistorical;
 use Syscover\Comunik\Models\EmailSendQueue;
+use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Pulsar\Libraries\EmailServices;
+use Syscover\Pulsar\Libraries\ImapServices;
+use Syscover\Pulsar\Models\EmailAccount;
 use Syscover\Pulsar\Models\Preference;
 use Syscover\Comunik\Models\EmailCampaign;
 use Syscover\Comunik\Models\Contact;
@@ -186,13 +171,10 @@ class Cron
         //cambiaremos el estado de envío de emails para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         //varias peticiones concurrentes del gestor de colas.
         if($emailServiceSendingEmails->value_018 == '1')
-        {
             exit;
-        }
         else
-        {
             Preference::setValue('emailServiceSendingEmails', 5, '1');
-        }
+
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
         // solo de aquellos envíos que estén en estado: 0 = waiting to be sent
@@ -324,56 +306,46 @@ class Cron
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     *  Función que comprueba los rebotes de los emails en cada cuenta y ejecuta una acción según la coincidencia del patron encontrado
-     *
-     * @access	public
-     * @return	void
+     *  Función que compruba si hay emails en las cuentas de correo que no hayan sido comprobados
      */
-    public static function checkBouncedEmailsAccountsToQueue()
+    public static function checkBouncedEmailsAccounts()
     {
-        $accounts = Cuenta::all();
+        $accounts = EmailAccount::all();
+
         foreach($accounts as $account)
         {
-            $imapServices = new ImapServices(array(
-                'host'      => $account->host_inbox_047,
-                'port'      => $account->port_inbox_047,
-                'user'      => $account->user_inbox_047,
-                'password'  => Crypt::decrypt($account->pass_inbox_047),
-                'ssl'       => $account->secure_inbox_047 == 'ssl'? true : false
-            ));
+            $imapServices = new ImapServices([
+                'host'      => $account->incoming_server_013,
+                'port'      => $account->incoming_port_013,
+                'user'      => $account->incoming_user_013,
+                'password'  => Crypt::decrypt($account->incoming_pass_013),
+                'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
+            ]);
 
-            // requerimos el número de mensajes total
-            $nMessages = $imapServices->getServer()->numMessages();
+            // get total messages
+            $nEmails = $imapServices->getServer()->numMessages();
 
-            // configuramos el número de emails actuales en la cuenta
-            Cuenta::where('id_047', '=', $account->id_047)->update(array(
-                'n_emails_047' => $nMessages
-            ));
+            // update n emails on account
+            EmailAccount::builder()
+                ->where('id_013')
+                ->update([
+                    'n_emails_013' => $nEmails
+                ]);
 
-            // averiguamos el UID del último email recibido si hay mas de uno
-            if($nMessages > 0)
+            // Get the last UID from email account
+            if($nEmails > 0)
             {
-                $UidLastMessage = $imapServices->getServer()->getUidByPositon($nMessages);
 
-                // Si el UID es mayor que el último UID del email gestionado, es que hay nuevos emails por comprobar
-                if ($UidLastMessage > $account->last_check_uid_047) {
-                    $dataQueue = array(
-                        'id' => $account->id_047
-                    );
-                    Queue::push('\Pulsar\Comunik\Libraries\Cron@checkBouncedMessagesToQueue', $dataQueue);
+                $lastUidMessage = $imapServices->getUidByPositon($nEmails);
+
+                // If the UID is grater than last UID manage, has to check account queue
+                if ($lastUidMessage > $account->last_check_uid_013) {
+
+                    // llamamos a la funcion que compruebe los correos es esa cuenta
+                    Cron::checkAccount([
+                       'id' =>  $account->id_013
+                    ]);
                 }
             }
         }
@@ -385,54 +357,63 @@ class Cron
      * @access	public
      * @return	void
      */
-    public static function checkBouncedMessagesToQueue($job, $data)
+    public static function checkAccount($data)
     {
-        $emailStateBouncedMessagesToQueue = ConfigPulsar::getValue('emailStateBouncedMessagesToQueue', 0);
+        $emailStatusBouncedMessagesFromAccount = Preference::getValue('emailStatusBouncedMessagesFromAccount', 5, '0');
 
-        // Comprobación para casos de errores o caídas del servidor, y no dejen bloqueda la entrada a peticiones
-        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailStateBouncedMessagesToQueue->updated_at);
-        if($emailStateBouncedMessagesToQueue->value_018 == 1 && date('U') - $update->getTimestamp() > 300)
-        {
-            ConfigPulsar::setValue('emailStateBouncedMessagesToQueue', 0);
-        }
+        // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo la comprobación de emails
+        // si en 5 minutos no se ha liberado la variable, damos por hecho que se ha bloqueado y la liberamos
+        $update = \DateTime::createFromFormat('Y-m-d H:i:s', $emailStatusBouncedMessagesFromAccount->updated_at);
+        if($emailStatusBouncedMessagesFromAccount->value_018 == '1' && date('U') - $update->getTimestamp() > 300)
+            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '0');
 
-        //en el caso de estár activo, significa que ya hay una gestión de cola en proceso y eliminamos la actual
-        if($emailStateBouncedMessagesToQueue->value_018)
-        {
-            $job->delete();
-            exit(0);
-        }
+        // en el caso que el estado de envio esté activo, eso siginifica que hay una petición trabajando
+        // cuando termine de hacerlo cambiaremos el estado de de comprobación de correos
+        // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
+        // varias peticiones concurrentes comprobando mails.
+        if($emailStatusBouncedMessagesFromAccount->value_018)
+            exit;
         else
-        {
-            ConfigPulsar::setValue('emailStateBouncedMessagesToQueue', 1);
-        }
+            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
 
-        $account    = Cuenta::find($data['id']);
-        $patterns   = PatternEmail::all();
 
-        $imapServices = new ImapServices(array(
-            'host'      => $account->host_inbox_047,
-            'port'      => $account->port_inbox_047,
-            'user'      => $account->user_inbox_047,
-            'password'  => Crypt::decrypt($account->pass_inbox_047),
-            'ssl'       => $account->secure_inbox_047 == 'ssl'? true : false
-        ));
+        // una vez comprobado que no hay mas procesos en ejecución, comenzamos a trabajar
+        // obteniendo la cuenta de correo
+        $account    = EmailAccount::builder()->find($data['id']);
+        $patterns   = EmailPattern::all();
 
-        $lastUidCheck = $account->last_check_uid_047;
+        $imapServices = new ImapServices([
+            'host'      => $account->incoming_server_013,
+            'port'      => $account->incoming_port_013,
+            'user'      => $account->incoming_user_013,
+            'password'  => Crypt::decrypt($account->incoming_pass_013),
+            'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
+        ]);
+
+        Cron::checkBouncedMessagesFromAccount($imapServices, $account, $patterns);
+    }
+
+
+    public static function checkBouncedMessagesFromAccount($imapServices, $account)
+    {
+        $lastUidCheck = $account->last_check_uid_013;
 
         //obtenemos la posición del siguiente mensaje sin chequear
         $position   = 0;
         $i          = 0;
 
+        // al no tener UID consecutivos, debemos averiguar cual es el siguiente UID disponible,
         // cuando obtengamos la posición del mensaje, será mayor que 0 y saldrá del bucle
         while($position < 1)
         {
-            if($i < $account->n_emails_047)
+            if($i < $account->n_emails_013)
             {
                 // intentamos averiguar la posición del siguiente mensaje al último comprobado
                 $lastUidCheck++;
+
                 // si este UID no existe devolverá posición 0
-                $position = $imapServices->getServer()->getPositonByUid($lastUidCheck);
+                $position = $imapServices->getPositonByUid($lastUidCheck);
+
                 // sumamos una vuelta para no entrar en bucle infinito
                 $i++;
             }
@@ -444,18 +425,18 @@ class Cron
             }
         }
 
-        // Solicitamos los mensajes a comprobar desde la posición del primer mensaje a comprobar
+        // Solicitamos los 10 siguientes mensajes a comprobar desde la posición del primer mensaje a comprobar
         $messages = $imapServices->getServer()->getMessages(10, $position);
 
         $i = 0; // contador del bucle
         foreach($messages as $message)
         {
-            // si es el último mensaje a actualizar, actualizamos el campo last_check_uid_047
+            // si es el último mensaje a actualizar, actualizamos el campo last_check_uid_013
             if($i == count($messages) - 1)
             {
-                Cuenta::where('id_047', '=', $account->id_047)->update(array(
-                    'last_check_uid_047' => $message->getUid()
-                ));
+                EmailAccount::where('id_013', $account->id_013)->update([
+                    'last_check_uid_013' => $message->getUid()
+                ]);
             }
             $i++;
 
@@ -464,35 +445,40 @@ class Cron
 
             if($response['success'])
             {
-                if(count($response['contactos']) > 0)
+                if(count($response['contacts']) > 0)
                 {
-                    // Obtenesmos el contacto del email que ha coincidido con el patrón
-                    $contacto = $response['contactos'][0];
+                    // Obtenemos el primer contacto del email que ha coincidido con el patrón
+                    $contact = $response['contacts']->first();
                 }
                 else
                 {
-                    $contacto = false;
+                    $contact = false;
                 }
 
-                // 0 = nada, 1 = borrar contacto y mensaje, 2 = unsuscribe y borrar mensaje, 3 = borrar contacto, 4 = ususcribe contacto, 5 = borrar mensaje
-                if($contacto != false && ($response['pattern']->action_079 == 1 || $response['pattern']->action_079 == 3))
+                // Acciones a realizar
+                // 1 = nada
+                // 2 = borrar contacto y mensaje
+                // 3 = unsuscribe y borrar mensaje
+                // 4 = borrar contacto
+                // 5 = ususcribe contacto
+                // 6 = borrar mensaje
+                if($contact != false && ($response['pattern']->action_049 == 2 || $response['pattern']->action_049 == 4))
                 {
                     // borrar contacto
-                    Contacto::where('id_030', '=', $contacto->id_030)->delete();
+                    Contact::where('id_041', $contact->id_041)->delete();
                 }
 
-                if($contacto != false && ($response['pattern']->action_079 == 2 || $response['pattern']->action_079 == 4))
+                if($contact != false && ($response['pattern']->action_049 == 3 || $response['pattern']->action_049 == 5))
                 {
-                    // unsuscriber contacto
-                    Contacto::where('id_030', '=', $contacto->id_030)->update(array(
-                        'unsubscribe_email_030' => 1
-                    ));
+                    // unsuscribe contacto
+                    Contact::where('id_041', $contact->id_041)->update([
+                        'unsubscribe_email_041' => true
+                    ]);
                 }
 
-                if($response['pattern']->action_079 == 1 || $response['pattern']->action_079 == 2 || $response['pattern']->action_079 == 5)
+                if($response['pattern']->action_049 == 2 || $response['pattern']->action_049 == 3 || $response['pattern']->action_049 == 6)
                 {
                     // borrar mensaje
-                    //$message                = $imapServices->getServer()->getMessageByUid($message->getUid());
                     $message->delete();
                     $imapServices->getServer()->expunge();
 
@@ -502,17 +488,16 @@ class Cron
             }
         }
 
-        ConfigPulsar::setValue('emailStateBouncedMessagesToQueue', 0);
-
+        // mientras hayamos tenido mensajes en la comprobación, dormimos el proceso y hacemos una llamada recursiva
         if(count($messages) > 0)
         {
-            // liberamos la queue
-            $job->release(5);
+            // retememos el proceso 5 segundos
+            sleep(5);
+            Cron::checkBouncedMessagesFromAccount($imapServices, $account);
         }
         else
         {
-            // borramos la queue
-            $job->delete();
+            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '0');
         }
     }
 }

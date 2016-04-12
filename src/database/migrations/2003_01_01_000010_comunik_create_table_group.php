@@ -11,11 +11,14 @@ class ComunikCreateTableGroup extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('005_040_group', function($table){
-			$table->engine = 'InnoDB';
-			$table->increments('id_040')->unsigned();
-			$table->string('name_040');
-		});
+		if (! Schema::hasTable('005_040_group'))
+		{
+			Schema::create('005_040_group', function ($table) {
+				$table->engine = 'InnoDB';
+				$table->increments('id_040')->unsigned();
+				$table->string('name_040');
+			});
+		}
 	}
 
 	/**

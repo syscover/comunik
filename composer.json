@@ -17,6 +17,5 @@
         "psr-4": {
             "Syscover\\Comunik\\": "src/Syscover/Comunik"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }

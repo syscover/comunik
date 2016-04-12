@@ -14,7 +14,7 @@ class EmailPreferenceController extends Controller {
 
     use TraitController;
 
-    protected $routeSuffix  = 'emailPreference';
+    protected $routeSuffix  = 'comunikEmailPreference';
     protected $folder       = 'preference';
     protected $package      = 'comunik';
     protected $aColumns     = [];

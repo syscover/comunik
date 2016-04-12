@@ -2,7 +2,7 @@
 
 @section('head')
     @parent
-    <!-- comunik::email_templates.create -->
+    <!-- comunik::email_template.create -->
     <link rel="stylesheet" href="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/magnific-popup.css') }}">
 
     <script src="{{ asset('packages/syscover/pulsar/vendor/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
@@ -220,11 +220,11 @@
             })
         }
     </script>
-    <!-- /.comunik::email_templates.create -->
+    <!-- /.comunik::email_template.create -->
 @stop
 
 @section('rows')
-    <!-- comunik::email_templates.create -->
+    <!-- comunik::email_template.create -->
     @include('pulsar::includes.html.form_text_group', [
         'label' => 'ID',
         'name' => 'id',
@@ -236,8 +236,8 @@
         'label' => trans('pulsar::pulsar.name'),
         'name' => 'name',
         'value' => old('name', isset($object->name_043)? $object->name_043 : null),
-        'maxLength' => '50',
-        'rangeLength' => '2,50',
+        'maxLength' => '255',
+        'rangeLength' => '2,255',
         'required' => true
     ])
     @include('pulsar::includes.html.form_checkbox_text_group', [
@@ -315,5 +315,5 @@
             <div><a id="btContent" class="btn btn-info mfp-iframe">{{ trans('comunik::pulsar.open_theme') }}</a></div>
         </div>
     </div>
-    <!-- /.comunik::email_templates.create -->
+    <!-- /.comunik::email_template.create -->
 @stop
