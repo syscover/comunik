@@ -170,10 +170,10 @@ class Cron
         //a la base de datos y esta sustrayendo los ids, para posteriormente cambiar el estado de envíos, solo en ese momento
         //cambiaremos el estado de envío de emails para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         //varias peticiones concurrentes del gestor de colas.
-        if($emailServiceSendingEmails->value_018 == '1')
-            exit;
-        else
-            Preference::setValue('emailServiceSendingEmails', 5, '1');
+//        if($emailServiceSendingEmails->value_018 == '1')
+//            exit;
+//        else
+//            Preference::setValue('emailServiceSendingEmails', 5, '1');
 
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
@@ -311,53 +311,6 @@ class Cron
      */
     public static function checkBouncedEmailsAccounts()
     {
-        $accounts = EmailAccount::all();
-
-        foreach($accounts as $account)
-        {
-            $imapServices = new ImapServices([
-                'host'      => $account->incoming_server_013,
-                'port'      => $account->incoming_port_013,
-                'user'      => $account->incoming_user_013,
-                'password'  => Crypt::decrypt($account->incoming_pass_013),
-                'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
-            ]);
-
-            // get total messages
-            $nEmails = $imapServices->getServer()->numMessages();
-
-            // update n emails on account
-            EmailAccount::builder()
-                ->where('id_013')
-                ->update([
-                    'n_emails_013' => $nEmails
-                ]);
-
-            // Get the last UID from email account
-            if($nEmails > 0)
-            {
-                $lastUidMessage = $imapServices->getUidByPositon($nEmails);
-
-                // If the UID is grater than last UID manage, has to check account queue
-                if ($lastUidMessage > $account->last_check_uid_013) {
-
-                    // llamamos a la funcion que compruebe los correos es esa cuenta
-                    Cron::checkAccount([
-                       'id' =>  $account->id_013
-                    ]);
-                }
-            }
-        }
-    }
-
-    /**
-     *  Función que recupera los contactos de una campaña que tiene que enviar la newsletter y no esten en cola de envio
-     *
-     * @access	public
-     * @return	void
-     */
-    public static function checkAccount($data)
-    {
         $emailStatusBouncedMessagesFromAccount = Preference::getValue('emailStatusBouncedMessagesFromAccount', 5, '0');
 
         // Comprobación para casos de errores o caídas del servidor, y no dejen bloquedo la comprobación de emails
@@ -370,75 +323,85 @@ class Cron
         // cuando termine de hacerlo cambiaremos el estado de de comprobación de correos
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes comprobando mails.
-        if($emailStatusBouncedMessagesFromAccount->value_018)
-            exit;
-        else
-            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
-
-
+//        if($emailStatusBouncedMessagesFromAccount->value_018 === '1')
+//        {
+//            exit;
+//        }
+//        else
+//        {
+//            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
+//        }
         // una vez comprobado que no hay mas procesos en ejecución, comenzamos a trabajar
-        // obteniendo la cuenta de correo
-        $account    = EmailAccount::builder()->find($data['id']);
+
+
+        $accounts   = EmailAccount::all();
         $patterns   = EmailPattern::all();
 
-        $imapServices = new ImapServices([
-            'host'      => $account->incoming_server_013,
-            'port'      => $account->incoming_port_013,
-            'user'      => $account->incoming_user_013,
-            'password'  => Crypt::decrypt($account->incoming_pass_013),
-            'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
-        ]);
+        foreach($accounts as $account)
+        {
+            $imapService = new ImapServices([
+                'host'      => $account->incoming_server_013,
+                'port'      => $account->incoming_port_013,
+                'user'      => $account->incoming_user_013,
+                'password'  => Crypt::decrypt($account->incoming_pass_013),
+                'ssl'       => $account->incoming_secure_013 == 'ssl'? true : false
+            ]);
 
-        // solo se mantiene un proceso en ejecución, el proceso evalua de diez en diez correos
-        Cron::checkBouncedMessagesFromAccount($imapServices, $account, $patterns);
+            // get total messages
+            $nEmails = $imapService->getServer()->numMessages();
+
+            // update n emails on account
+            EmailAccount::builder()
+                ->where('id_013')
+                ->update([
+                    'n_emails_013' => $nEmails
+                ]);
+
+            // Get the last UID from email account
+            if($nEmails > 0)
+            {
+                $lastUidMessage = $imapService->getServer()->getUidByPositon($nEmails);
+
+                // If the UID is grater than last UID manage, has to check account queue
+                if ($lastUidMessage > $account->last_check_uid_013)
+                    // llamamos a la funcion que compruebe los correos es esa cuenta
+                    Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $nEmails-1);
+            }
+
+            // after check bounced messages or if there are not emails, close IMAP connection
+            $imapService->getServer()->close();
+
+            // if is the last email account, we freed the proccess
+            if($accounts->last()->id_013 == $account->id_013)
+                Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '0');
+        }
     }
 
-
-    public static function checkBouncedMessagesFromAccount($imapServices, $account)
+    /**
+     * Recursive function
+     *
+     * @param \Syscover\Pulsar\Libraries\ImapServices   $imapService
+     * @param \Syscover\Pulsar\Models\EmailAccount      $account
+     * @param \Illuminate\Support\Collection            $patterns
+     * @param integer                                   $lastUidMessage
+     * @param integer                                   $position
+     */
+    public static function checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position)
     {
-        $lastUidCheck = $account->last_check_uid_013;
+        $nEmailsToChecck = -10;
 
-        //obtenemos la posición del siguiente mensaje sin chequear
-        $position   = 0;
-        $i          = 0;
+        // Solicitamos los 10 anteriores mensajes a comprobar desde la última posición comnprobada
+        $messages = $imapService->getServer()->getMessages($nEmailsToChecck, $position);
 
-        // al no tener UID consecutivos, debemos averiguar cual es el siguiente UID disponible,
-        // cuando obtengamos la posición del mensaje, será mayor que 0 y saldrá del bucle
-        while($position < 1)
+        $findLastCheckUid = false;
+        foreach($messages as $key => $message)
         {
-            if($i < $account->n_emails_013)
+            // si el mensaje es menor o igual, al último mensaje comprobado, terminamos la tarea
+            if($message->getUid() <= $account->last_check_uid_013)
             {
-                // intentamos averiguar la posición del siguiente mensaje al último comprobado
-                $lastUidCheck++;
-
-                // si este UID no existe devolverá posición 0
-                $position = $imapServices->getPositonByUid($lastUidCheck);
-
-                // sumamos una vuelta para no entrar en bucle infinito
-                $i++;
-            }
-            else
-            {
-                // si hemos hecho tantas o mas comprobaciones como emails hay, salimos del bucle
-                // sentencia para asegurarnos que no entramos en bucle infinito
+                $findLastCheckUid = true;
                 break;
             }
-        }
-
-        // Solicitamos los 10 siguientes mensajes a comprobar desde la posición del primer mensaje a comprobar
-        $messages = $imapServices->getServer()->getMessages(10, $position);
-
-        $i = 0; // contador del bucle
-        foreach($messages as $message)
-        {
-            // si es el último mensaje a actualizar, actualizamos el campo last_check_uid_013
-            if($i == count($messages) - 1)
-            {
-                EmailAccount::where('id_013', $account->id_013)->update([
-                    'last_check_uid_013' => $message->getUid()
-                ]);
-            }
-            $i++;
 
             // comprobamos si el mensaje coincide con algún patron
             $response = MiscellaneousComunik::checkEmailPattern($message, $patterns);
@@ -446,14 +409,10 @@ class Cron
             if($response['success'])
             {
                 if(count($response['contacts']) > 0)
-                {
                     // Obtenemos el primer contacto del email que ha coincidido con el patrón
                     $contact = $response['contacts']->first();
-                }
                 else
-                {
                     $contact = false;
-                }
 
                 // Acciones a realizar
                 // 1 = nada
@@ -480,7 +439,7 @@ class Cron
                 {
                     // borrar mensaje
                     $message->delete();
-                    $imapServices->getServer()->expunge();
+                    $imapService->getServer()->expunge();
 
                     // retrasamos medio segundo la ejecución para no saturar el servidor IMAP de peticiones
                     usleep(500000);
@@ -489,15 +448,18 @@ class Cron
         }
 
         // mientras hayamos tenido mensajes en la comprobación, dormimos el proceso y hacemos una llamada recursiva
-        if(count($messages) > 0)
+        if($position + $nEmailsToChecck >= 0 && ! $findLastCheckUid)
         {
-            // retememos el proceso 5 segundos
+            // retememos el proceso 5 segundos, para evitar saturar el servidor
             sleep(5);
-            Cron::checkBouncedMessagesFromAccount($imapServices, $account);
+            Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position + $nEmailsToChecck);
         }
         else
         {
-            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '0');
+            // si encontramos el lastCheckUid o no hay correos por comprobar
+            EmailAccount::where('id_013', $account->id_013)->update([
+                'last_check_uid_013' => $lastUidMessage
+            ]);
         }
     }
 }
