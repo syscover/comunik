@@ -77,13 +77,10 @@ class Cron
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes insertando mails.
         if($emailServiceSendingEmailsToQueue->value_018 == '1')
-        {
             exit;
-        }
         else
-        {
             Preference::setValue('emailServiceSendingEmailsToQueue', 5, '1');
-        }
+
 
         // START INCLUDES EMAILS IN SEND QUEUE TABLE
         $campaign = EmailCampaign::find($data['id']);
@@ -143,9 +140,7 @@ class Cron
         $nMailings = EmailSendQueue::getNMailings();
 
         if($nMailings > 0)
-        {
             Cron::sendEmails();
-        }
     }
 
 
@@ -170,10 +165,10 @@ class Cron
         //a la base de datos y esta sustrayendo los ids, para posteriormente cambiar el estado de envíos, solo en ese momento
         //cambiaremos el estado de envío de emails para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         //varias peticiones concurrentes del gestor de colas.
-//        if($emailServiceSendingEmails->value_018 == '1')
-//            exit;
-//        else
-//            Preference::setValue('emailServiceSendingEmails', 5, '1');
+        if($emailServiceSendingEmails->value_018 == '1')
+            exit;
+        else
+            Preference::setValue('emailServiceSendingEmails', 5, '1');
 
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
