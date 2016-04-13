@@ -323,14 +323,10 @@ class Cron
         // cuando termine de hacerlo cambiaremos el estado de de comprobación de correos
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes comprobando mails.
-//        if($emailStatusBouncedMessagesFromAccount->value_018 === '1')
-//        {
-//            exit;
-//        }
-//        else
-//        {
-//            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
-//        }
+        if($emailStatusBouncedMessagesFromAccount->value_018 === '1')
+            exit;
+        else
+            Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
         // una vez comprobado que no hay mas procesos en ejecución, comenzamos a trabajar
 
 
