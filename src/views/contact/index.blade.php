@@ -78,15 +78,17 @@
 @stop
 
 @section('headButtons')
-    <div class="btn-group margin-b10 margin-l10">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a id="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
-        </ul>
-    </div>
+    @if($viewParameters['newButton'])
+        <div class="btn-group margin-b10 margin-l10">
+            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-download"></i> {{ trans_choice('pulsar::pulsar.import', 1) }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a id="csv"><i class="fa fa-file-excel-o"></i> CSV</a></li>
+            </ul>
+        </div>
+    @endif
 @stop
 
 @section('tHead')
