@@ -376,8 +376,10 @@ class Cron
 
                     // llamamos a la funcion que compruebe los correos es esa cuenta
                     Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $position - 1);
+
+                    // solo comprobamo una cuenta
+                    break;
                 }
-                // ?? break, en caso de tener muchas cuentas para no expirar el tiempo de ejecución?
             }
 
             // after check bounced messages or if there are not emails, close IMAP connection
