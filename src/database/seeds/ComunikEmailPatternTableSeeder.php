@@ -18,6 +18,7 @@ class ComunikEmailPatternTableSeeder extends Seeder {
             ['name_049' => 'Warning: message (Delay reason: mailbox is full)',                                                  'subject_049' => 'failure notice',                                      'operator_049' => 'and',     'message_049' => 'Delay reason: mailbox is full',                                                      'action_049' => 3],
             ['name_049' => 'Mail delivery failed: returning message to sender (mailbox is full: retry timeout exceeded)',       'subject_049' => 'Mail delivery failed: returning message to sender',   'operator_049' => 'and',     'message_049' => 'mailbox is full: retry timeout exceeded',                                            'action_049' => 3],
             ['name_049' => 'Undelivered Mail Returned to Sender (unknown in virtual mailbox)',                                  'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'unknown in virtual mailbox',                                                         'action_049' => 3],
+            ['name_049' => 'Undelivered Mail Returned to Sender (This is a spam mail)',                                         'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'This is a spam mail',                                                                'action_049' => 6],
         ]);
     }
 }
