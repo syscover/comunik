@@ -455,7 +455,7 @@ class Cron
             {
                 // actualizamos el último UID comprobado
                 EmailAccount::where('id_013', $account->id_013)->update([
-                    'last_check_uid_013'    => $message->getUid()
+                    'last_check_uid_013' => $message->getUid()
                 ]);
             }
         }
