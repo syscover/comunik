@@ -356,7 +356,6 @@ class Cron
                 // If the UID is grater than last UID manage, has to check account queue
                 if ($lastUidMessage > $account->last_check_uid_013)
                 {
-
                     //obtenemos la posición del siguiente mensaje sin chequear
                     $lastUidCheck   = $account->last_check_uid_013;
                     $position       = 0;
@@ -376,7 +375,7 @@ class Cron
                     }
 
                     // llamamos a la funcion que compruebe los correos es esa cuenta
-                    Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position - 1);
+                    Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $position - 1);
                 }
                 // ?? break, en caso de tener muchas cuentas para no expirar el tiempo de ejecución?
             }
@@ -396,10 +395,9 @@ class Cron
      * @param \Syscover\Pulsar\Libraries\ImapServices   $imapService
      * @param \Syscover\Pulsar\Models\EmailAccount      $account
      * @param \Illuminate\Support\Collection            $patterns
-     * @param integer                                   $lastUidMessage
      * @param integer                                   $position
      */
-    public static function checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position)
+    public static function checkBouncedMessagesFromAccount($imapService, $account, $patterns, $position)
     {
         $nEmailsToChecck = 10;
 
