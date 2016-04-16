@@ -319,10 +319,12 @@ class Cron
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes comprobando mails.
         if($emailStatusBouncedMessagesFromAccount->value_018 === '1')
-            return response()->json([
-                'success'   => false,
-                'message'   => 'at this moment, there is a process running'
-            ]);
+//            todo, si devuelvo un json, al ejecutar el cron manualmente, no da ningún error, habría que filtrarlo
+//            return response()->json([
+//                'success'   => false,
+//                'message'   => 'at this moment, there is a process running'
+//            ]);
+            exit;
         else
             Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
         // una vez comprobado que no hay mas procesos en ejecución, comenzamos a trabajar
