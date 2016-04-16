@@ -18,11 +18,23 @@ class EmailPatternsController extends Controller {
     protected $routeSuffix  = 'comunikEmailPattern';
     protected $folder       = 'email_pattern';
     protected $package      = 'comunik';
-    protected $aColumns     = ['id_049', 'name_049'];
+    protected $aColumns     = ['id_049', 'name_049', ['type' => 'translated', 'data' => 'action_049']];
     protected $nameM        = 'name_049';
     protected $model        = EmailPattern::class;
     protected $icon         = 'fa fa-braille';
     protected $objectTrans  = 'pattern';
+
+    public function customColumnType($row, $aColumn, $aObject)
+    {
+        switch ($aColumn['type'])
+        {
+            case 'translated':
+                $row[] = trans(config('comunik.patternActions')[$aObject[$aColumn['data']]]->name);
+                break;
+        }
+
+        return $row;
+    }
 
     public function createCustomRecord($parameters)
     {
