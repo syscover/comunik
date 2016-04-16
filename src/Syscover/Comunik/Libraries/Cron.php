@@ -442,8 +442,8 @@ class Cron
         if($position + $nEmailsToChecck >= 0 && ! $findLastCheckUid)
         {
             // retememos el proceso 5 segundos, para evitar saturar el servidor
-            sleep(5);
-            Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position + $nEmailsToChecck);
+            //sleep(5);
+            //Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $lastUidMessage, $position + $nEmailsToChecck);
         }
         else
         {
