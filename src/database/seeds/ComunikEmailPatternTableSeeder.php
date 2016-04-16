@@ -21,6 +21,7 @@ class ComunikEmailPatternTableSeeder extends Seeder {
             ['name_049' => 'Undelivered Mail Returned to Sender (This is a spam mail)',                                         'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'This is a spam mail',                                                                'action_049' => 6],
             ['name_049' => 'Undelivered Mail Returned to Sender (Host or domain name not found)',                               'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'Host or domain name not found',                                                      'action_049' => 3],
             ['name_049' => 'Undelivered Mail Returned to Sender (Quota exceeded)',                                              'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'Quota exceeded',                                                                     'action_049' => 3],
+            ['name_049' => 'Undelivered Mail Returned to Sender (mailbox unavailable)',                                         'subject_049' => 'Undelivered Mail Returned to Sender',                 'operator_049' => 'and',     'message_049' => 'mailbox unavailable',                                                                'action_049' => 3],
         ]);
     }
 }

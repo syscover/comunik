@@ -445,7 +445,6 @@ class Cron
                 {
                     // borrar mensaje
                     $message->delete();
-                    $imapService->getServer()->expunge();
 
                     // retrasamos medio segundo la ejecución para no saturar el servidor IMAP de peticiones
                     usleep(500000);
@@ -455,6 +454,9 @@ class Cron
             // si es la última interacción
             if($key === count($messages) - 1)
             {
+                // purge all delete messages
+                $imapService->getServer()->expunge();
+
                 // actualizamos el último UID comprobado
                 EmailAccount::where('id_013', $account->id_013)->update([
                     'last_check_uid_013' => $message->getUid()
