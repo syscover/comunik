@@ -29,7 +29,7 @@ class EmailPatternsController extends Controller {
         switch ($aColumn['type'])
         {
             case 'translated':
-                $row[] = trans(config('comunik.patternActions')[$aObject[$aColumn['data']]]->name);
+                $row[] = trans(collect(config('comunik.patternActions'))->where('id', $aObject[$aColumn['data']])->first()->name);
                 break;
         }
 
