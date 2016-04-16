@@ -319,7 +319,10 @@ class Cron
         // para poder aceptar más peticiones, de esa manera nos aseguramos que no hayan
         // varias peticiones concurrentes comprobando mails.
         if($emailStatusBouncedMessagesFromAccount->value_018 === '1')
-            exit;
+            return response()->json([
+                'success'   => false,
+                'message'   => 'at this moment, there is a process running'
+            ]);
         else
             Preference::setValue('emailStatusBouncedMessagesFromAccount', 5, '1');
         // una vez comprobado que no hay mas procesos en ejecución, comenzamos a trabajar
@@ -378,7 +381,7 @@ class Cron
                     Cron::checkBouncedMessagesFromAccount($imapService, $account, $patterns, $position - 1);
 
                     // solo comprobamo una cuenta
-                    break;
+                    //break;
                 }
             }
 
@@ -409,6 +412,8 @@ class Cron
         $findLastCheckUid = false;
         foreach($messages as $key => $message)
         {
+            //var_dump($message->getUid());
+
             // comprobamos si el mensaje coincide con algún patron
             $response = MiscellaneousComunik::checkEmailPattern($message, $patterns);
 
