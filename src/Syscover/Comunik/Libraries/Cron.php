@@ -406,7 +406,7 @@ class Cron
      */
     public static function checkBouncedMessagesFromAccount($imapService, $account, $patterns, $position)
     {
-        $nEmailsToChecck = 10;
+        $nEmailsToChecck = 25;
 
         // Solicitamos los 10 anteriores mensajes a comprobar desde la última posición comnprobada
         $messages = $imapService->getServer()->getMessages($nEmailsToChecck, $position);
