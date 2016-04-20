@@ -1,10 +1,9 @@
 <?php namespace Syscover\Comunik\Models;
 
-use Syscover\Pulsar\Models\Model;
-use Illuminate\Support\Facades\Validator;
-use Syscover\Pulsar\Traits\TraitModel;
+use Syscover\Pulsar\Core\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Illuminate\Support\Facades\Validator;
 use Syscover\Pulsar\Models\Lang;
 
 /**
@@ -16,9 +15,8 @@ use Syscover\Pulsar\Models\Lang;
  * @package     Syscover\Comunik\Models
  */
 
-class EmailCampaign extends Model {
-
-    use TraitModel;
+class EmailCampaign extends Model
+{
     use Eloquence, Mappable;
 
 	protected $table        = '005_044_email_campaign';

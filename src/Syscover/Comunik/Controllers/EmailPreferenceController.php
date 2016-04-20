@@ -1,19 +1,16 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Syscover\Pulsar\Core\Controller;
 use Syscover\Comunik\Models\Group;
-use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Models\Preference;
-use Syscover\Pulsar\Traits\TraitController;
 
 /**
  * Class EmailPreferenceController
  * @package Syscover\Comunik\Controllers
  */
 
-class EmailPreferenceController extends Controller {
-
-    use TraitController;
-
+class EmailPreferenceController extends Controller
+{
     protected $routeSuffix  = 'comunikEmailPreference';
     protected $folder       = 'preference';
     protected $package      = 'comunik';

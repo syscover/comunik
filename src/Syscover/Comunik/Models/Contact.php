@@ -1,10 +1,9 @@
 <?php namespace Syscover\Comunik\Models;
 
-use Syscover\Pulsar\Models\Model;
-use Illuminate\Support\Facades\Validator;
-use Syscover\Pulsar\Traits\TraitModel;
+use Syscover\Pulsar\Core\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Illuminate\Support\Facades\Validator;
 use Syscover\Pulsar\Models\Country;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +16,8 @@ use Illuminate\Support\Facades\DB;
  * @package     Syscover\Comunik\Models
  */
 
-class Contact extends Model {
-
-    use TraitModel;
+class Contact extends Model
+{
     use Eloquence, Mappable;
 
 	protected $table        = '005_041_contact';

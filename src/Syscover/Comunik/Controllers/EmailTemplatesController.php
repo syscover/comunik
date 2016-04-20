@@ -1,19 +1,16 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Syscover\Pulsar\Core\Controller;
 use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\EmailTemplate;
-use Syscover\Pulsar\Controllers\Controller;
-use Syscover\Pulsar\Traits\TraitController;
 
 /**
  * Class EmailTemplatesController
  * @package Syscover\Comunik\Controllers
  */
 
-class EmailTemplatesController extends Controller {
-
-    use TraitController;
-
+class EmailTemplatesController extends Controller
+{
     protected $routeSuffix  = 'comunikEmailTemplate';
     protected $folder       = 'email_template';
     protected $package      = 'comunik';

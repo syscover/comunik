@@ -1,11 +1,10 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Syscover\Pulsar\Core\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Syscover\Comunik\Libraries\Cron;
 use Syscover\Comunik\Models\EmailSendHistorical;
-use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Libraries\EmailServices;
-use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Pulsar\Models\EmailAccount;
 use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Comunik\Models\EmailCampaign;
@@ -19,10 +18,8 @@ use Syscover\Comunik\Models\EmailTemplate;
  * @package Syscover\Comunik\Controllers
  */
 
-class EmailCampaignsController extends Controller {
-
-    use TraitController;
-
+class EmailCampaignsController extends Controller
+{
     protected $routeSuffix  = 'comunikEmailCampaign';
     protected $folder       = 'email_campaign';
     protected $package      = 'comunik';

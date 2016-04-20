@@ -1,7 +1,6 @@
 <?php namespace Syscover\Comunik\Controllers;
 
-use Syscover\Pulsar\Controllers\Controller;
-use Syscover\Pulsar\Traits\TraitController;
+use Syscover\Pulsar\Core\Controller;
 use Syscover\Comunik\Models\Group;
 
 /**
@@ -9,10 +8,8 @@ use Syscover\Comunik\Models\Group;
  * @package Syscover\Comunik\Controllers
  */
 
-class GroupsController extends Controller {
-
-    use TraitController;
-
+class GroupsController extends Controller
+{
     protected $routeSuffix  = 'comunikGroup';
     protected $folder       = 'group';
     protected $package      = 'comunik';

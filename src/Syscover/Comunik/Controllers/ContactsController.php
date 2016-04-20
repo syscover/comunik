@@ -1,11 +1,10 @@
 <?php namespace Syscover\Comunik\Controllers;
 
+use Syscover\Pulsar\Core\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Syscover\Comunik\Models\Group;
-use Syscover\Pulsar\Controllers\Controller;
 use Syscover\Pulsar\Models\Country;
-use Syscover\Pulsar\Traits\TraitController;
 use Syscover\Comunik\Models\Contact;
 
 /**
@@ -13,10 +12,8 @@ use Syscover\Comunik\Models\Contact;
  * @package Syscover\Comunik\Controllers
  */
 
-class ContactsController extends Controller {
-
-    use TraitController;
-
+class ContactsController extends Controller
+{
     protected $routeSuffix  = 'comunikContact';
     protected $folder       = 'contact';
     protected $package      = 'comunik';
