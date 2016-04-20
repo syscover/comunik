@@ -24,7 +24,7 @@ class EmailTemplatesController extends Controller
     {
         $actions = '';
 
-        $actions .= session('userAcl')->allows($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('preview' . ucfirst($this->routeSuffix), ['id' => $aObject['id_043']]) . '" data-original-title="' . trans('comunik::pulsar.preview_template') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
+        $actions .= is_allowed($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('preview' . ucfirst($this->routeSuffix), ['id' => $aObject['id_043']]) . '" data-original-title="' . trans('comunik::pulsar.preview_template') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
 
         return $actions;
     }
