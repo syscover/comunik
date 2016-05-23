@@ -1,6 +1,7 @@
 <?php namespace Syscover\Comunik\Controllers;
 
 use Syscover\Pulsar\Core\Controller;
+use Illuminate\Http\Request;
 use Syscover\Comunik\Models\Group;
 use Syscover\Pulsar\Models\Preference;
 
@@ -19,6 +20,13 @@ class EmailPreferenceController extends Controller
     protected $model        = Preference::class;
     protected $icon         = 'fa fa-cog';
     protected $objectTrans  = 'preference';
+
+    function __construct(Request $request)
+    {
+        parent::__construct($request);
+
+        $this->viewParameters['cancelButton'] = false;
+    }
 
     public function customIndex($parameters)
     {
