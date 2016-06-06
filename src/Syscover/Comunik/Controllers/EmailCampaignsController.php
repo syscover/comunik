@@ -33,9 +33,9 @@ class EmailCampaignsController extends Controller
     {
         $actions = '';
 
-        $actions .= is_allowed($this->resource, 'create')? '<a class="btn btn-xs bs-tooltip" href="' . route('create' . ucfirst($this->routeSuffix), ['offset' => $this->request->input('iDisplayStart'), 'id' => $aObject['id_044']]) . '" data-original-title="' . trans('comunik::pulsar.duplicate_campaign') . '"><i class="fa fa-files-o"></i></a>' : null;
+        $actions .= is_allowed($this->resource, 'create')? '<a class="btn btn-xs bs-tooltip" href="' . route('create' . ucfirst($this->routeSuffix), ['offset' => $this->request->input('start'), 'id' => $aObject['id_044']]) . '" data-original-title="' . trans('comunik::pulsar.duplicate_campaign') . '"><i class="fa fa-files-o"></i></a>' : null;
         $actions .= is_allowed($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('preview' . ucfirst($this->routeSuffix), [Crypt::encrypt($aObject['id_044'])]) . '" data-original-title="' . trans('comunik::pulsar.preview_campaign') . '" target="_blank"><i class="fa fa-eye"></i></a>' : null;
-        $actions .= is_allowed($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $this->request->input('iDisplayStart')]) . '" data-original-title="' . trans('comunik::pulsar.send_test_email') . '"><i class="fa fa-share"></i></a>' : null;
+        $actions .= is_allowed($this->resource, 'access')? '<a class="btn btn-xs bs-tooltip" href="' . route('sendTest' . ucfirst($this->routeSuffix), [$aObject['id_044'], $this->request->input('start')]) . '" data-original-title="' . trans('comunik::pulsar.send_test_email') . '"><i class="fa fa-share"></i></a>' : null;
 
         return $actions;
     }

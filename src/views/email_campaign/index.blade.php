@@ -8,19 +8,19 @@
             if ($.fn.dataTable)
             {
                 $('.datatable-pulsar').dataTable({
-                    'iDisplayStart' : {{ $offset }},
-                    'aaSorting': [[ 0, "desc" ]],
-                    'aoColumnDefs': [
-                        { 'visible': false, "bSearchable": false, 'aTargets': [3,5]}, // hidden column 1 and prevents search on column 1
-                        { 'iDataSort': 3, 'aTargets': [4] }, // sort column 2 according hidden column 1 data
-                        { 'iDataSort': 5, 'aTargets': [6] }, // sort column 2 according hidden column 1 data
-                        { 'bSortable': false, 'aTargets': [9,10]},
-                        { 'sClass': 'checkbox-column', 'aTargets': [9]},
-                        { 'sClass': 'align-center', 'aTargets': [8,10]}
+                    'displayStart' : {{ $offset }},
+                    'sorting': [[0, 'desc']],
+                    'columnDefs': [
+                        { 'visible': false, searchable': false, 'targets': [3,5]}, // hidden column 1 and prevents search on column 1
+                        { 'dataSort': 3, 'targets': [4] }, // sort column 2 according hidden column 1 data
+                        { 'dataSort': 5, 'targets': [6] }, // sort column 2 according hidden column 1 data
+                        { 'sortable': false, 'targets': [9,10]},
+                        { 'class': 'checkbox-column', 'targets': [9]},
+                        { 'class': 'align-center', 'targets': [8,10]}
                     ],
-                    "bProcessing": true,
-                    "bServerSide": true,
-                    "sAjaxSource": "{{ route('jsonData' . ucfirst($routeSuffix)) }}"
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ route('jsonData' . ucfirst($routeSuffix)) }}"
                 }).fnSetFilteringDelay();
             }
         });
