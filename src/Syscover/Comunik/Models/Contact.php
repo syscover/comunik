@@ -52,7 +52,7 @@ class Contact extends Model
     public function scopeBuilder($query)
     {
         return $query->join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
-            ->where('lang_002', config('app.locale'));
+            ->where('lang_id_002', config('app.locale'));
     }
 
     public function getGroups()
@@ -103,8 +103,8 @@ class Contact extends Model
 
     public static function getCountriesContacts($args)
     {
-        return Country::join('001_001_lang', '001_002_country.lang_002', '=', '001_001_lang.id_001')
-            ->where('lang_002', $args['lang'])
+        return Country::join('001_001_lang', '001_002_country.lang_id_002', '=', '001_001_lang.id_001')
+            ->where('lang_id_002', $args['lang'])
             ->whereIn('id_002', function($query) {
                 $query->select('country_041')
                     ->from('005_041_contact')
