@@ -21,13 +21,14 @@ class ComunikCreateTableEmailPattern extends Migration {
 				$table->string('subject_049')->nullable();
 				$table->string('operator_049', 10)->nullable();
 				$table->string('message_049')->nullable();
-				$table->tinyInteger('action_049')->unsigned();
+				
 				// 0 = nada
 				// 1 = borrar contacto y mensaje
 				// 2 = unsuscribe y borrar mensaje
 				// 3 = borrar contacto
 				// 4 = ususcribe contacto
 				// 5 = borrar mensaje
+				$table->tinyInteger('action_049')->unsigned();
 			});
 		}
 	}

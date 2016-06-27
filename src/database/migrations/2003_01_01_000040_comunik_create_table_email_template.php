@@ -15,6 +15,7 @@ class ComunikCreateTableEmailTemplate extends Migration {
 		{
 			Schema::create('005_043_email_template', function ($table) {
 				$table->engine = 'InnoDB';
+				
 				$table->increments('id_043')->unsigned();
 				$table->string('name_043');
 				$table->string('subject_043');
@@ -37,5 +38,4 @@ class ComunikCreateTableEmailTemplate extends Migration {
 	{
             Schema::drop('005_043_email_template');
 	}
-
 }
