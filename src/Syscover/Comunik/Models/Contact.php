@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * Class Contact
  *
  * Model with properties
- * <br><b>[id, company, name, surname, birth_date, birth_date_text, country, prefix, mobile, email, unsubscribe_mobile, unsubscribe_email]</b>
+ * <br><b>[id, company, name, surname, birth_date, birth_date_text, country_id, prefix, mobile, email, unsubscribe_mobile, unsubscribe_email]</b>
  *
  * @package     Syscover\Comunik\Models
  */
@@ -23,7 +23,7 @@ class Contact extends Model
 	protected $table        = '005_041_contact';
     protected $primaryKey   = 'id_041';
     public $timestamps      = false;
-    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','birth_date_text_041','country_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
+    protected $fillable     = ['id_041','company_041','name_041','surname_041','birth_date_041','birth_date_text_041','country_id_041','prefix_041','mobile_041','email_041','unsubscribe_mobile_041','unsubscribe_email_041'];
     protected $maps         = [];
     protected $relationMaps = [
         'country'      => \Syscover\Pulsar\Models\Country::class,
@@ -51,19 +51,19 @@ class Contact extends Model
 
     public function scopeBuilder($query)
     {
-        return $query->join('001_002_country', '005_041_contact.country_041', '=', '001_002_country.id_002')
+        return $query->join('001_002_country', '005_041_contact.country_id_041', '=', '001_002_country.id_002')
             ->where('lang_id_002', config('app.locale'));
     }
 
     public function getGroups()
     {
-        return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_042', 'group_042');
+        return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_id_042', 'group_id_042');
     }
 
     public static function getCustomReturnIndexRecords($query, $parameters)
     {
-        return $query->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
+        return $query->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
             ->groupBy('id_041')
             ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
     }
@@ -71,8 +71,8 @@ class Contact extends Model
     public static function customCountIndexRecords($query, $parameters)
     {
         return $query->select(DB::raw('id_041, GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
-            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_042', '=', '005_040_group.id_040')
+            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
+            ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
             ->groupBy('id_041')
             ->get()     // without get, don't count correctly, count group number
             ->count();
@@ -83,14 +83,14 @@ class Contact extends Model
     {
         $query = Contact::builder();
 
-        if(isset($parameters['group_042']))
+        if(isset($parameters['group_id_042']))
         {
             $query->whereIn('id_041', function($query) use ($parameters) {
                 // select contacts from this groups
-                $query->select('contact_042')
+                $query->select('contact_id_042')
                     ->from('005_042_contacts_groups')
-                    ->whereIn('group_042', [$parameters['group_042']])
-                    ->groupBy('contact_042')
+                    ->whereIn('group_id_042', [$parameters['group_id_042']])
+                    ->groupBy('contact_id_042')
                     ->get();
             });
         }
@@ -106,9 +106,9 @@ class Contact extends Model
         return Country::join('001_001_lang', '001_002_country.lang_id_002', '=', '001_001_lang.id_001')
             ->where('lang_id_002', $args['lang'])
             ->whereIn('id_002', function($query) {
-                $query->select('country_041')
+                $query->select('country_id_041')
                     ->from('005_041_contact')
-                    ->groupBy('country_041')
+                    ->groupBy('country_id_041')
                     ->get();
             })
             ->orderBy('name_002')->get();
@@ -119,25 +119,25 @@ class Contact extends Model
     {
         return Contact::whereIn('id_041', function($query) use ($groups) {
                 // select contacts from this groups
-                $query->select('contact_042')
+                $query->select('contact_id_042')
                     ->from('005_042_contacts_groups')
-                    ->whereIn('group_042', $groups)
-                    ->groupBy('contact_042')
+                    ->whereIn('group_id_042', $groups)
+                    ->groupBy('contact_id_042')
                     ->get();
             })
             // and they are from this countries
-            ->whereIn('country_041', $countries)
+            ->whereIn('country_id_041', $countries)
             // the contact isn't in queue queue in the same campaign
             ->whereNotIn('id_041', function($query) use ($campaign) {
-                $query->select('contact_047')
+                $query->select('contact_id_047')
                     ->from('005_047_email_send_queue')
-                    ->where('campaign_047', $campaign)->get();
+                    ->where('campaign_id_047', $campaign)->get();
             })
             // the contact isn't in historical queue in the same campaign
             ->whereNotIn('id_041', function($query) use ($campaign) {
-                $query->select('contact_048')
-                    ->from('005_048_email_send_historical')
-                    ->where('campaign_048', $campaign)->get();
+                $query->select('contact_id_048')
+                    ->from('005_048_email_send_history')
+                    ->where('campaign_id_048', $campaign)->get();
             })
             ->where('unsubscribe_email_041', false)
             ->whereNotNull('email_041')

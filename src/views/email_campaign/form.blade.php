@@ -249,7 +249,7 @@
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.account', 1),
         'name' => 'emailAccount',
-        'value' => old('emailAccount', isset($object->email_account_044)? $object->email_account_044 : null),
+        'value' => old('emailAccount', isset($object->email_account_id_044)? $object->email_account_id_044 : null),
         'objects' => $emailAccounts,
         'idSelect' => 'id_013',
         'nameSelect' => 'email_013',
@@ -269,7 +269,7 @@
     @include('pulsar::includes.html.form_select_group', [
         'label' => trans_choice('pulsar::pulsar.template', 1),
         'name' => 'template',
-        'value' => old('template', isset($object->template_044)? $object->template_044 : null),
+        'value' => old('template', isset($object->template_id_044)? $object->template_id_044 : null),
         'objects' => $templates,
         'idSelect' => 'id_043',
         'nameSelect' => 'name_043',
@@ -307,7 +307,7 @@
         'checked' => !isset($object),
         'inputText' => [
             'name' => 'trackPixel',
-            'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "'>"
+            'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historyId' => '#historyId#']) . "'>"
         ]
     ])
     @include('pulsar::includes.html.form_text_group', [

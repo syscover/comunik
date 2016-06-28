@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Validator;
 use Syscover\Pulsar\Models\Preference;
 
 /**
- * Class EmailSendHistorical
+ * Class EmailSendQueue
  *
  * Model with properties
- * <br><b>[id, campaign, contact, sorting, status, create]</b>
+ * <br><b>[id, campaign, contact, sorting, status_id, create]</b>
  *
  * @package     Syscover\Comunik\Models
  */
@@ -22,7 +22,7 @@ class EmailSendQueue extends Model
 	protected $table        = '005_047_email_send_queue';
     protected $primaryKey   = 'id_047';
     public $timestamps      = false;
-    protected $fillable     = ['id_047', 'campaign_047', 'contact_047', 'sorting_047', 'status_047', 'create_047'];
+    protected $fillable     = ['id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'status_id_047', 'create_047'];
     protected $maps         = [];
     protected $relationMaps = [
         'campaign'  => \Syscover\Comunik\Models\EmailCampaign::class,
@@ -37,8 +37,8 @@ class EmailSendQueue extends Model
 
     public function scopeBuilder($query)
     {
-        return $query->join('005_044_email_campaign', '005_047_email_send_queue.campaign_047', '=', '005_044_email_campaign.id_044')
-            ->join('005_041_contact', '005_047_email_send_queue.contact_047', '=', '005_041_contact.id_041');
+        return $query->join('005_044_email_campaign', '005_047_email_send_queue.campaign_id_047', '=', '005_044_email_campaign.id_044')
+            ->join('005_041_contact', '005_047_email_send_queue.contact_id_047', '=', '005_041_contact.id_041');
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron
@@ -52,12 +52,12 @@ class EmailSendQueue extends Model
         // sin terminar de crear la campaña campaña para agilizar el proceso de envío
         return EmailSendQueue::builder()
             // 0 = waiting to be sent
-            ->where('status_047', 0)
+            ->where('status_id_047', 0)
             // only campaign already created
             ->where('created_044', true)
-            ->whereNotIn('contact_047', function($query) use ($limitDate){
-                $query->select('contact_048')
-                    ->from('005_048_email_send_historical')
+            ->whereNotIn('contact_id_047', function($query) use ($limitDate){
+                $query->select('contact_id_048')
+                    ->from('005_048_email_send_history')
                     ->where('sent_048', '>', $limitDate)
                     ->get();
             })
@@ -72,11 +72,11 @@ class EmailSendQueue extends Model
         $limitDate  = $now - (Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 
         return EmailSendQueue::builder()
-                ->join('001_013_email_account', '005_044_email_campaign.email_account_044', '=', '001_013_email_account.id_013')
-                ->where('status_047', '=', 0)
-                ->whereNotIn('contact_047', function($query) use ($limitDate) {
-                    $query->select('contact_048')
-                                ->from('005_048_email_send_historical')
+                ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
+                ->where('status_id_047', '=', 0)
+                ->whereNotIn('contact_id_047', function($query) use ($limitDate) {
+                    $query->select('contact_id_048')
+                                ->from('005_048_email_send_history')
                                 ->where('sent_048', '>', $limitDate)
                                 ->get();
                 })
@@ -89,13 +89,13 @@ class EmailSendQueue extends Model
     // Attention! function called from \Syscover\Comunik\Controller\EmailCampaignsController
     public static function deleteMailingWithoutGroupSendQueue($groups, $campaign)
     {
-        EmailSendQueue::where('campaign_047', $campaign)
-            ->where('status_047', 0)
-            ->whereNotIn('contact_047', function($query) use ($groups) {
-                $query->select('contact_042')
+        EmailSendQueue::where('campaign_id_047', $campaign)
+            ->where('status_id_047', 0)
+            ->whereNotIn('contact_id_047', function($query) use ($groups) {
+                $query->select('contact_id_042')
                     ->from('005_042_contacts_groups')
-                    ->whereIn('group_042', $groups)
-                    ->groupBy('contact_042')
+                    ->whereIn('group_id_042', $groups)
+                    ->groupBy('contact_id_042')
                     ->get();
             })
             ->delete();

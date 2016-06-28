@@ -101,7 +101,7 @@
 
             // validamos que haya elegido un campo pais
             var nCountry = $(".fields").filter(function() {
-                return this.value == "country_041";
+                return this.value == "country_id_041";
             });
 
             if($('[name="country"]').val() == '' && nCountry.length == 0)

@@ -267,7 +267,7 @@
         'checked' => true,
         'inputText' => [
             'name' => 'trackPixel',
-            'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historicalId' => '#historicalId#']) . "'>"
+            'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historyId' => '#historyId#']) . "'>"
         ]
     ])
     @include('pulsar::includes.html.form_text_group', [

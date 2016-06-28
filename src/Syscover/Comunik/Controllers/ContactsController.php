@@ -38,7 +38,7 @@ class ContactsController extends Controller
             'surname_041'               => $this->request->input('surname'),
             'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
             'birth_date_text_041'       => $this->request->has('birthDate')? $this->request->input('birthDate') : null,
-            'country_041'               => $this->request->input('country'),
+            'country_id_041'            => $this->request->input('country'),
             'prefix_041'                => $this->request->input('prefix'),
             'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
             'email_041'                 => strtolower($this->request->input('email')),
@@ -74,7 +74,7 @@ class ContactsController extends Controller
             'surname_041'               => $this->request->input('surname'),
             'birth_date_041'            => $this->request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $this->request->input('birthDate'))->getTimestamp() : null,
             'birth_date_text_041'       => $this->request->has('birthDate')? $this->request->input('birthDate') : null,
-            'country_041'               => $this->request->input('country'),
+            'country_id_041'            => $this->request->input('country'),
             'prefix_041'                => $this->request->input('prefix'),
             'mobile_041'                => $this->request->has('mobile')? str_replace('-', '', $this->request->input('mobile')) : null,
             'email_041'                 => strtolower($this->request->input('email')),
@@ -118,13 +118,13 @@ class ContactsController extends Controller
         $data['groups']     = Group::all();
         $inputFileName      = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $parameters['file'];
         $fields             = [
-            'id_040'        => trans('comunik::pulsar.group_id'),
-            'company_041'   => trans_choice('pulsar::pulsar.company', 1),
-            'name_041'      => trans('pulsar::pulsar.name'),
-            'surname_041'   => trans('pulsar::pulsar.surname'),
-            'country_041'   => trans('comunik::pulsar.country_id'),
-            'mobile_041'    => trans('pulsar::pulsar.mobile'),
-            'email_041'     => trans('pulsar::pulsar.email')
+            'id_040'            => trans('comunik::pulsar.group_id'),
+            'company_041'       => trans_choice('pulsar::pulsar.company', 1),
+            'name_041'          => trans('pulsar::pulsar.name'),
+            'surname_041'       => trans('pulsar::pulsar.surname'),
+            'country_id_041'    => trans('comunik::pulsar.country_id'),
+            'mobile_041'        => trans('pulsar::pulsar.mobile'),
+            'email_041'         => trans('pulsar::pulsar.email')
         ];
 
         $objReader =  \PHPExcel_IOFactory::createReader('CSV')
@@ -172,12 +172,12 @@ class ContactsController extends Controller
         $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $this->request->input('file');
         $fields     = [
             'id_040'        => trans('comunik::pulsar.group_id'),
-            'company_041'   => trans_choice('pulsar::pulsar.company', 1),
-            'name_041'      => trans('pulsar::pulsar.name'),
-            'surname_041'   => trans('pulsar::pulsar.surname'),
-            'country_041'   => trans('comunik::pulsar.country_id'),
-            'mobile_041'    => trans('pulsar::pulsar.mobile'),
-            'email_041'     => trans('pulsar::pulsar.email')
+            'company_041'       => trans_choice('pulsar::pulsar.company', 1),
+            'name_041'          => trans('pulsar::pulsar.name'),
+            'surname_041'       => trans('pulsar::pulsar.surname'),
+            'country_id_041'    => trans('comunik::pulsar.country_id'),
+            'mobile_041'        => trans('pulsar::pulsar.mobile'),
+            'email_041'         => trans('pulsar::pulsar.email')
         ];
         $columns         = [];
 
@@ -237,10 +237,10 @@ class ContactsController extends Controller
                         // siempre y cuando no se elia un grupo para todas las filas
                         $dbRow['id_040'] = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
                     }
-                    elseif (empty($country) && $this->request->input('column' . $col) == 'country_041')
+                    elseif (empty($country) && $this->request->input('column' . $col) == 'country_id_041')
                     {
-                        $dbRow['country_041']   = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
-                        $countryObj             = $countries->find($dbRow['country_041']);
+                        $dbRow['country_id_041']   = trim(strtoupper($objWorksheet->getCellByColumnAndRow($col, $row)->getValue()));
+                        $countryObj             = $countries->find($dbRow['country_id_041']);
                         if($countryObj != null)
                             $dbRow['prefix_041']    = $countryObj->prefix_002;
                     }
@@ -256,9 +256,9 @@ class ContactsController extends Controller
                         if(!empty($country))
                         {
                             // instanciamos los datos comunes de country
-                            $country                = $countries->find($country);
-                            $dbRow['country_041']   = $country->id_002;
-                            $dbRow['prefix_041']    = $country->prefix_002;
+                            $country                    = $countries->find($country);
+                            $dbRow['country_id_041']    = $country->id_002;
+                            $dbRow['prefix_041']        = $country->prefix_002;
                         }
                         $checkCommonField = true;
                     }
@@ -266,11 +266,11 @@ class ContactsController extends Controller
 
                 // check data from server side
                 $rules = [
-                    'email_041'     => 'email|between:2,50|unique:005_041_contact,email_041',
-                    'prefix_041'    => 'numeric|digits_between:0,5',
-                    'mobile_041'    => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041',
-                    'country_041'   => 'required|exists:001_002_country,id_002',
-                    'id_040'        => 'required'
+                    'email_041'         => 'email|between:2,50|unique:005_041_contact,email_041',
+                    'prefix_041'        => 'numeric|digits_between:0,5',
+                    'mobile_041'        => 'numeric|digits_between:2,50|unique:005_041_contact,mobile_041',
+                    'country_id_041'    => 'required|exists:001_002_country,id_002',
+                    'id_040'            => 'required'
                 ];
 
                 // si no tenemos instaciado un grupo para todas las filas, añadimos la comprobación

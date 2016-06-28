@@ -36,6 +36,6 @@ class ComunikCreateTableEmailTemplate extends Migration {
 	 */
 	public function down()
 	{
-            Schema::drop('005_043_email_template');
+    	Schema::drop('005_043_email_template');
 	}
 }

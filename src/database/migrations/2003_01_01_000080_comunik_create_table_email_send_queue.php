@@ -18,21 +18,22 @@ class ComunikCreateTableEmailSendQueue extends Migration {
 				$table->engine = 'InnoDB';
 				
 				$table->bigIncrements('id_047')->unsigned();
-				$table->integer('campaign_047')->unsigned();
-				$table->integer('contact_047')->unsigned();
+				$table->integer('campaign_id_047')->unsigned();
+				$table->integer('contact_id_047')->unsigned();
 				$table->smallInteger('sorting_047')->nullable()->unsigned()->default(0);
-				// status_047 = 0 waiting
-				// status_047 = 1 in process
+				
+				// status_id_047 = 0 waiting
+				// status_id_047 = 1 in process
 				// when is sent, will be deleted
-				$table->tinyInteger('status_047')->unsigned()->default(0);
+				$table->tinyInteger('status_id_047')->unsigned()->default(0);
 				$table->integer('create_047')->unsigned();
 
-				$table->foreign('campaign_047', 'fk01_005_047_email_send_queue')
+				$table->foreign('campaign_id_047', 'fk01_005_047_email_send_queue')
 					->references('id_044')
 					->on('005_044_email_campaign')
 					->onDelete('cascade')
 					->onUpdate('cascade');
-				$table->foreign('contact_047', 'fk02_005_047_email_send_queue')
+				$table->foreign('contact_id_047', 'fk02_005_047_email_send_queue')
 					->references('id_041')
 					->on('005_041_contact')
 					->onDelete('cascade')

@@ -3,7 +3,7 @@
 use Syscover\Pulsar\Core\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Syscover\Comunik\Libraries\Cron;
-use Syscover\Comunik\Models\EmailSendHistorical;
+use Syscover\Comunik\Models\EmailSendHistory;
 use Syscover\Pulsar\Libraries\EmailServices;
 use Syscover\Pulsar\Models\EmailAccount;
 use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
@@ -47,8 +47,8 @@ class EmailCampaignsController extends Controller
             $campaign = EmailCampaign::builder()->find($parameters['id']);
             $object = [
                 'name_044'                  => $campaign->name_044,
-                'email_account_044'         => $campaign->email_account_044,
-                'template_044'              => $campaign->template_044,
+                'email_account_id_044'      => $campaign->email_account_id_044,
+                'template_id_044'           => $campaign->template_id_044,
                 'subject_044'               => $campaign->subject_044,
                 'theme_044'                 => $campaign->theme_044,
                 'header_044'                => $campaign->header_044,
@@ -82,8 +82,8 @@ class EmailCampaignsController extends Controller
 
         $emailCampaign = EmailCampaign::create([
             'name_044'                  => $this->request->input('name'),
-            'email_account_044'         => $this->request->input('emailAccount'),
-            'template_044'              => empty($this->request->input('template'))? null : $this->request->input('template'),
+            'email_account_id_044'      => $this->request->input('emailAccount'),
+            'template_id_044'           => empty($this->request->input('template'))? null : $this->request->input('template'),
             'subject_044'               => $this->request->input('subject'),
             'theme_044'                 => $this->request->input('theme'),
             'header_044'                => $htmlLinks['header'],
@@ -114,10 +114,10 @@ class EmailCampaignsController extends Controller
         $parameters['selectCountries']      = $parameters['object']->getCountries;
 
         // statistics
-        $parameters['queueMailings']        = EmailSendQueue::where('campaign_047', $parameters['id'])->count();
-        $parameters['sentMailings']         = EmailSendHistorical::where('campaign_048', $parameters['id'])->count();
-        $parameters['noSentMailings']       = EmailSendQueue::where('campaign_047', $parameters['id'])->where('status_047', 0)->count();
-        $parameters['uniqueViewMailings']   = EmailSendHistorical::where('campaign_048', $parameters['id'])->where('viewed_048', '>' ,0)->count();
+        $parameters['queueMailings']        = EmailSendQueue::where('campaign_id_047', $parameters['id'])->count();
+        $parameters['sentMailings']         = EmailSendHistory::where('campaign_id_048', $parameters['id'])->count();
+        $parameters['noSentMailings']       = EmailSendQueue::where('campaign_id_047', $parameters['id'])->where('status_id_047', 0)->count();
+        $parameters['uniqueViewMailings']   = EmailSendHistory::where('campaign_id_048', $parameters['id'])->where('viewed_048', '>' ,0)->count();
         $parameters['effectiveness']        = $parameters['uniqueViewMailings'] > 0? round($parameters['uniqueViewMailings'] / $parameters['sentMailings'] * 100, 2) : 0;
 
         return $parameters;
@@ -129,8 +129,8 @@ class EmailCampaignsController extends Controller
 
         EmailCampaign::where('id_044', $parameters['id'])->update([
             'name_044'                  => $this->request->input('name'),
-            'email_account_044'         => $this->request->input('emailAccount'),
-            'template_044'              => empty($this->request->input('template'))? null : $this->request->input('template'),
+            'email_account_id_044'      => $this->request->input('emailAccount'),
+            'template_id_044'           => empty($this->request->input('template'))? null : $this->request->input('template'),
             'subject_044'               => $this->request->input('subject'),
             'theme_044'                 => $this->request->input('theme'),
             'header_044'                => $htmlLinks['header'],
@@ -150,7 +150,7 @@ class EmailCampaignsController extends Controller
         $emailCampaign->getCountries()->sync($this->request->input('countries'));
         $emailCampaign->getGroups()->sync($this->request->input('groups'));
 
-        // borramos los envíos de cola, de aquellos correos en estado, status_047 = 0 waiting
+        // borramos los envíos de cola, de aquellos correos en estado, status_id_047 = 0 waiting
         // que no correspondan con los nuevos grupos, caso muy dificil de ocurrir,
         // ya que solo se pasan a cola cuando van a ser enviados
         EmailSendQueue::deleteMailingWithoutGroupSendQueue($this->request->input('groups'), $emailCampaign->id_044);
@@ -166,10 +166,10 @@ class EmailCampaignsController extends Controller
 
         // We check that the historicoId exists and is equal to 0,
         // It is 0 when the request comes from a campaign preview
-        if(isset($parameters['historicalId']) && $parameters['historicalId'] != 0)
-            $emailSendHistorical = EmailSendHistorical::getRecords(['id_048' => Crypt::decrypt($parameters['historicalId'])])->first();
+        if(isset($parameters['historyId']) && $parameters['historyId'] != 0)
+            $emailSendHistorical = EmailSendHistory::getRecords(['id_048' => Crypt::decrypt($parameters['historyId'])])->first();
 
-        // if is a test mailing, set contactKey and historicalId to 0
+        // if is a test mailing, set contactKey and historyId to 0
         $data           = [
             'email'         => isset($emailSendHistorical->email_041)? $emailSendHistorical->email_041 : null,
             'html'          => $emailCampaign->header_044 . $emailCampaign->body_044 . $emailCampaign->footer_044,
@@ -180,7 +180,7 @@ class EmailCampaignsController extends Controller
             'name'          => isset($emailSendHistorical->name_041)? $emailSendHistorical->name_041 : null,
             'surname'       => isset($emailSendHistorical->surname_041)? $emailSendHistorical->surname_041 : null,
             'birthDay'      => isset($emailSendHistorical->birth_date_041)?  date(config('pulsar.datePattern'), $emailSendHistorical->birth_date_041) : null,
-            'historicalId'  => isset($parameters['historicalId'])? $parameters['historicalId'] : 0,
+            'historyId'     => isset($parameters['historyId'])? $parameters['historyId'] : 0,
         ];
 
         $data = EmailServices::setTemplate($data);
@@ -194,17 +194,17 @@ class EmailCampaignsController extends Controller
         $parameters = $this->request->route()->parameters();
 
         // if it's a test email, we brake execution
-        if($parameters['historicalId'] === "0") exit;
+        if($parameters['historyId'] === "0") exit;
 
-        $campaign       = Crypt::decrypt($parameters['campaign']);
-        $historicalId   = Crypt::decrypt($parameters['historicalId']);
+        $campaign   = Crypt::decrypt($parameters['campaign']);
+        $historyId  = Crypt::decrypt($parameters['historyId']);
 
 
         // add a viewed to the campaign
         EmailCampaign::where('id_044', $campaign)->increment('viewed_044');
 
         // add a viewed to the historical
-        EmailSendHistorical::where('id_048', $historicalId)->increment('viewed_048');
+        EmailSendHistory::where('id_048', $historyId)->increment('viewed_048');
     }
 
     public function sendTest()

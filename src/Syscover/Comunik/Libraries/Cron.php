@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Crypt;
 use Syscover\Comunik\Models\EmailPattern;
-use Syscover\Comunik\Models\EmailSendHistorical;
+use Syscover\Comunik\Models\EmailSendHistory;
 use Syscover\Comunik\Models\EmailSendQueue;
 use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
 use Syscover\Pulsar\Libraries\EmailServices;
@@ -104,10 +104,10 @@ class Cron
             foreach ($contacts as $contact)
             {
                 $emailing = [
-                    'campaign_047'  => $campaign->id_044,
-                    'contact_047'   => $contact->id_041,
-                    'create_047'    => date('U'),
-                    'sorting_047'   => $campaign->sorting_044
+                    'campaign_id_047'   => $campaign->id_044,
+                    'contact_id_047'    => $contact->id_041,
+                    'create_047'        => date('U'),
+                    'sorting_047'       => $campaign->sorting_044
                 ];
                 array_push($emailSendQueue, $emailing);
             }
@@ -181,8 +181,8 @@ class Cron
         {
             // cambiamos el estado de EmailSendQueue para que se puedan hacer peticiones
             EmailSendQueue::whereIn('id_047', $mailingIds)->update([
-                // status_047 = 1 in process
-                'status_047' => 1
+                // status_id_047 = 1 in process
+                'status_id_047' => 1
             ]);
 
             // desbloqueo de proceso de obtención de emails para ser enviados y se puedan hacer peticiones
@@ -193,10 +193,10 @@ class Cron
             foreach ($mailings as $mailing)
             {
                 // Creamos el historico de envío con antelación para obtener el ID del histórico de envío y contabilizarlo
-                $emailSendHistorical = EmailSendHistorical::create([
-                    'send_queue_048'    => $mailing->id_047,
-                    'campaign_048'      => $mailing->campaign_047,
-                    'contact_048'       => $mailing->contact_047,
+                $emailSendHistorical = EmailSendHistory::create([
+                    'send_queue_id_048' => $mailing->id_047,
+                    'campaign_id_048'   => $mailing->campaign_id_047,
+                    'contact_id_048'    => $mailing->contact_id_047,
                     'create_048'        => $mailing->create_047,
                     'sent_048'          => date('U'),
                     'viewed_048'        => 0
@@ -214,7 +214,7 @@ class Cron
                     'surname'       => isset($mailing->surname_041)? $mailing->surname_041 : '',
                     'birthDate'     => isset($mailing->birth_date_041)?  date(config('pulsar.datePattern'), $mailing->birth_date_041) : '',
                     'campaign'      => Crypt::encrypt($mailing->id_044),
-                    'historicalId'  => Crypt::encrypt($emailSendHistorical->id_048), // dato para contabilizar en las estadísticas
+                    'historyId'     => Crypt::encrypt($emailSendHistorical->id_048), // dato para contabilizar en las estadísticas
                 ];
 
                 // config SMTP account
@@ -236,7 +236,7 @@ class Cron
                 else
                 {
                     // error de envío, eliminamos el histórico antes creado
-                    EmailSendHistorical::destroy($emailSendHistorical->id_048);
+                    EmailSendHistory::destroy($emailSendHistorical->id_048);
 
                     /// marcamos en error
                     // TODO:AQUÍ MARCAMOS EL ERROR
@@ -265,7 +265,7 @@ class Cron
     {
         $campaign       = EmailCampaign::builder()->where('id_044', $paramenters['id'])->first();
         $testGroup      = Preference::getValue('emailServiceTestGroup', 5);
-        $contacts       = Contact::getRecords(['group_042' => (int)$testGroup->value_018, 'groupBy' => 'id_041']);
+        $contacts       = Contact::getRecords(['group_id_042' => (int)$testGroup->value_018, 'groupBy' => 'id_041']);
 
         if(count($contacts) > 0)
         {

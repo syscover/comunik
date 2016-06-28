@@ -25,7 +25,7 @@
                 useSeparatorHighlight:      true,
                 textSeparatorHighlight:     '------------------',
 
-                countryValue:               '{{ old('country', isset($object->country_041)? $object->country_041 : null) }}'
+                countryValue:               '{{ old('country', isset($object->country_id_041)? $object->country_id_041 : null) }}'
             })
         })
     </script>

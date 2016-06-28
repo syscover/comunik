@@ -18,8 +18,8 @@ class ComunikCreateTableEmailCampaign extends Migration {
                 
                 $table->increments('id_044')->unsigned();
                 $table->string('name_044');
-                $table->integer('email_account_044')->unsigned();
-                $table->integer('template_044')->nullable()->unsigned();
+                $table->integer('email_account_id_044')->unsigned();
+                $table->integer('template_id_044')->unsigned()->nullable();
                 $table->string('subject_044');
                 $table->string('theme_044');
                 $table->text('header_044');
@@ -40,12 +40,12 @@ class ComunikCreateTableEmailCampaign extends Migration {
                 $table->boolean('created_044')->default(false);
                 $table->integer('viewed_044')->unsigned()->default(0);
 
-                $table->foreign('email_account_044', 'fk01_005_044_email_campaign')
+                $table->foreign('email_account_id_044', 'fk01_005_044_email_campaign')
                     ->references('id_013')
                     ->on('001_013_email_account')
                     ->onDelete('restrict')
                     ->onUpdate('cascade');
-                $table->foreign('template_044', 'fk02_005_044_email_campaign')
+                $table->foreign('template_id_044', 'fk02_005_044_email_campaign')
                     ->references('id_043')
                     ->on('005_043_email_template')
                     ->onDelete('restrict')
