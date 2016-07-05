@@ -11,7 +11,7 @@
                     "displayStart": {{ $offset }},
                     "sorting": [[0, "desc"]],
                     "columnDefs": [
-                        { "visible": false, searchable': false, "targets": [3,5]}, // hidden column 1 and prevents search on column 1
+                        { "visible": false, "searchable": false, "targets": [3,5]}, // hidden column 1 and prevents search on column 1
                         { "dataSort": 3, "targets": [4] }, // sort column 2 according hidden column 1 data
                         { "dataSort": 5, "targets": [6] }, // sort column 2 according hidden column 1 data
                         { "sortable": false, "targets": [9,10]},
@@ -31,7 +31,7 @@
             }
         });
     </script>
-    <!-- /.comunik::email_campaign.index -->
+    <!-- /comunik::email_campaign.index -->
 @stop
 
 @section('tHead')
@@ -49,5 +49,5 @@
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /.comunik::email_campaign.index -->
+    <!-- /comunik::email_campaign.index -->
 @stop
