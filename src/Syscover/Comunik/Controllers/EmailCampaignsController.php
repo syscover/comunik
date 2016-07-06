@@ -194,7 +194,7 @@ class EmailCampaignsController extends Controller
         $parameters = $this->request->route()->parameters();
 
         // if it's a test email, we brake execution
-        if($parameters['historyId'] === "0") exit;
+        if($parameters['historyId'] === '0') exit;
 
         $campaign   = Crypt::decrypt($parameters['campaign']);
         $historyId  = Crypt::decrypt($parameters['historyId']);

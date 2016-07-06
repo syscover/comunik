@@ -285,7 +285,7 @@ class Cron
                         'surname'       => isset($contact->surname_041)? $contact->surname_041 : '',
                         'birthDate'     => isset($contact->birth_date_041)?  date(config('pulsar.datePattern'), $contact->birth_date_041) : '',
                         'campaign'      => Crypt::encrypt($campaign->id_044),
-                        'historyId'     => Crypt::encrypt(0) // data to set statics, set 0 to not count visit
+                        'historyId'     => '0' // data to set statics, set 0 to not count visit
                     ];
 
                     // config SMTP account
