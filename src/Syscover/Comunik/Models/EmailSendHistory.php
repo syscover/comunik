@@ -37,20 +37,4 @@ class EmailSendHistory extends Model
     {
         return $query->join('005_041_contact', '005_048_email_send_history.contact_id_048', '=', '005_041_contact.id_041');
     }
-
-    /**
-     * @deprecated
-     * @param $parameters
-     * @return mixed
-     */
-    public static function getRecords($parameters)
-    {
-        $query = EmailSendHistory::builder();
-
-        if(isset($parameters['id_048'])) $query->where('id_048', $parameters['id_048']);
-        if(isset($parameters['campaign_id_048'])) $query->where('campaign_id_048', $parameters['campaign_id_048']);
-        if(isset($parameters['contact_id_048'])) $query->where('contact_id_048', $parameters['contact_id_048']);
-
-        return $query->get();
-    }
 }

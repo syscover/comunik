@@ -167,7 +167,7 @@ class EmailCampaignsController extends Controller
         // We check that the historicoId exists and is equal to 0,
         // It is 0 when the request comes from a campaign preview
         if(isset($parameters['historyId']) && $parameters['historyId'] != 0)
-            $emailSendHistorical = EmailSendHistory::getRecords(['id_048' => Crypt::decrypt($parameters['historyId'])])->first();
+            $emailSendHistorical = EmailSendHistory::builder()->where('id_048', Crypt::decrypt($parameters['historyId']))->first();
 
         // if is a test mailing, set contactKey and historyId to 0
         $data           = [
