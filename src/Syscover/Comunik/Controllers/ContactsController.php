@@ -98,13 +98,13 @@ class ContactsController extends Controller
         $contact = Contact::find(Crypt::decrypt($parameters['contactKey']));
 
         // from contactKey, we get contact and key for unsubscribe the contact
-
         return view('comunik::contact.unsubscribe', ['key' => $parameters['contactKey'], 'contact' => $contact]);
     }
 
     public function unsubscribeEmail()
     {
         $contact = Contact::find(Crypt::decrypt($this->request->input('key')));
+        
         Contact::where('id_041', $contact->id_041)->update([
             'unsubscribe_email_041' => true
         ]);
