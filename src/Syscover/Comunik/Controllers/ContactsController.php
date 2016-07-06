@@ -97,6 +97,8 @@ class ContactsController extends Controller
 
         $contact = Contact::find(Crypt::decrypt($parameters['contactKey']));
 
+        // from contactKey, we get contact and key for unsubscribe the contact
+
         return view('comunik::contact.unsubscribe', ['key' => $parameters['contactKey'], 'contact' => $contact]);
     }
 
