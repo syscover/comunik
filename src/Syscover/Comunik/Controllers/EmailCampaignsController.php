@@ -164,9 +164,9 @@ class EmailCampaignsController extends Controller
         // function to view online the campaign
         $emailCampaign = EmailCampaign::find(Crypt::decrypt($parameters['campaign']));
 
-        // We check that the historicoId exists and is equal to 0,
+        // We check that the historyId exists and is equal to 0,
         // It is 0 when the request comes from a campaign preview
-        if(isset($parameters['historyId']) && $parameters['historyId'] != 0)
+        if(isset($parameters['historyId']) && $parameters['historyId'] !== '0')
             $emailSendHistorical = EmailSendHistory::builder()->where('id_048', Crypt::decrypt($parameters['historyId']))->first();
 
         // if is a test mailing, set contactKey and historyId to 0
@@ -210,7 +210,7 @@ class EmailCampaignsController extends Controller
     public function sendTest()
     {
         // get parameters from url route
-        $parameters     = $this->request->route()->parameters();
+        $parameters = $this->request->route()->parameters();
 
         Cron::sendEmailsTest($parameters);
 

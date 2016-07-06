@@ -193,7 +193,7 @@ class Cron
             foreach ($mailings as $mailing)
             {
                 // Creamos el historico de envío con antelación para obtener el ID del histórico de envío y contabilizarlo
-                $emailSendHistorical = EmailSendHistory::create([
+                $emailSendHistory = EmailSendHistory::create([
                     'send_queue_id_048' => $mailing->id_047,
                     'campaign_id_048'   => $mailing->campaign_id_047,
                     'contact_id_048'    => $mailing->contact_id_047,
@@ -214,7 +214,7 @@ class Cron
                     'surname'       => isset($mailing->surname_041)? $mailing->surname_041 : '',
                     'birthDate'     => isset($mailing->birth_date_041)?  date(config('pulsar.datePattern'), $mailing->birth_date_041) : '',
                     'campaign'      => Crypt::encrypt($mailing->id_044),
-                    'historyId'     => Crypt::encrypt($emailSendHistorical->id_048), // dato para contabilizar en las estadísticas
+                    'historyId'     => Crypt::encrypt($emailSendHistory->id_048) // data to set statics
                 ];
 
                 // config SMTP account
@@ -236,7 +236,7 @@ class Cron
                 else
                 {
                     // error de envío, eliminamos el histórico antes creado
-                    EmailSendHistory::destroy($emailSendHistorical->id_048);
+                    EmailSendHistory::destroy($emailSendHistory->id_048);
 
                     /// marcamos en error
                     // TODO:AQUÍ MARCAMOS EL ERROR
@@ -285,6 +285,7 @@ class Cron
                         'surname'       => isset($contact->surname_041)? $contact->surname_041 : '',
                         'birthDate'     => isset($contact->birth_date_041)?  date(config('pulsar.datePattern'), $contact->birth_date_041) : '',
                         'campaign'      => Crypt::encrypt($campaign->id_044),
+                        'historyId'     => Crypt::encrypt(0) // data to set statics, set 0 to not count visit
                     ];
 
                     // config SMTP account
