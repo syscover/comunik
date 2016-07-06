@@ -175,12 +175,12 @@ class EmailCampaignsController extends Controller
             'html'          => $emailCampaign->header_044 . $emailCampaign->body_044 . $emailCampaign->footer_044,
             'subject'       => $emailCampaign->subject_044,
             'campaign'      => Crypt::encrypt($emailCampaign->id_044),
-            'contactKey'    => isset($emailSendHistorical->id_041)? Crypt::encrypt($emailSendHistorical->id_041) : 0,
+            'contactKey'    => isset($emailSendHistorical->id_041)? Crypt::encrypt($emailSendHistorical->id_041) : '0',
             'company'       => isset($emailSendHistorical->company_041)? $emailSendHistorical->company_041 : null,
             'name'          => isset($emailSendHistorical->name_041)? $emailSendHistorical->name_041 : null,
             'surname'       => isset($emailSendHistorical->surname_041)? $emailSendHistorical->surname_041 : null,
             'birthDay'      => isset($emailSendHistorical->birth_date_041)?  date(config('pulsar.datePattern'), $emailSendHistorical->birth_date_041) : null,
-            'historyId'     => isset($parameters['historyId'])? $parameters['historyId'] : 0,
+            'historyId'     => isset($parameters['historyId'])? $parameters['historyId'] : '0',
         ];
 
         $data = EmailServices::setTemplate($data);

@@ -93,11 +93,11 @@ class ContactsController extends Controller
         $parameters = $this->request->route()->parameters();
 
         // if it's a test email, we brake execution
-        if($parameters['key'] === "0") exit;
+        if($parameters['contactKey'] === '0') exit;
 
-        $contact = Contact::find(Crypt::decrypt($parameters['key']));
+        $contact = Contact::find(Crypt::decrypt($parameters['contactKey']));
 
-        return view('comunik::contact.unsubscribe', ['key' => $parameters['key'], 'contact' => $contact]);
+        return view('comunik::contact.unsubscribe', ['key' => $parameters['contactKey'], 'contact' => $contact]);
     }
 
     public function unsubscribeEmail()
