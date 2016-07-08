@@ -14,7 +14,7 @@ class EmailTemplatesController extends Controller
     protected $routeSuffix  = 'comunikEmailTemplate';
     protected $folder       = 'email_template';
     protected $package      = 'comunik';
-    protected $indexColumns     = ['id_043', 'name_043'];
+    protected $indexColumns = ['id_043', 'name_043'];
     protected $nameM        = 'name_043';
     protected $model        = EmailTemplate::class;
     protected $icon         = 'fa fa-pencil-square-o';

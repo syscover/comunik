@@ -13,7 +13,7 @@ class EmailPatternsController extends Controller
     protected $routeSuffix  = 'comunikEmailPattern';
     protected $folder       = 'email_pattern';
     protected $package      = 'comunik';
-    protected $indexColumns     = ['id_049', 'name_049', ['type' => 'translated', 'data' => 'action_049']];
+    protected $indexColumns = ['id_049', 'name_049', ['type' => 'translated', 'data' => 'action_049']];
     protected $nameM        = 'name_049';
     protected $model        = EmailPattern::class;
     protected $icon         = 'fa fa-braille';

@@ -15,7 +15,7 @@ class EmailPreferenceController extends Controller
     protected $routeSuffix  = 'comunikEmailPreference';
     protected $folder       = 'preference';
     protected $package      = 'comunik';
-    protected $indexColumns     = [];
+    protected $indexColumns = [];
     protected $nameM        = null;
     protected $model        = Preference::class;
     protected $icon         = 'fa fa-cog';

@@ -23,7 +23,7 @@ class EmailCampaignsController extends Controller
     protected $routeSuffix  = 'comunikEmailCampaign';
     protected $folder       = 'email_campaign';
     protected $package      = 'comunik';
-    protected $indexColumns     = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'shipping_date_text_044', 'persistence_date_044', 'persistence_date_text_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
+    protected $indexColumns = ['id_044', 'name_044', 'name_013', 'shipping_date_044', 'shipping_date_text_044', 'persistence_date_044', 'persistence_date_text_044', 'sorting_044', ['data' => 'processing_044', 'type' => 'active']];
     protected $nameM        = 'name_044';
     protected $model        = EmailCampaign::class;
     protected $icon         = 'fa fa-user';

@@ -13,7 +13,7 @@ class GroupsController extends Controller
     protected $routeSuffix  = 'comunikGroup';
     protected $folder       = 'group';
     protected $package      = 'comunik';
-    protected $indexColumns     = ['id_040', 'name_040'];
+    protected $indexColumns = ['id_040', 'name_040'];
     protected $nameM        = 'name_040';
     protected $model        = Group::class;
     protected $icon         = 'fa fa-users';
