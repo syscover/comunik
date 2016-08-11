@@ -1,9 +1,7 @@
 {
     "name": "syscover/comunik",
-    "version": "5.2",
     "description": "Comunik package",
     "keywords": ["syscover","pulsar","laravel","comunik"],
-    "license": "MIT",
     "authors": [
         {
             "name": "SYSCOVER SL",
