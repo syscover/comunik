@@ -1,10 +1,12 @@
-# Comunik App to Laravel 5
+# Comunik App to Laravel 5.2
+
+[![Total Downloads](https://poser.pugx.org/syscover/comounik/downloads)](https://packagist.org/packages/syscover/comounik)
 
 ## Installation
 
 **1 - After install Laravel framework, insert on file composer.json, inside require object this value**
 ```
-"syscover/comunik": "dev-master"
+"syscover/comunik": "~1.0"
 
 ```
 and execute on console:
