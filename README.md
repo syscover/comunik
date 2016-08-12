@@ -1,6 +1,6 @@
 # Comunik App to Laravel 5.2
 
-[![Total Downloads](https://poser.pugx.org/syscover/comounik/downloads)](https://packagist.org/packages/syscover/comounik)
+[![Total Downloads](https://poser.pugx.org/syscover/comunik/downloads)](https://packagist.org/packages/syscover/comunik)
 
 ## Installation
 
@@ -11,7 +11,7 @@
 ```
 and execute on console:
 ```
-composer update
+composer install
 ```
 
 **2 - Register service provider, on file config/app.php add to providers array**
