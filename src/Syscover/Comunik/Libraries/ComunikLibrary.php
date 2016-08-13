@@ -40,8 +40,8 @@ class ComunikLibrary
             'prefix_041'                => $request->has('prefix')? $request->input('prefix') : null,
             'mobile_041'                => $request->has('mobile')? $request->input('mobile') : null,
             'email_041'                 => $request->has('email')? strtolower($request->input('email')) : null,
-            'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? false : true,
-            'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? false : true
+            'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? true : false,
+            'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? true : false
         ]);
 
         return $contact;
@@ -84,8 +84,8 @@ class ComunikLibrary
             'prefix_041'                => $request->has('prefix')? $request->input('prefix') : null,
             'mobile_041'                => $request->has('mobile')? $request->input('mobile') : null,
             'email_041'                 => $request->has('email')? strtolower($request->input('email')) : null,
-            'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? false : true,
-            'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? false : true
+            'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? true : false,
+            'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? true : false
         ]);
 
         $contact = Contact::builder()->find($request->input('id'));
