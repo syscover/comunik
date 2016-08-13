@@ -1,5 +1,6 @@
 <?php namespace Syscover\Comunik\Libraries;
 
+use Illuminate\Http\Request;
 use Syscover\Pulsar\Libraries\Miscellaneous;
 use Syscover\Comunik\Models\Contact;
 
@@ -24,7 +25,7 @@ class ComunikLibrary
      * @return  \Syscover\Comunik\Models\Contact    $contact
      * @throws  \Exception
      */
-    public static function createContact($request)
+    public static function createContact(Request $request)
     {
         if(! $request->has('country'))
             throw new \Exception('You have to define a country field to record a contact');
@@ -42,6 +43,55 @@ class ComunikLibrary
             'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? false : true,
             'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? false : true
         ]);
+
+        return $contact;
+    }
+
+    /**
+     * Function updateContact
+     *
+     * Input names to create customer
+     *
+     * company_041 [company]
+     * name_041 [name]
+     * surname_041 [surname]
+     * birth_date_041 [birthDate]
+     * prefix_041 [prefix]
+     * mobile_041 [mobile]
+     * email_041 [email]
+     * unsubscribe_mobile_041 [subscribeMobile]
+     * unsubscribe_email_041 [subscribeEmail]
+     *
+     * @param   \Illuminate\Http\Request            $request
+     * @return  \Syscover\Comunik\Models\Contact    $contact
+     * @throws  \Exception
+     */
+    public static function updateContact(Request $request)
+    {
+        if(! $request->has('id'))
+            throw new \Exception('You have to indicate a id contact');
+
+        if(! $request->has('country'))
+            throw new \Exception('You have to define a country field to record a contact');
+
+        Contact::where('id_401', $request->input('id'))->update([
+            'company_041'               => $request->has('company')? $request->input('company') : null,
+            'name_041'                  => $request->has('name')? ucwords(strtolower($request->input('name'))) : null,
+            'surname_041'               => $request->has('surname')? ucwords(strtolower($request->input('surname'))) : null,
+            'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
+            'birth_date_text_041'       => $request->has('birthDate')? $request->input('birthDate') : null,
+            'country_id_041'            => $request->input('country'),
+            'prefix_041'                => $request->has('prefix')? $request->input('prefix') : null,
+            'mobile_041'                => $request->has('mobile')? $request->input('mobile') : null,
+            'email_041'                 => $request->has('email')? strtolower($request->input('email')) : null,
+            'unsubscribe_mobile_041'    => $request->has('subscribeMobile') && $request->input('subscribeMobile') != '1'? false : true,
+            'unsubscribe_email_041'     => $request->has('subscribeEmail') && $request->input('subscribeEmail') != '1'? false : true
+        ]);
+
+        $contact = Contact::builder()->find($request->input('id'));
+
+        if($contact === null)
+            throw new \Exception('You have to indicate an id of a existing contact');
 
         return $contact;
     }
