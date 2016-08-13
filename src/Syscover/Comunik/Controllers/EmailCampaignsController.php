@@ -6,7 +6,7 @@ use Syscover\Comunik\Libraries\Cron;
 use Syscover\Comunik\Models\EmailSendHistory;
 use Syscover\Pulsar\Libraries\EmailServices;
 use Syscover\Pulsar\Models\EmailAccount;
-use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
+use Syscover\Comunik\Libraries\ComunikLibrary;
 use Syscover\Comunik\Models\EmailCampaign;
 use Syscover\Comunik\Models\EmailSendQueue;
 use Syscover\Comunik\Models\Group;
@@ -68,8 +68,8 @@ class EmailCampaignsController extends Controller
 
         $parameters['emailAccounts']    = EmailAccount::all();
         $parameters['templates']        = EmailTemplate::all();
-        $parameters['themes']           = MiscellaneousComunik::getThemes();
-        $parameters['emlHeaders']       = MiscellaneousComunik::getEmlHeaders();
+        $parameters['themes']           = ComunikLibrary::getThemes();
+        $parameters['emlHeaders']       = ComunikLibrary::getEmlHeaders();
         $parameters['groups']           = Group::all();
         $parameters['countries']        = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_id_010]);
 
@@ -78,7 +78,7 @@ class EmailCampaignsController extends Controller
 
     public function storeCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
+        $htmlLinks = ComunikLibrary::setMailingLinks($this->request, $parameters);
 
         $emailCampaign = EmailCampaign::create([
             'name_044'                  => $this->request->input('name'),
@@ -106,8 +106,8 @@ class EmailCampaignsController extends Controller
     {
         $parameters['emailAccounts']        = EmailAccount::all();
         $parameters['templates']            = EmailTemplate::all();
-        $parameters['themes']               = MiscellaneousComunik::getThemes();
-        $parameters['emlHeaders']           = MiscellaneousComunik::getEmlHeaders();
+        $parameters['themes']               = ComunikLibrary::getThemes();
+        $parameters['emlHeaders']           = ComunikLibrary::getEmlHeaders();
         $parameters['groups']               = Group::all();
         $parameters['selectGroups']         = $parameters['object']->getGroups;
         $parameters['countries']            = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_id_010]);
@@ -125,7 +125,7 @@ class EmailCampaignsController extends Controller
     
     public function updateCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
+        $htmlLinks = ComunikLibrary::setMailingLinks($this->request, $parameters);
 
         EmailCampaign::where('id_044', $parameters['id'])->update([
             'name_044'                  => $this->request->input('name'),

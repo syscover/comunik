@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Crypt;
 use Syscover\Comunik\Models\EmailPattern;
 use Syscover\Comunik\Models\EmailSendHistory;
 use Syscover\Comunik\Models\EmailSendQueue;
-use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
+use Syscover\Comunik\Libraries\ComunikLibrary;
 use Syscover\Pulsar\Libraries\EmailServices;
 use Syscover\Pulsar\Libraries\ImapServices;
 use Syscover\Pulsar\Models\EmailAccount;
@@ -418,7 +418,7 @@ class Cron
             //var_dump($message->getUid());
 
             // comprobamos si el mensaje coincide con algún patron
-            $response = MiscellaneousComunik::checkEmailPattern($message, $patterns);
+            $response = ComunikLibrary::checkEmailPattern($message, $patterns);
 
             if($response['success'])
             {

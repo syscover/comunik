@@ -1,10 +1,51 @@
 <?php namespace Syscover\Comunik\Libraries;
 
-use Syscover\Pulsar\Libraries\Miscellaneous as MiscellaneousPulsar;
+use Syscover\Pulsar\Libraries\Miscellaneous;
 use Syscover\Comunik\Models\Contact;
 
-class Miscellaneous
+class ComunikLibrary
 {
+    /**
+     * Function createContact
+     *
+     * Input names to create customer
+     *
+     * company_041 [company]
+     * name_041 [groupId]
+     * surname_041 [date]
+     * birth_date_041 [birthDate]
+     * prefix_041 [prefix]
+     * mobile_041 [mobile]
+     * email_041 [email]
+     * unsubscribe_mobile_041 [subscribeMobile]
+     * unsubscribe_email_041 [subscribeEmail]
+     *
+     * @param   \Illuminate\Http\Request            $request
+     * @return  \Syscover\Comunik\Models\Contact    $contact
+     * @throws  \Exception
+     */
+    public function createContact($request)
+    {
+        if(! $request->has('country'))
+            throw new \Exception('You have to define a country field to record a contact');
+
+        $contact = Contact::create([
+            'company_041'               => $request->has('company')? $request->input('company') : null,
+            'name_041'                  => $request->has('name')? ucwords(strtolower($request->input('name'))) : null,
+            'surname_041'               => $request->has('surname')? ucwords(strtolower($request->input('surname'))) : null,
+            'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
+            'birth_date_text_041'       => $request->has('birthDate')? $this->request->input('birthDate') : null,
+            'country_id_041'            => $request->input('country'),
+            'prefix_041'                => $request->has('prefix')? $request->input('prefix') : null,
+            'mobile_041'                => $request->has('mobile')? $request->input('mobile') : null,
+            'email_041'                 => $request->has('email')? strtolower($request->input('email')) : null,
+            'unsubscribe_mobile_041'    => ! $request->has('subscribeMobile'),
+            'unsubscribe_email_041'     => ! $request->has('subscribeEmail'),
+        ]);
+
+        return $contact;
+    }
+
     /**
      * Function to get default email header
      *
@@ -88,7 +129,6 @@ class Miscellaneous
             throw new \Exception('eml headers not found. Check if exist the file: '.$path);
         }
     }
-
 
     /**
      * Function to get default html email header
@@ -304,7 +344,7 @@ class Miscellaneous
      * @param   string $text text with any number of \r, \r\n and \n combinations
      * @return  string the fixed text
      */
-    private static function fixNewlines($text)
+    protected static function fixNewlines($text)
     {
         // replace \r\n to \n
         $text = str_replace("\r\n", "\n", $text);
@@ -314,7 +354,7 @@ class Miscellaneous
         return $text;
     }
 
-    private static function nextChildName($node)
+    protected static function nextChildName($node)
     {
         // get the next child
         $nextNode = $node->nextSibling;
@@ -335,7 +375,7 @@ class Miscellaneous
         return $nextName;
     }
 
-    private static function prevChildName($node)
+    protected static function prevChildName($node)
     {
         // get the previous child
         $nextNode = $node->previousSibling;
@@ -356,7 +396,7 @@ class Miscellaneous
         return $nextName;
     }
 
-    private static function iterateOverNode($node)
+    protected static function iterateOverNode($node)
     {
         if ($node instanceof \DOMText)
         {
@@ -542,7 +582,7 @@ class Miscellaneous
         {
             $response['success']    = true;
             $response['pattern']    = $objPattern;
-            $emails                 = MiscellaneousPulsar::extractEmail($body);
+            $emails                 = Miscellaneous::extractEmail($body);
             $response['contacts']   = Contact::builder()
                 ->whereIn('email_041', $emails)
                 ->where('unsubscribe_email_041', false)
@@ -552,7 +592,7 @@ class Miscellaneous
         {
             $response['success']    = false;
             $response['pattern']    = false;
-            $emails                 = MiscellaneousPulsar::extractEmail($body);
+            $emails                 = Miscellaneous::extractEmail($body);
             $response['contacts']   = Contact::builder()
                 ->whereIn('email_041', $emails)
                 ->where('unsubscribe_email_041', false)

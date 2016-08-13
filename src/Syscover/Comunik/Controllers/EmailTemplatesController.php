@@ -1,7 +1,7 @@
 <?php namespace Syscover\Comunik\Controllers;
 
 use Syscover\Pulsar\Core\Controller;
-use Syscover\Comunik\Libraries\Miscellaneous as MiscellaneousComunik;
+use Syscover\Comunik\Libraries\ComunikLibrary;
 use Syscover\Comunik\Models\EmailTemplate;
 
 /**
@@ -31,14 +31,14 @@ class EmailTemplatesController extends Controller
 
     public function createCustomRecord($parameters)
     {
-        $parameters['themes']       = MiscellaneousComunik::getThemes();
+        $parameters['themes'] = ComunikLibrary::getThemes();
 
         return $parameters;
     }
 
     public function storeCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
+        $htmlLinks = ComunikLibrary::setMailingLinks($this->request, $parameters);
 
         EmailTemplate::create([
             'name_043'      => $this->request->input('name'),
@@ -54,14 +54,14 @@ class EmailTemplatesController extends Controller
 
     public function editCustomRecord($parameters)
     {
-        $parameters['themes']       = MiscellaneousComunik::getThemes();
+        $parameters['themes'] = ComunikLibrary::getThemes();
 
         return $parameters;
     }
     
     public function updateCustomRecord($parameters)
     {
-        $htmlLinks = MiscellaneousComunik::setMailingLinks($this->request, $parameters);
+        $htmlLinks = ComunikLibrary::setMailingLinks($this->request, $parameters);
 
         EmailTemplate::where('id_043', $parameters['id'])->update([
             'name_043'      => $this->request->input('name'),
