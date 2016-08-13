@@ -11,8 +11,8 @@ class ComunikLibrary
      * Input names to create customer
      *
      * company_041 [company]
-     * name_041 [groupId]
-     * surname_041 [date]
+     * name_041 [name]
+     * surname_041 [surname]
      * birth_date_041 [birthDate]
      * prefix_041 [prefix]
      * mobile_041 [mobile]
