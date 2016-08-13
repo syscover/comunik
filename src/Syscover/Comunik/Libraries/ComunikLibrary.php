@@ -24,7 +24,7 @@ class ComunikLibrary
      * @return  \Syscover\Comunik\Models\Contact    $contact
      * @throws  \Exception
      */
-    public function createContact($request)
+    public static function createContact($request)
     {
         if(! $request->has('country'))
             throw new \Exception('You have to define a country field to record a contact');
