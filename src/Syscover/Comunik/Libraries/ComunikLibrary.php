@@ -34,7 +34,7 @@ class ComunikLibrary
             'name_041'                  => $request->has('name')? ucwords(strtolower($request->input('name'))) : null,
             'surname_041'               => $request->has('surname')? ucwords(strtolower($request->input('surname'))) : null,
             'birth_date_041'            => $request->has('birthDate')? \DateTime::createFromFormat(config('pulsar.datePattern'), $request->input('birthDate'))->getTimestamp() : null,
-            'birth_date_text_041'       => $request->has('birthDate')? $this->request->input('birthDate') : null,
+            'birth_date_text_041'       => $request->has('birthDate')? $request->input('birthDate') : null,
             'country_id_041'            => $request->input('country'),
             'prefix_041'                => $request->has('prefix')? $request->input('prefix') : null,
             'mobile_041'                => $request->has('mobile')? $request->input('mobile') : null,
