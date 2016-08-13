@@ -74,7 +74,7 @@ class ComunikLibrary
         if(! $request->has('country'))
             throw new \Exception('You have to define a country field to record a contact');
 
-        Contact::where('id_401', $request->input('id'))->update([
+        Contact::where('id_041', $request->input('id'))->update([
             'company_041'               => $request->has('company')? $request->input('company') : null,
             'name_041'                  => $request->has('name')? ucwords(strtolower($request->input('name'))) : null,
             'surname_041'               => $request->has('surname')? ucwords(strtolower($request->input('surname'))) : null,
