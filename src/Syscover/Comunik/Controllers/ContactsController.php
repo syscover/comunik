@@ -23,7 +23,7 @@ class ContactsController extends Controller
     protected $icon         = 'fa fa-user';
     protected $objectTrans  = 'contact';
 
-    
+
     public function createCustomRecord($parameters)
     {
         $parameters['groups'] = Group::all();
