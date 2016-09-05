@@ -82,7 +82,8 @@ class Contact extends Model
 
     public static function customCountIndexRecords($query, $parameters)
     {
-        return $query->select(DB::raw('id_041, GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
+        return $query
+            ->select(DB::raw('id_041, GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
             ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
             ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
             ->groupBy('id_041')
