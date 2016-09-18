@@ -23,7 +23,7 @@
             return $option;
         };
     </script>
-    <!-- /.comunik::preferences.index -->
+    <!-- /comunik::preferences.index -->
 @stop
 
 @section('rows')
@@ -58,5 +58,5 @@
         'fieldSize' => 5,
         'required' => true
     ])
-    <!-- /.comunik::preferences.index -->
+    <!-- /comunik::preferences.index -->
 @stop

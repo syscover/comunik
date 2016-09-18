@@ -5,4 +5,4 @@
 <li class="current">
     <a href="{{ route($routeSuffix) }}">{{ trans_choice($objectTrans, 2) }}</a>
 </li>
-<!-- /.comunik::email_pattern.breadcrumbs -->
+<!-- /comunik::email_pattern.breadcrumbs -->

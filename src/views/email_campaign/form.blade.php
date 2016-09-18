@@ -226,7 +226,7 @@
             })
         }
     </script>
-    <!-- /.comunik::email_campaign.create -->
+    <!-- /comunik::email_campaign.create -->
 @stop
 
 @section('rows')
@@ -488,5 +488,5 @@
             ]
         ])
     @endif
-    <!-- /.comunik::email_campaign.create -->
+    <!-- /comunik::email_campaign.create -->
 @stop

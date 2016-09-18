@@ -27,7 +27,7 @@
             }
         });
     </script>
-    <!-- /.comunik::groups.index -->
+    <!-- /comunik::groups.index -->
 @stop
 
 @section('tHead')
@@ -38,5 +38,5 @@
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /.comunik::groups.index -->
+    <!-- /comunik::groups.index -->
 @stop

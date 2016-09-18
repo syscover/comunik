@@ -17,5 +17,5 @@
         'rangeLength' => '2,255',
         'required' => true
     ])
-    <!-- /.comunik::groups.create -->
+    <!-- /comunik::groups.create -->
 @stop

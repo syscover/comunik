@@ -220,7 +220,7 @@
             })
         }
     </script>
-    <!-- /.comunik::email_template.create -->
+    <!-- /comunik::email_template.create -->
 @stop
 
 @section('rows')
@@ -315,5 +315,5 @@
             <div><a id="btContent" class="btn btn-info mfp-iframe">{{ trans('comunik::pulsar.open_theme') }}</a></div>
         </div>
     </div>
-    <!-- /.comunik::email_template.create -->
+    <!-- /comunik::email_template.create -->
 @stop

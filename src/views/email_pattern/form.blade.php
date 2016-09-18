@@ -50,5 +50,5 @@
         'nameSelect' => 'name',
         'required' => true
     ])
-    <!-- /.comunik::email_pattern.create -->
+    <!-- /comunik::email_pattern.create -->
 @stop

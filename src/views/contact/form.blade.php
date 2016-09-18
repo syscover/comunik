@@ -29,7 +29,7 @@
             })
         })
     </script>
-    <!-- /.comunik::contact.create -->
+    <!-- /comunik::contact.create -->
 @stop
 
 @section('rows')
@@ -141,5 +141,5 @@
             ]
         ]
     ])
-    <!-- /.comunik::contact.create -->
+    <!-- /comunik::contact.create -->
 @stop

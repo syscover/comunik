@@ -80,7 +80,7 @@
             );
         });
     </script>
-    <!-- /.comunik::contact.index -->
+    <!-- /comunik::contact.index -->
 @stop
 
 @section('headButtons')
@@ -111,5 +111,5 @@
         <th class="checkbox-column"><input type="checkbox" class="uniform"></th>
         <th>{{ trans_choice('pulsar::pulsar.action', 2) }}</th>
     </tr>
-    <!-- /.comunik::contact.index -->
+    <!-- /comunik::contact.index -->
 @stop
