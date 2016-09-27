@@ -20,7 +20,7 @@ class ComunikCreateTableContact extends Migration {
                 $table->string('company_041')->nullable();
                 $table->string('name_041')->nullable();
                 $table->string('surname_041')->nullable();
-                $table->integer('birth_date_041')->unsigned()->nullable();
+                $table->integer('birth_date_041')->nullable();
                 $table->string('birth_date_text_041')->nullable();
                 $table->string('country_id_041', 2);
                 $table->string('prefix_041', 5)->nullable();
