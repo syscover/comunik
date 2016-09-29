@@ -321,7 +321,7 @@
 
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
-        <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::includes.html.required')</label>
+        <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::elements.required')</label>
         <div class="col-md-10">
             <input type="hidden" id="emlHeaders" name="emlHeaders" value="{{ $emlHeaders }}">
             <input type="hidden" id="header" name="header" value="{{ htmlspecialchars(old('header', isset($object->header_044)? $object->header_044 : null)) }}">

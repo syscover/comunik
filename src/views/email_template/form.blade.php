@@ -281,7 +281,7 @@
 
     <!-- TODO: evitar usar HTML dentro de vistas -->
     <div class="form-group">
-        <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::includes.html.required')</label>
+        <label class="col-md-2 control-label">{{ trans('pulsar::pulsar.message') }} @include('pulsar::elements.required')</label>
         <div class="col-md-10">
             <input type="hidden" name="header" value="{{ htmlspecialchars(old('header', isset($object->header_043)? $object->header_043 : null)) }}">
             <input type="hidden" name="body" value="{{ htmlspecialchars(old('body', isset($object->body_043)? $object->body_043 : null)) }}">
