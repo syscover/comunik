@@ -68,22 +68,27 @@ class EmailSendQueue extends Model
     public static function getMailings($take, $skip)
     {
         $now        = date('U');
+
         // fecha que hasta pasada la misma no se podría enviar emails
         $limitDate  = $now - (Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 
         return EmailSendQueue::builder()
-                ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
-                ->where('status_id_047', '=', 0)
-                ->whereNotIn('contact_id_047', function($query) use ($limitDate) {
-                    $query->select('contact_id_048')
-                                ->from('005_048_email_send_history')
-                                ->where('sent_048', '>', $limitDate)
-                                ->get();
-                })
-                ->groupBy('005_041_contact.id_041')
-                ->take($take)->skip($skip)
-                ->orderBy('sorting_047', 'asc')
-                ->get();
+            //->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047')
+            ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
+            ->where('status_id_047', '=', 0)
+            // don't send to contacts than we have send email before limit date
+            ->whereNotIn('contact_id_047', function($query) use ($limitDate) {
+                $query->select('contact_id_048')
+                    ->from('005_048_email_send_history')
+                    ->where('sent_048', '>', $limitDate)
+                    ->get();
+            })
+
+            ->groupBy('contact_id_047') // todo, por que hay que agruparlo??
+
+            ->take($take)->skip($skip)
+            ->orderBy('sorting_047', 'asc')
+            ->get();
     }
 
     // Attention! function called from \Syscover\Comunik\Controller\EmailCampaignsController

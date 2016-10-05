@@ -73,7 +73,7 @@ class Contact extends Model
         // this parameter check mode ONLY_FULL_GROUP_BY,
         // than force to define in group by all column than you want view
         return $query
-            ->select(DB::raw('id_041, name_041, surname_041, name_002, mobile_041, email_041, unsubscribe_email_041, GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
+            ->select('id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', 'email_041', 'unsubscribe_email_041', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
             ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
             ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
             ->groupBy('id_041', 'name_041', 'surname_041', 'name_002', 'mobile_041', 'email_041', 'unsubscribe_email_041')
@@ -83,7 +83,7 @@ class Contact extends Model
     public static function customCountIndexRecords($query, $parameters)
     {
         return $query
-            ->select(DB::raw('id_041, GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
+            ->select('id_041' ,DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
             ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
             ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
             ->groupBy('id_041')
