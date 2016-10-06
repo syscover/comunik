@@ -63,11 +63,11 @@ class Contact extends Model
     public static function getCustomReturnIndexRecords($query, $parameters)
     {
         // old query, let comment to show alternative to select columns in get() sentence
-        // return $query
-        //    ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
-        //    ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
-        //    ->groupBy('id_041')
-        //    ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
+//         return $query
+//            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
+//            ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
+//            ->groupBy('id_041')
+//            ->get(['*', DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040')]);
 
         // In laravel 5.3 in MySql drive has parameter strict = true,
         // this parameter check mode ONLY_FULL_GROUP_BY,
@@ -82,13 +82,26 @@ class Contact extends Model
 
     public static function customCountIndexRecords($query, $parameters)
     {
-        return $query
-            ->select('id_041' ,DB::raw('GROUP_CONCAT(name_040 SEPARATOR \', \') AS name_040'))
-            ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
-            ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
-            ->groupBy('id_041')
-            ->get()     // without get, don't count correctly, count group number
-            ->count();
+        // TODO, cuando se realiza una búsqueda se forma una query sobre el campo concatenado name_040, tengo que poner joins ya que este campo está en $indexColumns de ContactsController
+        // si logro crear una excepción que me permita no buscar por ese campo y poder quitar los leftJoin, haciendo la búsuqeda exacta, ahora se duplica el campo
+        if(isset($parameters['where']))
+        {
+            $query
+                ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
+                ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
+                ->whereIn('id_041', function($query) use ($parameters) {
+                    $query->select('contact_id_042')
+                        ->from('005_042_contacts_groups')
+                        ->whereIn('group_id_042', function($query) use ($parameters) {
+                            $query->select('id_040')
+                                ->from('005_040_group')
+                                ->where('name_040', 'LIKE', '%' . $parameters['where'] . '%')
+                                ->get();
+                        })->get();
+                });
+        }
+
+        return $query->count();
     }
 
     // Attention! function called from \Syscover\Comunik\Libraries\Cron::sendEmailTest
