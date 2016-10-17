@@ -95,7 +95,7 @@ class EmailCampaignsController extends Controller
             'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
             'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
-            'sorting_044'               => $this->request->input('sorting')
+            'sorting_044'               => $this->request->has('sorting')? $this->request->input('sorting') : null
         ]);
 
         $emailCampaign->getCountries()->attach($this->request->input('countries'));
@@ -142,7 +142,7 @@ class EmailCampaignsController extends Controller
             'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
             'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
-            'sorting_044'               => $this->request->input('sorting')
+            'sorting_044'               => $this->request->has('sorting')? $this->request->input('sorting') : null
         ]);
 
         $emailCampaign = EmailCampaign::find($parameters['id']);
