@@ -107,7 +107,8 @@ class Cron
                     'campaign_id_047'   => $campaign->id_044,
                     'contact_id_047'    => $contact->id_041,
                     'create_047'        => date('U'),
-                    'sorting_047'       => $campaign->sorting_044
+                    'sorting_047'       => $campaign->sorting_044,
+                    'status_id_047'     => 0
                 ];
                 array_push($emailSendQueue, $emailing);
             }

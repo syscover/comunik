@@ -73,7 +73,7 @@ class EmailSendQueue extends Model
         $limitDate  = $now - (Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 
         return EmailSendQueue::builder()
-            //->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047')
+            ->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047')
             ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
             ->where('status_id_047', '=', 0)
             // don't send to contacts than we have send email before limit date
@@ -83,8 +83,9 @@ class EmailSendQueue extends Model
                     ->where('sent_048', '>', $limitDate)
                     ->get();
             })
-            
-            ->groupBy('contact_id_047') // group contact, can be duplicate if a contact has multiple groups
+
+            // group contact, can be duplicate if a contact has multiple groups
+            ->groupBy('contact_id_047', 'id_047', 'campaign_id_047', 'sorting_047', 'create_047')
 
             ->take($take)->skip($skip)
             ->orderBy('sorting_047', 'asc')
