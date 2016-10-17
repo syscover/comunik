@@ -83,7 +83,7 @@ class EmailSendQueue extends Model
                     ->where('sent_048', '>', $limitDate)
                     ->get();
             })
-
+            
             ->groupBy('contact_id_047') // todo, por que hay que agruparlo??
 
             ->take($take)->skip($skip)
