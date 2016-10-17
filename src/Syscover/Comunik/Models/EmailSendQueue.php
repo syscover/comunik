@@ -73,7 +73,7 @@ class EmailSendQueue extends Model
         $limitDate  = $now - (Preference::getValue('emailServiceIntervalShipping', 5)->value_018 * 24 * 60 * 60);
 
         return EmailSendQueue::builder()
-            ->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047')
+            ->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047', 'reply_to_013', 'email_041', 'header_044', 'body_044', 'footer_044', 'text_044', 'subject_044', 'id_041', 'company_041', 'name_041', 'surname_041', 'birth_date_041', 'id_044', 'outgoing_server_013', 'outgoing_port_013', 'email_013', 'name_013', 'outgoing_secure_013', 'outgoing_user_013', 'outgoing_pass_013')
             ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
             ->where('status_id_047', '=', 0)
             // don't send to contacts than we have send email before limit date
@@ -85,7 +85,7 @@ class EmailSendQueue extends Model
             })
 
             // group contact, can be duplicate if a contact has multiple groups
-            ->groupBy('contact_id_047', 'id_047', 'campaign_id_047', 'sorting_047', 'create_047')
+            ->groupBy('contact_id_047', 'id_047', 'campaign_id_047', 'sorting_047', 'create_047', 'reply_to_013', 'email_041', 'header_044', 'body_044', 'footer_044', 'text_044', 'subject_044', 'id_041', 'company_041', 'name_041', 'surname_041', 'birth_date_041', 'id_044', 'outgoing_server_013', 'outgoing_port_013', 'email_013', 'name_013', 'outgoing_secure_013', 'outgoing_user_013', 'outgoing_pass_013')
 
             ->take($take)->skip($skip)
             ->orderBy('sorting_047', 'asc')
