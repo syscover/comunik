@@ -84,7 +84,7 @@ class EmailSendQueue extends Model
                     ->get();
             })
             
-            ->groupBy('contact_id_047') // todo, por que hay que agruparlo??
+            ->groupBy('contact_id_047') // group contact, can be duplicate if a contact has multiple groups
 
             ->take($take)->skip($skip)
             ->orderBy('sorting_047', 'asc')
