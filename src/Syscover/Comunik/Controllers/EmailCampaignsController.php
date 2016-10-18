@@ -92,7 +92,7 @@ class EmailCampaignsController extends Controller
             'text_044'                  => $htmlLinks['text'],
             'data_044'                  => $this->request->input('data', 'NULL'),
             'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
-            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
+            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : date(config('pulsar.datePattern') . ' H:i'),
             'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
             'sorting_044'               => $this->request->has('sorting')? $this->request->input('sorting') : null
@@ -139,7 +139,7 @@ class EmailCampaignsController extends Controller
             'text_044'                  => $htmlLinks['text'],
             'data_044'                  => $this->request->input('data', 'NULL'),
             'shipping_date_044'         => $this->request->has('shippingDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('shippingDate'))->getTimestamp() : (integer)date('U'),
-            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : null,
+            'shipping_date_text_044'    => $this->request->has('shippingDate')? $this->request->input('shippingDate') : date(config('pulsar.datePattern') . ' H:i'),
             'persistence_date_044'      => $this->request->has('persistenceDate')? \DateTime::createFromFormat(config('pulsar.datePattern') . ' H:i', $this->request->input('persistenceDate'))->getTimestamp() : null,
             'persistence_date_text_044' => $this->request->has('persistenceDate')? $this->request->input('persistenceDate') : null,
             'sorting_044'               => $this->request->has('sorting')? $this->request->input('sorting') : null
