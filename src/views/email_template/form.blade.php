@@ -244,7 +244,7 @@
         'label' => trans('comunik::pulsar.include_html_link'),
         'name' => 'setHtmlLink',
         'value' => 1,
-        'checked' => true,
+        'checked' => $action == 'create'? true : false,
         'inputText' => [
             'name' => 'htmlLink',
             'value' => trans('comunik::pulsar.html_link_value')
@@ -254,7 +254,7 @@
         'label' => trans('comunik::pulsar.include_unsubscribe_link'),
         'name' => 'setUnsubscribeLink',
         'value' => 1,
-        'checked' => true,
+        'checked' => $action == 'create'? true : false,
         'inputText' => [
             'name' => 'unsubscribeLink',
             'value' => trans('comunik::pulsar.unsubscribe_link_value')
@@ -264,7 +264,7 @@
         'label' => trans('comunik::pulsar.include_track_pixel'),
         'name' => 'setTrackPixel',
         'value' => 1,
-        'checked' => true,
+        'checked' => $action == 'create'? true : false,
         'inputText' => [
             'name' => 'trackPixel',
             'value' => "<img height='1' width='1' src='" . route('statisticsComunikEmailCampaign', ['campaign' => '#campaign#', 'historyId' => '#historyId#']) . "'>"
