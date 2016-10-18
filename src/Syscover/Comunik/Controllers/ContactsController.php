@@ -168,13 +168,13 @@ class ContactsController extends Controller
     public function importRecords(){
         $data           = [];
         $jsonData       = json_decode($this->request->input('data'));
-        $countries      = Country::where('lang_id_010', auth('pulsar')->user()->lang_id_010)->get();
+        $countries      = Country::where('lang_id_002', auth('pulsar')->user()->lang_id_010)->get();
         $groups         = $this->request->input('groups');
         $country        = $this->request->input('country');
 
         $inputFileName  = public_path() . '/packages/syscover/pulsar/storage/tmp/' . $this->request->input('file');
         $fields     = [
-            'id_040'        => trans('comunik::pulsar.group_id'),
+            'id_040'            => trans('comunik::pulsar.group_id'),
             'company_041'       => trans_choice('pulsar::pulsar.company', 1),
             'name_041'          => trans('pulsar::pulsar.name'),
             'surname_041'       => trans('pulsar::pulsar.surname'),
