@@ -343,7 +343,7 @@ class Cron
 
             // update n emails on account
             EmailAccount::builder()
-                ->where('id_013')
+                ->where('id_013', $account->id_013)
                 ->update([
                     'n_emails_013' => $nEmails
                 ]);
