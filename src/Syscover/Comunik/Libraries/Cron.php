@@ -231,22 +231,15 @@ class Cron
 
                 if($response)
                 {
-                    // agregamos el id del envío al array para actulizar su estado posteriormente
-                    $successfulIds[] = $mailing->id_047;
+                    // delete message from queue
+                    EmailSendQueue::where('id_047', $mailing->id_047)->delete();
                 }
                 else
                 {
                     // error de envío, eliminamos el histórico antes creado
                     EmailSendHistory::destroy($emailSendHistory->id_048);
-
-                    /// marcamos en error
-                    // TODO:AQUÍ MARCAMOS EL ERROR
                 }
             }
-
-            // borramos los mensajes de la cola de envíos una vez enviados
-            // delete queue?
-            EmailSendQueue::whereIn('id_047', $successfulIds)->delete();
         }
         else
         {
@@ -416,8 +409,6 @@ class Cron
         $findLastCheckUid = false;
         foreach($messages as $key => $message)
         {
-            //var_dump($message->getUid());
-
             // comprobamos si el mensaje coincide con algún patron
             $response = ComunikLibrary::checkEmailPattern($message, $patterns);
 
