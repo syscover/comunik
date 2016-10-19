@@ -50,9 +50,9 @@ class EmailPatternsController extends Controller
     {
         EmailPattern::create([
             'name_049'          => $this->request->input('name'),
-            'subject_049'       => $this->request->input('subject', null),
-            'operator_049'      => $this->request->input('operator', null),
-            'message_049'       => $this->request->input('message', null),
+            'subject_049'       => $this->request->has('subject')? $this->request->input('subject') : null,
+            'operator_049'      => $this->request->has('operator')? $this->request->input('operator') : null,
+            'message_049'       => $this->request->has('message')? $this->request->input('message') : null,
             'action_049'        => $this->request->input('actionPattern')
         ]);
     }
@@ -76,9 +76,9 @@ class EmailPatternsController extends Controller
     {
         EmailPattern::where('id_049', $parameters['id'])->update([
             'name_049'          => $this->request->input('name'),
-            'subject_049'       => $this->request->input('subject', null),
-            'operator_049'      => $this->request->input('operator', null),
-            'message_049'       => $this->request->input('message', null),
+            'subject_049'       => $this->request->has('subject')? $this->request->input('subject') : null,
+            'operator_049'      => $this->request->has('operator')? $this->request->input('operator') : null,
+            'message_049'       => $this->request->has('message')? $this->request->input('message') : null,
             'action_049'        => $this->request->input('actionPattern')
         ]);
     }
