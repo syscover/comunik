@@ -57,7 +57,7 @@ class Contact extends Model
 
     public function getGroups()
     {
-        return Contact::belongsToMany('Syscover\Comunik\Models\Group','005_042_contacts_groups', 'contact_id_042', 'group_id_042');
+        return Contact::belongsToMany('Syscover\Comunik\Models\Group', '005_042_contacts_groups', 'contact_id_042', 'group_id_042');
     }
 
     public static function getCustomReturnIndexRecords($query, $parameters)
@@ -82,23 +82,14 @@ class Contact extends Model
 
     public static function customCountIndexRecords($query, $parameters)
     {
-        // TODO, cuando se realiza una búsqueda se forma una query sobre el campo concatenado name_040, tengo que poner joins ya que este campo está en $indexColumns de ContactsController
-        // si logro crear una excepción que me permita no buscar por ese campo y poder quitar los leftJoin, haciendo la búsuqeda exacta, ahora se duplica el campo
         if(isset($parameters['where']))
         {
-            $query
+            return $query
+                ->select('id_041')
                 ->leftJoin('005_042_contacts_groups', '005_041_contact.id_041', '=', '005_042_contacts_groups.contact_id_042')
                 ->leftJoin('005_040_group', '005_042_contacts_groups.group_id_042', '=', '005_040_group.id_040')
-                ->whereIn('id_041', function($query) use ($parameters) {
-                    $query->select('contact_id_042')
-                        ->from('005_042_contacts_groups')
-                        ->whereIn('group_id_042', function($query) use ($parameters) {
-                            $query->select('id_040')
-                                ->from('005_040_group')
-                                ->where('name_040', 'LIKE', '%' . $parameters['where'] . '%')
-                                ->get();
-                        })->get();
-                });
+                ->distinct()
+                ->count('id_041');
         }
 
         return $query->count();
