@@ -34,9 +34,9 @@ class Contact extends Model
         'name'          => 'required|between:2,255',
         'surname'       => 'between:0,255',
         'country'       => 'required',
-        'email'         => 'required|between:2,255|email|mysql2.unique:005_041_contact,email_041',
+        'email'         => 'required|between:2,255|email|unique:mysql2.005_041_contact,email_041',
         'prefix'        => 'numeric|digits_between:0,5',
-        'mobile'        => 'numeric|digits_between:2,255|mysql2.unique:005_041_contact,mobile_041'
+        'mobile'        => 'numeric|digits_between:2,255|unique:mysql2.005_041_contact,mobile_041'
     ];
 
     public static function validate($data, $specialRules = [])

@@ -269,9 +269,9 @@ class ContactsController extends Controller
 
                 // check data from server side
                 $rules = [
-                    'email_041'         => 'email|between:2,50|mysql2.unique:005_041_contact,email_041',
+                    'email_041'         => 'email|between:2,50|unique:mysql2.005_041_contact,email_041',
                     'prefix_041'        => 'numeric|digits_between:0,5',
-                    'mobile_041'        => 'numeric|digits_between:2,50|mysql2.unique:005_041_contact,mobile_041',
+                    'mobile_041'        => 'numeric|digits_between:2,50|unique:mysql2.005_041_contact,mobile_041',
                     'country_id_041'    => 'required|exists:001_002_country,id_002',
                     'id_040'            => 'required'
                 ];
@@ -283,16 +283,16 @@ class ContactsController extends Controller
                     $rules['id_040']    = 'required|exists:005_040_group,id_040';
 
                 if(!array_key_exists('email_041', $dbRow) && array_key_exists('mobile_041', $dbRow))
-                    $rules['mobile_041']    = 'required|numeric|digits_between:2,50|mysql2.unique:005_041_contact,mobile_041';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:2,50|unique:mysql2.005_041_contact,mobile_041';
 
                 if(!array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow))
-                    $rules['email_041']     = 'required|email|between:2,50|mysql2.unique:005_041_contact,email_041';
+                    $rules['email_041']     = 'required|email|between:2,50|unique:mysql2.005_041_contact,email_041';
 
                 //if(array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow) && empty($dbRow['mobile_041']) && empty($dbRow['email_041']))
                 if((array_key_exists('mobile_041', $dbRow) && array_key_exists('email_041', $dbRow)) || (!array_key_exists('mobile_041', $dbRow) && !array_key_exists('email_041', $dbRow)))
                 {
-                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15|mysql2.unique:005_041_contact,mobile_041';
-                    $rules['email_041']     = 'required|email|between:2,50|mysql2.unique:005_041_contact,email_041';
+                    $rules['mobile_041']    = 'required|numeric|digits_between:6,15|unique:mysql2.005_041_contact,mobile_041';
+                    $rules['email_041']     = 'required|email|between:2,50|unique:mysql2.005_041_contact,email_041';
                 }
 
                 // cargamos la validación de los datos para la fila a insertar
