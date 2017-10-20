@@ -403,6 +403,12 @@ class Cron
     {
         $nEmailsToChecck = 25;
 
+        // REVISAR ESTO
+        if($position == -1)
+        {
+            $position = 0;
+        }
+
         // Solicitamos los 10 anteriores mensajes a comprobar desde la última posición comnprobada
         $messages = $imapService->getServer()->getMessages($nEmailsToChecck, $position);
 
