@@ -71,7 +71,7 @@ class EmailCampaignsController extends Controller
         $parameters['themes']           = ComunikLibrary::getThemes();
         $parameters['emlHeaders']       = ComunikLibrary::getEmlHeaders();
         $parameters['groups']           = Group::all();
-        $parameters['countries']        = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_id_010]);
+        $parameters['countries']        = Contact::getCountriesContacts(['lang' => auth()->guard('pulsar')->user()->lang_id_010]);
 
         return $parameters;
     }
@@ -110,7 +110,7 @@ class EmailCampaignsController extends Controller
         $parameters['emlHeaders']           = ComunikLibrary::getEmlHeaders();
         $parameters['groups']               = Group::all();
         $parameters['selectGroups']         = $parameters['object']->getGroups;
-        $parameters['countries']            = Contact::getCountriesContacts(['lang' => auth('pulsar')->user()->lang_id_010]);
+        $parameters['countries']            = Contact::getCountriesContacts(['lang' => auth()->guard('pulsar')->user()->lang_id_010]);
         $parameters['selectCountries']      = $parameters['object']->getCountries;
 
         // statistics

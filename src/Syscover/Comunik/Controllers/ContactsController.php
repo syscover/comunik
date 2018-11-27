@@ -168,7 +168,7 @@ class ContactsController extends Controller
     public function importRecords(){
         $data           = [];
         $jsonData       = json_decode($this->request->input('data'));
-        $countries      = Country::where('lang_id_002', auth('pulsar')->user()->lang_id_010)->get();
+        $countries      = Country::where('lang_id_002', auth()->guard('pulsar')->user()->lang_id_010)->get();
         $groups         = $this->request->input('groups');
         $country        = $this->request->input('country');
 
