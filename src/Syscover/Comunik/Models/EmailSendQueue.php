@@ -93,19 +93,14 @@ class EmailSendQueue extends Model
             ->get();
     }
 
-    public static function getStuckMailings($take, $skip)
+    public static function getStuckMailings()
     {
-        return EmailSendQueue::builder()
-            ->select('id_047', 'campaign_id_047', 'contact_id_047', 'sorting_047', 'create_047', 'reply_to_013', 'email_041', 'header_044', 'body_044', 'footer_044', 'text_044', 'subject_044', 'id_041', 'company_041', 'name_041', 'surname_041', 'birth_date_041', 'id_044', 'outgoing_server_013', 'outgoing_port_013', 'email_013', 'name_013', 'outgoing_secure_013', 'outgoing_user_013', 'outgoing_pass_013')
-            ->join('001_013_email_account', '005_044_email_campaign.email_account_id_044', '=', '001_013_email_account.id_013')
-            ->where('status_id_047', '=', 1)
-            // recuperamos los mails que aún no se han enviado y se han cambiado hace una hora
+        EmailSendQueue::where('status_id_047', 1)
+            // reseteamos los mails que aún no se han enviado y se han cambiado hace una hora
             ->where('create_047', '<', Carbon::now()->subMinutes(60)->timestamp)
-            // group contact, can be duplicate if a contact has multiple groups
-            ->groupBy('contact_id_047', 'id_047', 'campaign_id_047', 'sorting_047', 'create_047', 'reply_to_013', 'email_041', 'header_044', 'body_044', 'footer_044', 'text_044', 'subject_044', 'id_041', 'company_041', 'name_041', 'surname_041', 'birth_date_041', 'id_044', 'outgoing_server_013', 'outgoing_port_013', 'email_013', 'name_013', 'outgoing_secure_013', 'outgoing_user_013', 'outgoing_pass_013')
-            ->take($take)->skip($skip)
-            ->orderBy('sorting_047', 'asc')
-            ->get();
+            ->update([
+                'status_id_047' => 0
+            ]);
     }
 
     // Attention! function called from \Syscover\Comunik\Controller\EmailCampaignsController

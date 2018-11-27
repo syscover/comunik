@@ -171,13 +171,13 @@ class Cron
         else
             Preference::setValue('emailServiceSendingEmails', 5, '1');
 
+        // TODO investigar porque hay emais que se quedan en proceso y no llegan a ser enviados
+        // consultamos emails que se quedan en sin enviar
+        EmailSendQueue::getStuckMailings();
 
         // consultamos la cola de envíos que estén por enviar, solicitamos los primero N envíos según el itervalo configurado
         // solo de aquellos envíos que estén en estado: 0 = waiting to be sent
         $mailings   = EmailSendQueue::getMailings((int)Preference::getValue('emailServiceIntervalProcess', 5)->value_018, 0);
-        $mailings   = $mailings->merge(EmailSendQueue::getStuckMailings((int)Preference::getValue('emailServiceIntervalProcess', 5)->value_018, 0));
-
-
 
         $mailingIds = $mailings->pluck('id_047')->toArray();
 
@@ -230,17 +230,26 @@ class Cron
                 config(['mail.password'     => Crypt::decrypt($mailing->outgoing_pass_013)]);
 
                 // exec mailing
-                $response = EmailServices::SendEmail($dataEmail);
+                try
+                {
+                    $response = EmailServices::SendEmail($dataEmail);
 
-                if($response)
+                    if($response)
+                    {
+                        // delete message from queue
+                        EmailSendQueue::where('id_047', $mailing->id_047)->delete();
+                    }
+                    else
+                    {
+                        // error de envío, eliminamos el histórico antes creado
+                        EmailSendHistory::destroy($emailSendHistory->id_048);
+                    }
+                }
+                catch (\Exception $e)
                 {
                     // delete message from queue
                     EmailSendQueue::where('id_047', $mailing->id_047)->delete();
-                }
-                else
-                {
-                    // error de envío, eliminamos el histórico antes creado
-                    EmailSendHistory::destroy($emailSendHistory->id_048);
+                    Contact::where('email_041', $mailing->email_041)->delete();
                 }
             }
         }
