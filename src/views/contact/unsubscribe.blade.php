@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-inverse margin-r10">Pinche Aquí / Click here</button>
-                                <input type="hidden" name="key" value="{{ $key or null }}">
+                                <input type="hidden" name="key" value="{{ $key ?? null }}">
                             </div>
                         </div>
                     </form>
